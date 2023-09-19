@@ -1,0 +1,25 @@
+.link-sidebar{
+    color: black;
+    width: 100%;
+}
+.link-sidebar:hover{
+    color: dodgerblue;
+}
+
+.logoutStyle{
+    cursor: pointer;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 7px;
+    transition: all;
+    transition-duration: 0.2s;
+    transition-timing-function: linear;
+}
+.logoutStyle:hover{
+    transition: all;
+    transition-duration: 0.2s;
+    transition-timing-function: linear;
+    outline: 1px solid white;
+}
