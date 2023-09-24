@@ -17,15 +17,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import '../../styles/home-globals.css'
 import '../../styles/sgsdhStyle.css'
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import LogoutIcon from '@mui/icons-material/Logout';
-
-
-
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import CancelIcon from '@mui/icons-material/Cancel';
+import PaidIcon from '@mui/icons-material/Paid';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 const drawerWidth = 260;
 
@@ -74,6 +77,23 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
+function Copyright(props) {
+    return (
+        <Typography variant="body2"
+                    color="text.secondary"
+                    align="center"
+                    {...props}
+        >
+            {'Copyright © '}
+            <Link href="https://www.etecsa.cu/" underline="hover">
+                {'Etecsa"'}
+            </Link>
+            {' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
 
 
 export default function PersistentDrawerLeft({children}) {
@@ -94,7 +114,7 @@ export default function PersistentDrawerLeft({children}) {
         router.push('/login')
     }
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex' }} >
             <CssBaseline />
             <AppBar position="fixed" open={open}>
                 <Toolbar>
@@ -146,7 +166,7 @@ export default function PersistentDrawerLeft({children}) {
                         <Link href={'/dashboard/'} className='link-sidebar'>
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <MailIcon />
+                                    <DashboardIcon />
                                 </ListItemIcon>
                                 <ListItemText>Inicio</ListItemText>
                             </ListItemButton>
@@ -155,7 +175,7 @@ export default function PersistentDrawerLeft({children}) {
                     <ListItem disablePadding >
                         <ListItemButton>
                             <ListItemIcon>
-                                <MailIcon />
+                                <SupervisorAccountIcon />
                             </ListItemIcon>
                             <ListItemText>Admin</ListItemText>
                         </ListItemButton>
@@ -163,21 +183,15 @@ export default function PersistentDrawerLeft({children}) {
                 </List>
                 <Divider className='bg-dark'/>
                 <List>
-                    <ListItem disablePadding>
-                        <Link href={'/dashboard/solicitudes_pendientes'} className='link-sidebar'>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <MailIcon />
-                                </ListItemIcon>
-                                <ListItemText>Solicitudes Pendientes</ListItemText>
-                            </ListItemButton>
-                        </Link>
+                    <ListItem disablePadding className={'ps-3 text-underline'}>
+                        <ListItemText>Solicitudes </ListItemText>
                     </ListItem>
-                    <ListItem disablePadding>
-                        <Link href={'/dashboard/pendientes_solicitar'} className='link-sidebar'>
+
+                    <ListItem disablePadding disableGutters>
+                        <Link disable href={'/dashboard/pendientes_solicitar'} className='link-sidebar'>
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <MailIcon />
+                                    <LibraryBooksIcon />
                                 </ListItemIcon>
                                 <ListItemText>Pendientes a Solicitar</ListItemText>
                             </ListItemButton>
@@ -185,53 +199,60 @@ export default function PersistentDrawerLeft({children}) {
                     </ListItem>
                     <ListItem disablePadding>
                         <Link href={'/dashboard/pendientes_aprobar'} className='link-sidebar'>
-
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <MailIcon />
+                                    <HowToRegIcon />
                                 </ListItemIcon>
                                 <ListItemText>Pendientes a Aprobar</ListItemText>
                             </ListItemButton>
                         </Link>
                     </ListItem>
                     <ListItem disablePadding>
+                        <Link href={'/dashboard/solicitudes_anticipo_pago'}  className='link-sidebar'>
+                            <ListItemButton>
+                                <ListItemIcon >
+                                    <PaidIcon/>
+                                </ListItemIcon>
+                                <ListItemText>Pendientes a Anticipo</ListItemText>
+                            </ListItemButton>
+                        </Link>
+                    </ListItem>
+                    <Divider className='bg-dark'/>
+                    <ListItem disablePadding>
                         <Link href={'/dashboard/solicitudes_archivadas'} className='link-sidebar'>
-
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <MailIcon />
+                                    <ArchiveIcon />
                                 </ListItemIcon>
-                                <ListItemText>Solicitudes Archivadas</ListItemText>
+                                <ListItemText>Archivadas</ListItemText>
                             </ListItemButton>
                         </Link>
                     </ListItem>
                     <ListItem disablePadding>
                         <Link href={'/dashboard/solicitudes_canceladas'}  className='link-sidebar'>
-
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <MailIcon />
+                                    <CancelIcon />
                                 </ListItemIcon>
-                                <ListItemText>Solicitudes Canceladas</ListItemText>
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <Link href={'/dashboard/solicitudes_anticipo_pago'}  className='link-sidebar'>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <MailIcon />
-                                </ListItemIcon>
-                                <ListItemText>Solicitudes Pendientes a Anticipo</ListItemText>
+                                <ListItemText>Canceladas</ListItemText>
                             </ListItemButton>
                         </Link>
                     </ListItem>
                 </List>
             </Drawer>
-            <Main open={open}>
+            <Main open={open}  sx={{
+                backgroundColor: (theme) =>
+                    theme.palette.mode === 'light'
+                        ? theme.palette.grey[100]
+                        : theme.palette.grey[900],
+                height: '100vh',
+                overflow: 'auto',
+            }}>
                 <DrawerHeader />
                 {children}
+                <DrawerHeader />
             </Main>
+
         </Box>
     );
 }

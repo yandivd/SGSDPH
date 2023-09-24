@@ -1,6 +1,7 @@
 .link-sidebar{
     color: black;
     width: 100%;
+    text-decoration: none;
 }
 .link-sidebar:hover{
     color: dodgerblue;
@@ -23,3 +24,4 @@
     transition-timing-function: linear;
     outline: 1px solid white;
 }
+
