@@ -1,3 +1,7 @@
 sgsdph_backend/sgsdph_backend/__pycache__
 sgsdph_backend/sistema/migrations
 sgsdph_backend/venv
+sgsdph_backend/sistema/__pycache__
+sgsdph_backend/autentic/__pycache__
+sgsdph_backend/autentic/migrations
+sgsdph_backend/db.sqlite3
