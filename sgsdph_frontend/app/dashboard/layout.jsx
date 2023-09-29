@@ -1,5 +1,4 @@
 'use client'
-import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -17,8 +16,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import '../../styles/home-globals.css'
-import '../../styles/sgsdhStyle.css'
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -29,6 +26,10 @@ import PaidIcon from '@mui/icons-material/Paid';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {inactiveUser} from "../../redux/features/auth/authSlice";
+import Loading from "../../components/Loading";
 
 const drawerWidth = 260;
 
@@ -74,7 +75,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
 }));
 
 function Copyright(props) {
@@ -97,6 +97,10 @@ function Copyright(props) {
 
 
 export default function PersistentDrawerLeft({children}) {
+    const {user, isActive, rol} = useSelector((state) => state.auth);
+    const router = useRouter();
+    const dispatch = useDispatch();
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
 
@@ -108,10 +112,21 @@ export default function PersistentDrawerLeft({children}) {
         setOpen(false);
     };
 
-    const router = useRouter();
+    useEffect(() => {
+        if (!isActive) {
+            router.push('/login')
+        }
+    }, [router])
+
+    if ( !isActive) {
+        return (
+            <Loading infoText='Verificando permisos' />
+        )
+    }
 
     const handleLogout = () =>{
-        router.push('/login')
+        dispatch(inactiveUser());
+        router.push('/login');
     }
     return (
         <Box sx={{ display: 'flex' }} >
@@ -155,10 +170,15 @@ export default function PersistentDrawerLeft({children}) {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
+                <DrawerHeader className={'justify-content-between'}>
+                    <div className={'ps-2  text-capitalize '}>
+                        <Typography>{user}</Typography>
+                    </div>
+                    <div>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                        </IconButton>
+                    </div>
                 </DrawerHeader>
                 <Divider className='bg-dark'/>
                 <List>
