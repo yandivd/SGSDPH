@@ -6,6 +6,7 @@ import BasicTable from "../../components/TableMine";
 import CreateSolicitudModal from "../../components/CreateSolicitudModal";
 import {useState} from "react";
 import Typography from "@mui/material/Typography";
+import {useSelector} from "react-redux";
 
 export default function BasicCard() {
     const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function BasicCard() {
             <div className='d-flex justify-content-end m-2'>
                 <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>
             </div>
+
 
             <CreateSolicitudModal isOpen={open} handleClose={handleClose} setOpen={setOpen} />
 
