@@ -1,4 +1,3 @@
-db.sqlite3
 
 # dependencies
 sgsdph_frontend/node_modules
@@ -33,3 +32,7 @@ sgsdph_frontend/.vercel
 # typescript
 sgsdph_frontend/.tsbuildinfo
 sgsdph_frontend/next-env.d.ts
+
+sgsdph_backend/sgsdph_backend/__pycache__
+sgsdph_backend/sistema/migrations
+sgsdph_backend/venv
