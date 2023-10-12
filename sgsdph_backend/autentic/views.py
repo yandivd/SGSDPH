@@ -9,13 +9,17 @@ from .api.serializers import *
 
 # Create your views here.
 def authenticate(username=None, password=None):
+    print('autenticate')
     try:
         # Verificar en el modelo User
         user = Trabajador.objects.get(username=username)
-        if user.check_password(password):
-            return user
-    except:
-        pass
+        print(user)
+        if user:
+            print(user.check_password(password))
+            if user.check_password(password):
+                return user
+    except Exception as e:
+        print(e)
 
     return None
 
@@ -25,8 +29,9 @@ class LoginAPI(KnoxLoginView):
     def post(self, request, format=None):
         username = request.data.get('username')
         password = request.data.get('password')
-
         if username and password:
+            print(username)
+            print(password)
             user = authenticate(username=username, password=password)
         else:
             return Response({'message': 'Usuario o contraseña incorrecta'}, status=status.HTTP_400_BAD_REQUEST)
