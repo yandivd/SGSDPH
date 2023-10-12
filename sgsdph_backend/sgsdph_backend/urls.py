@@ -21,4 +21,5 @@ from autentic.views import LoginAPI
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', LoginAPI.as_view(), name='login'),
+    path('', include('autentic.api.urls')),
 ]
