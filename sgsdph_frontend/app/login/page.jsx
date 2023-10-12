@@ -13,6 +13,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useRouter} from "next/navigation";
+import {useDispatch, useSelector} from "react-redux";
+import {activeUser} from "../../redux/features/auth/authSlice";
 
 function Copyright(props) {
     return (
@@ -31,14 +33,20 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
     const router = useRouter();
+    const dispatch = useDispatch();
+
+    const {isActive} = useSelector((state) => state.auth);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const user =  data.get('user');
+
+        dispatch(activeUser( {
+            user: user ,
+            rol: 'admin'
+        } ) );
+
         router.push('/dashboard')
     };
 
@@ -65,10 +73,10 @@ export default function SignIn() {
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
+                            id="user"
+                            label="Usuario"
+                            name="user"
+                            type="text"
                             autoFocus
                         />
                         <TextField
@@ -76,10 +84,9 @@ export default function SignIn() {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label='Contraseña'
                             type="password"
                             id="password"
-                            autoComplete="current-password"
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
