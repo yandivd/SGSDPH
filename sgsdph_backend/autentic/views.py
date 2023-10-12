@@ -3,6 +3,12 @@ from django.contrib.auth import login, get_backends
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.signals import user_logged_out
+
+from knox.auth import TokenAuthentication
+from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
 from .models import Trabajador
 from .api.serializers import *
@@ -49,3 +55,22 @@ class LoginAPI(KnoxLoginView):
                     }, status=status.HTTP_201_CREATED)
         else:
                 return Response({'message': 'Usuario o contraseña incorrecta'}, status=status.HTTP_400_BAD_REQUEST)
+        
+class LogoutAPI(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        request._auth.delete()
+        user_logged_out.send(sender=request.user.__class__,
+                            request=request, user=request.user)
+        return Response({'message': 'Sesion finalizada con exito'}, status=status.HTTP_200_OK)
+
+class VerifyTokenView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        user = request.user
+        user_serializer = TrabajadorSerializer(user)
+        return Response({'detail': 'Token válido y usuario autenticado', 'user': user_serializer.data}, status=status.HTTP_200_OK)
