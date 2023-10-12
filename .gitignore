@@ -41,3 +41,5 @@ sgsdph_backend/autentic/__pycache__
 sgsdph_backend/autentic/migrations
 sgsdph_backend/db.sqlite3
 sgsdph_frontend/node_modules
+sgsdph_backend/autentic/api/__pycache__
+sgsdph_backend/autentic/api/__pycache__/serializers.cpython-311.pyc
