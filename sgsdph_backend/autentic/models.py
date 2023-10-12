@@ -32,6 +32,8 @@ class Rol(models.Model):
     class Meta:
         verbose_name="Rol"
         verbose_name_plural="Roles"
+    def __str__(self):
+        return self.name
 
 class Unidad_Organizativa(models.Model):
     name=models.CharField(max_length=100, verbose_name='Nombre')

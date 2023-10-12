@@ -1,6 +1,5 @@
-from autentic.models import Trabajador
+from autentic.models import Trabajador, Rol
 from rest_framework import serializers
-from django.contrib.auth.models import User
 
 class TrabajadorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,3 +18,8 @@ class TrabajadorSerializer(serializers.ModelSerializer):
         updated_user.set_password(validated_data['password'])
         updated_user.save()
         return updated_user
+    
+class RolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rol
+        fields = '__all__'
