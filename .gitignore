@@ -5,3 +5,4 @@ sgsdph_backend/sistema/__pycache__
 sgsdph_backend/autentic/__pycache__
 sgsdph_backend/autentic/migrations
 sgsdph_backend/db.sqlite3
+sgsdph_frontend/node_modules
