@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  sgsdph-backend:
+    build:
+      context: ./sgsdph_backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./sgsdph_backend:/sgsdph_backend
+      - ./sgsdph_backend/media:/sgsdph_backend/media 
+
+    depends_on:
+      - mysql
+    command: sh -c "gunicorn sgsdph_backend.wsgi:application --bind 0.0.0.0:8000"
+
+  sgsdph-frontend:
+    build:
+      context: ./sgsdph_frontend
+      dockerfile: Dockerfile
+    command: npm run start
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_HOST=0.0.0.0:8000
+    volumes:
+      - ./sgsdph_frontend:/sgsdph_frontend
+    depends_on:
+      - sgsdph-backend
+
+  mysql:
+    image: mysql:8.0.34-debian
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: sgsdph
+      MYSQL_USER: sgsdph
+      MYSQL_PASSWORD: sgsdph
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  
+
+  

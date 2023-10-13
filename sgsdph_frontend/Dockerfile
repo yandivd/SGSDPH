@@ -1,11 +1,11 @@
 FROM node:16-alpine
 
-WORKDIR /salsa_admin
+WORKDIR /salsa_frontend
 
 COPY . .
 RUN npm install
 RUN npm run build
 
-EXPOSE 5000
+EXPOSE 3000
 
 #CMD ["npm", "run", "build"]
