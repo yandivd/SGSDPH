@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from autentic.views import LoginAPI, LogoutAPI
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,3 +26,6 @@ urlpatterns = [
     path('logout/', LogoutAPI.as_view(), name='logout'),
     path('', include('autentic.api.urls')),
 ]
+if settings.DEBUG: #revisar q este en desarrollo
+    urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns+= static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

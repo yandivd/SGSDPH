@@ -44,3 +44,4 @@ sgsdph_frontend/node_modules
 sgsdph_backend/autentic/api/__pycache__
 sgsdph_backend/autentic/api/__pycache__/serializers.cpython-311.pyc
 mysql
+sgsdph_backend/static
