@@ -25,6 +25,7 @@ urlpatterns = [
     path('login/', LoginAPI.as_view(), name='login'),
     path('logout/', LogoutAPI.as_view(), name='logout'),
     path('', include('autentic.api.urls')),
+    path('api/sistema/', include('sistema.api.urls')),
 ]
 if settings.DEBUG: #revisar q este en desarrollo
     urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
