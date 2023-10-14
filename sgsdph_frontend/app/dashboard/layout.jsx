@@ -116,6 +116,10 @@ export default function PersistentDrawerLeft({children}) {
         if (!isActive) {
             router.push('/login')
         }
+        const userAuthenticated = window.localStorage.getItem('rol')
+        if (userAuthenticated === null) {
+            return router.push('/login')
+        }
     }, [router])
 
     if ( !isActive) {
