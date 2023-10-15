@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from autentic.views import LoginAPI, LogoutAPI
+from autentic.views import LoginAPI, LogoutAPI, VerifyTokenView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', LoginAPI.as_view(), name='login'),
     path('logout/', LogoutAPI.as_view(), name='logout'),
+    path('verify-token/', VerifyTokenView.as_view(), name='verify-token'),
     path('', include('autentic.api.urls')),
     path('api/sistema/', include('sistema.api.urls')),
 ]
