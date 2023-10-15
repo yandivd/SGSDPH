@@ -64,16 +64,18 @@ export default function SignIn() {
 
                 window.localStorage.setItem('rol', rol)
                 window.localStorage.setItem('token', token)
+                window.localStorage.setItem('username', username)
 
                 router.push('/dashboard')
             }else{
                 if (resp.status === 400) {
                     setErrorMessage('Credenciales incorrectas')
                 } else {
-                    console.log(error)
+                    console.log(resp.status, error)
                 }
             }
         } catch (error) {
+            setErrorMessage('Error de conexión con el servidor')
             console.log(error)
         }
 
@@ -92,8 +94,8 @@ export default function SignIn() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
+                    <Avatar  sx={{ m: 1, bgcolor: 'primary.main',  width: 50, height: 50}}  >
+                        <LockOutlinedIcon  sx={{ fontSize: 30 }} />
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Ingrese sus credenciales
@@ -101,7 +103,6 @@ export default function SignIn() {
                     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
-                            required
                             fullWidth
                             id="user"
                             label="Usuario"
@@ -117,7 +118,6 @@ export default function SignIn() {
                         />
                         <TextField
                             margin="normal"
-                            required
                             fullWidth
                             name="password"
                             label='Contraseña'

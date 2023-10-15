@@ -21,7 +21,7 @@ const CardDescription = () => {
             <Card sx={{ minWidth: 220 }} className='my-3'>
                 <CardContent>
                     <Typography svariant="h5" className='text-primary ' gutterBottom>
-                        <b>Solicitudes canceladas</b>
+                        <b>Solicitudes por aprobar</b>
                     </Typography>
                     <Typography variant="h6" component="div">
                         145
@@ -31,7 +31,7 @@ const CardDescription = () => {
             <Card sx={{ minWidth: 220 }} className='my-3'>
                 <CardContent>
                     <Typography svariant="h5" className='text-primary ' gutterBottom>
-                        <b>Cantidad de archivadas</b>
+                        <b>Solicitudes archivadas</b>
                     </Typography>
                     <Typography variant="h6" component="div">
                         425
@@ -41,10 +41,10 @@ const CardDescription = () => {
             <Card sx={{ minWidth: 220 }} className='my-3'>
                 <CardContent>
                     <Typography svariant="h5" className='text-primary ' gutterBottom>
-                        <b>Cantidad de $</b>
+                        <b>Cantidad de canceladas</b>
                     </Typography>
                     <Typography variant="h6" component="div">
-                        $425687
+                        687
                     </Typography>
                 </CardContent>
             </Card>
