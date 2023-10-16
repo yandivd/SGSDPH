@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    isActive: false,
+    isActive: null,
     user: null,
     rol: null
 };
@@ -12,6 +12,7 @@ const authSlice = createSlice({
     reducers: {
         activeUser: (state, action) => {
             const { user, rol } = action.payload;
+
             state.isActive = true;
             state.user = user;
             state.rol = rol;
