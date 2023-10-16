@@ -6,7 +6,7 @@ django.setup()
 
 from autentic.models import Rol
 
-rol = Rol(name='Creador')
+rol = Rol(name='Crea')
 rol.save()
 
 rol = Rol(name='Solicitante')
