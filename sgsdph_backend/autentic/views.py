@@ -71,6 +71,10 @@ class VerifyTokenView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        user = request.user
-        user_serializer = TrabajadorSerializer(user)
-        return Response({'detail': 'Token válido y usuario autenticado', 'user': user_serializer.data}, status=status.HTTP_200_OK)
+        id_user = request.user.id
+        user = Trabajador.objects.get(id=id_user)
+        if isinstance(user, Trabajador):
+            user_serializer = TrabajadorSerializer(user)
+            return Response({'detail': 'Token válido y usuario autenticado', 'user': user_serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Token valido pero el usuario no es un trabajador'}, status=status.HTTP_404_NOT_FOUND)
