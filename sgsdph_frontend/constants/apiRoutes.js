@@ -1,0 +1,1 @@
+export const veryfy_token = 'verify-token/'

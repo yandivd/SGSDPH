@@ -1,3 +1,47 @@
-db.sqlite3
+
+# dependencies
+sgsdph_frontend/node_modules
+sgsdph_frontend/.pnp
+sgsdph_frontend/.pnp.js
+
+# testing
+sgsdph_frontend/coverage
+
+# next.js
+sgsdph_frontend/.next/
+sgsdph_frontend/out/
+
+# production
+sgsdph_frontend/build
+
+# misc
+sgsdph_frontend/.DS_Store
+sgsdph_frontend.pem
+
+# debug
+sgsdph_frontend/npm-debug.log*
+sgsdph_frontend/yarn-debug.log*
+sgsdph_frontend/yarn-error.log*
+
+# local env files
+sgsdph_frontend/.env*.local
+
+# vercel
+sgsdph_frontend/.vercel
+
+# typescript
+sgsdph_frontend/.tsbuildinfo
+sgsdph_frontend/next-env.d.ts
+
 sgsdph_backend/sgsdph_backend/__pycache__
 sgsdph_backend/sistema/migrations
+sgsdph_backend/venv
+sgsdph_backend/sistema/__pycache__
+sgsdph_backend/autentic/__pycache__
+sgsdph_backend/autentic/migrations
+sgsdph_backend/db.sqlite3
+sgsdph_backend/autentic/api/__pycache__
+sgsdph_backend/autentic/api/__pycache__/serializers.cpython-311.pyc
+mysql
+sgsdph_backend/static
+sgsdph_backend/sistema/api/__pycache__

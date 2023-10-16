@@ -1,0 +1,156 @@
+'use client'
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {useRouter} from "next/navigation";
+import {useDispatch, useSelector} from "react-redux";
+import {activeUser} from "../../redux/features/auth/authSlice";
+import {useForm} from "react-hook-form";
+import {fetchSinToken} from "../../helper/fetch";
+import {useState} from "react";
+
+
+function Copyright(props) {
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="https://mui.com/">
+                Etecsa
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
+
+const defaultTheme = createTheme();
+
+export default function SignIn() {
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
+    const { register, handleSubmit, errors } = useForm();
+    const {isActive} = useSelector((state) => state.auth);
+
+    const onSubmit = async (data) => {
+        setLoading(true)
+
+        setErrorMessage('')
+
+        try {
+            const resp = await fetchSinToken('login/', data, "POST");
+            const body = await resp.json();
+
+            if (resp.status === 201) {
+                const rol = body.user.rol;
+                const username = body.user.username;
+                const token = body.token;
+
+                dispatch(activeUser( {
+                    user: username ,
+                    rol: rol
+                } ) );
+
+                window.localStorage.setItem('rol', rol)
+                window.localStorage.setItem('token', token)
+                window.localStorage.setItem('username', username)
+
+                router.push('/dashboard')
+            }else{
+                if (resp.status === 400) {
+                    setErrorMessage('Credenciales incorrectas')
+                } else {
+                    console.log(resp.status, error)
+                }
+            }
+        } catch (error) {
+            setErrorMessage('Error de conexión con el servidor')
+            console.log(error)
+        }
+
+        setLoading(false)
+    }
+
+    return (
+        <ThemeProvider theme={defaultTheme}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Avatar  sx={{ m: 1, bgcolor: 'primary.main',  width: 50, height: 50}}  >
+                        <LockOutlinedIcon  sx={{ fontSize: 30 }} />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Ingrese sus credenciales
+                    </Typography>
+                    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            id="user"
+                            label="Usuario"
+                            name="username"
+                            type="text"
+                            autoFocus
+                            disabled={loading}
+                            {...register("username", {
+                                required: 'Campo requerido'
+                            })}
+                            //error={errors}
+                            //helperText={errors.username.message}
+                        />
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            name="password"
+                            label='Contraseña'
+                            type="password"
+                            id="password"
+                            disabled={loading}
+                            {...register('password',
+                                { minLength: { value: 4, message: 'Minimo 6 caracteres'},
+                                        required: 'Campo requerido'
+                            })}
+
+                            //error={errors.password}
+                            //helperText={errors}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox value="remember" color="primary" />}
+                            label="Recordarme"
+                        />
+                        {errorMessage && <div className='error-message text-danger'>{errorMessage}</div>}
+
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            disabled={loading}
+                        >
+                            Acceder
+                        </Button>
+                    </Box>
+                </Box>
+                <Copyright sx={{ mt: 8, mb: 4 }} />
+            </Container>
+        </ThemeProvider>
+    );
+}

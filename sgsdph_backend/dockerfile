@@ -1,0 +1,43 @@
+# Establecer la imagen base para Django
+FROM python:3.10-alpine
+
+# Instala las dependencias necesarias para mysqlclient en Alpine Linux
+RUN apk add --no-cache mariadb-dev
+
+# Instala las herramientas de desarrollo de C
+RUN apk add --no-cache build-base
+
+
+# Directorio de trabajo dentro del contenedor
+WORKDIR /sgsdph_backend
+
+# Copiar los archivos requerimientos para el backend
+COPY requirements.txt .
+
+# Instalar las dependencias de Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar el código del backend al contenedor
+COPY . .
+
+# COPY media /var/www/Salsa/salsa_backend/media
+
+# COPY static /var/www/Salsa/salsa_backend/staticfiles
+
+# COPY static /var/www/Salsa/salsa_backend/static
+
+# Realizar las migraciones antes de ejecutar el servidor Django
+# Copiar el script wait_for_db
+# COPY wait_for_db .
+
+# # Agregar el directorio al PATH
+# ENV PATH="/salsa_backend:${PATH}"
+
+# Exponer el puerto en el que Django se ejecutará (ajústalo según tu configuración)
+EXPOSE 8000
+
+# Comando para ejecutar el servidor Django
+# Comando para ejecutar el servidor Django
+# CMD ["sh", "-c", "python manage.py wait_for_db && python manage.py runserver 0.0.0.0:8000"]
+# Comando para ejecutar Celery Beat y Celery Worker junto con el servidor Django
+CMD ["python manage.py runserver 0.0.0.0:8000"]
