@@ -20,16 +20,18 @@ export const fetchSinToken = ( endpoint, data, method = 'GET' ) => {
 export const fetchConToken = ( endpoint, data, method = 'GET' ) => {
 
     const url = `${ baseUrl }/${ endpoint }`;
-    const token = localStorage.getItem('token') || ''; //recibiendo el token del localStorage
+
+    console.log('esta es la data', data)
 
     if ( method === 'GET' ) {
         return fetch( url, {
             method,
             headers: {
-                'x-token': token //mandando el token en los headers
+                'Content-type': 'application/json',
+                'Authorization': JSON.stringify( data )
             }
         });
-    } else {
+    }else {
         return fetch( url, {
             method,
             headers: {
