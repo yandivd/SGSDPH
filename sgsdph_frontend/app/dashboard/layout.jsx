@@ -26,12 +26,13 @@ import PaidIcon from '@mui/icons-material/Paid';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {activeUser, inactiveUser} from "../../redux/features/auth/authSlice";
 import Loading from "../../components/Loading";
 import {fetchConToken, fetchSinToken} from "../../helper/fetch";
 import {veryfy_token} from "../../constants/apiRoutes";
+import {LogoutService} from "../../helper/LogoutService";
 
 const drawerWidth = 260;
 
@@ -114,12 +115,26 @@ export default function PersistentDrawerLeft({children}) {
         setOpen(false);
     };
 
-    useEffect(() => {
+    useEffect( () => {
         const userAuthenticated = window.localStorage.getItem('token');
 
         if (userAuthenticated === null) {
             return router.push('/login')
+        }else{
+            fetchConToken(veryfy_token, userAuthenticated, "GET").then((isValid) => {
+                if( isValid){
+                    dispatch(activeUser( {
+                        user: user ,
+                    } ) );
+
+                }else{
+                    window.localStorage.clear()
+                    dispatch(inactiveUser())
+                    router.push('/login')
+                }
+            })
         }
+
     }, [dispatch,router])
 
     if (isActive === null ) {
@@ -135,10 +150,14 @@ export default function PersistentDrawerLeft({children}) {
             const resp = await fetchConToken(veryfy_token, userAuthenticated, "GET");
             const body = await resp.json();
 
-            console.log('body',body)
+            if (resp.status === 200) {
+                const resp = await LogoutService( 'logout/', body.token, "POST");
 
-            if (resp.status === 201) {
-
+                window.localStorage.clear()
+                dispatch(inactiveUser())
+                router.push('/login')
+            }else{
+                dispatch(inactiveUser())
             }
         } catch (error) {
             console.log(error)
@@ -209,7 +228,7 @@ export default function PersistentDrawerLeft({children}) {
                         </Link>
                     </ListItem>
                     <ListItem disablePadding >
-                        <Link disable href={'http://localhost:8000/admin'} className='link-sidebar'>
+                        <Link  href={'http://localhost:8000/admin'} className='link-sidebar'>
                             <ListItemButton>
                                 <ListItemIcon>
                                     <SupervisorAccountIcon />
@@ -226,7 +245,7 @@ export default function PersistentDrawerLeft({children}) {
                     </ListItem>
 
                     <ListItem disablePadding disableGutters>
-                        <Link disable href={'/dashboard/pendientes_solicitar'} className='link-sidebar'>
+                        <Link href={'/dashboard/pendientes_solicitar'} className='link-sidebar'>
                             <ListItemButton>
                                 <ListItemIcon>
                                     <LibraryBooksIcon />
