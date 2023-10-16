@@ -30,7 +30,7 @@ export default function Main() {
 
 
     return (
-        <Loading infoText={'Accediendo al sistema de gestión de solicitudes de dietas...'} />
+        <Loading infoText={'Accediendo al sistema de gestión de solicitudes de dietas ...'} />
     );
 }
 
