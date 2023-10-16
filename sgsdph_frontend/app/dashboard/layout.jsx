@@ -114,22 +114,23 @@ export default function PersistentDrawerLeft({children}) {
         setOpen(false);
     };
 
-    const userAuthenticated = window.localStorage.getItem('token')
-    const username = window.localStorage.getItem('username')
-
     useEffect(() => {
+        const userAuthenticated = window.localStorage.getItem('token');
+
         if (userAuthenticated === null) {
             return router.push('/login')
         }
     }, [dispatch,router])
 
-    if (userAuthenticated === null ) {
+    if (isActive === null ) {
         return (
             <Loading infoText='Verificando permisos' />
         )
     }
 
     const handleLogout = async () =>{
+        const userAuthenticated = window.localStorage.getItem('token');
+
         try {
             const resp = await fetchConToken(veryfy_token, userAuthenticated, "GET");
             const body = await resp.json();
@@ -187,7 +188,7 @@ export default function PersistentDrawerLeft({children}) {
             >
                 <DrawerHeader className={'justify-content-between'}>
                     <div className={'ps-2  text-capitalize '}>
-                        <Typography>{username}</Typography>
+                        <Typography>{user}</Typography>
                     </div>
                     <div>
                         <IconButton onClick={handleDrawerClose}>
