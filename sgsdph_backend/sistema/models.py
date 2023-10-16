@@ -4,6 +4,7 @@ from autentic.models import Trabajador, Unidad_Organizativa, Centro_Costo, Cargo
 # Create your models here.
 
 class Solicitud(models.Model):
+    tipo_sol = models.IntegerField(null=True, blank=True)
     numero=models.IntegerField() #numero que sale en la columna No (lo asignas  tu en dependencia)
     solicitante=models.ForeignKey(Trabajador, on_delete=models.CASCADE, related_name='Solicitante') #persona que solicitara el modelo (misma para todas las solicitudes)
     trabajador=models.ForeignKey(Trabajador, on_delete=models.CASCADE) #trabajador para el cual se hace la solicitud (por supuesto cambia)
@@ -42,6 +43,7 @@ class Solicitud(models.Model):
         verbose_name_plural="Solicitudes"
 
 class Modelo(models.Model):
+    tipo_model = models.IntegerField(null=True, blank=True)
     nombre=models.CharField(max_length=50) #persona que crea el modelo
     solicitante=models.CharField(max_length=50)
     unidad_organizativa=models.CharField(max_length=100)

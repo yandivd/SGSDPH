@@ -1,4 +1,4 @@
-from autentic.models import Trabajador, Rol
+from autentic.models import Trabajador, Rol, Centro_Costo, Cargo_al_Presupuesto
 from rest_framework import serializers
 
 class TrabajadorSerializer(serializers.ModelSerializer):
@@ -22,4 +22,14 @@ class TrabajadorSerializer(serializers.ModelSerializer):
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rol
+        fields = '__all__'
+
+class CCostoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Centro_Costo
+        fields = '__all__'
+
+class Cargo_al_presupuestoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cargo_al_Presupuesto
         fields = '__all__'
