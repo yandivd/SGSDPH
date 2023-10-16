@@ -28,8 +28,10 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {inactiveUser} from "../../redux/features/auth/authSlice";
+import {activeUser, inactiveUser} from "../../redux/features/auth/authSlice";
 import Loading from "../../components/Loading";
+import {fetchConToken, fetchSinToken} from "../../helper/fetch";
+import {veryfy_token} from "../../constants/apiRoutes";
 
 const drawerWidth = 260;
 
@@ -112,25 +114,34 @@ export default function PersistentDrawerLeft({children}) {
         setOpen(false);
     };
 
+    const userAuthenticated = window.localStorage.getItem('token')
+    const username = window.localStorage.getItem('username')
+
     useEffect(() => {
-        if (!isActive) {
-            router.push('/login')
-        }
-        const userAuthenticated = window.localStorage.getItem('rol')
         if (userAuthenticated === null) {
             return router.push('/login')
         }
-    }, [router])
+    }, [dispatch,router])
 
-    if ( !isActive) {
+    if (userAuthenticated === null ) {
         return (
             <Loading infoText='Verificando permisos' />
         )
     }
 
-    const handleLogout = () =>{
-        dispatch(inactiveUser());
-        router.push('/login');
+    const handleLogout = async () =>{
+        try {
+            const resp = await fetchConToken(veryfy_token, userAuthenticated, "GET");
+            const body = await resp.json();
+
+            console.log('body',body)
+
+            if (resp.status === 201) {
+
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
     return (
         <Box sx={{ display: 'flex' }} >
@@ -176,7 +187,7 @@ export default function PersistentDrawerLeft({children}) {
             >
                 <DrawerHeader className={'justify-content-between'}>
                     <div className={'ps-2  text-capitalize '}>
-                        <Typography>{user}</Typography>
+                        <Typography>{username}</Typography>
                     </div>
                     <div>
                         <IconButton onClick={handleDrawerClose}>
@@ -197,12 +208,14 @@ export default function PersistentDrawerLeft({children}) {
                         </Link>
                     </ListItem>
                     <ListItem disablePadding >
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <SupervisorAccountIcon />
-                            </ListItemIcon>
-                            <ListItemText>Admin</ListItemText>
-                        </ListItemButton>
+                        <Link disable href={'http://localhost:8000/admin'} className='link-sidebar'>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <SupervisorAccountIcon />
+                                </ListItemIcon>
+                                <ListItemText>Admin</ListItemText>
+                            </ListItemButton>
+                        </Link>
                     </ListItem>
                 </List>
                 <Divider className='bg-dark'/>
