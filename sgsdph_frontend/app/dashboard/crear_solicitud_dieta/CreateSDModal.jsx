@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
@@ -8,8 +8,37 @@ import Button from "@mui/material/Button";
 import {DialogActions, MenuItem} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import FieldSelect from "../../../components/FieldSelect";
+import {
+    autoriza_endpoint,
+    cargo_presupuesto_endpoint,
+    ccosto_endpoint,
+    solicita_endpoint, trabajadores_endpoint,
+} from "../../../constants/apiRoutes";
+import axios from "axios";
+import {municipios} from "../../../constants/municipios";
+import {useForm} from "react-hook-form";
+import {fetchSinToken} from "../../../helper/fetch";
+import {activeUser} from "../../../redux/features/auth/authSlice";
+
+
 
 const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
+    const [solicita, setSolicita] = React.useState('');
+    const [autoriza, setAutoriza] = React.useState('');
+    const [ccosto, setCcosto] = React.useState('');
+    const [cargoPresupuesto, setCargoPresupuesto] = React.useState('');
+    const [trabajadores, setTrabajadores] = React.useState('');
+    const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
+    const [provinciaDestino, setProvinciaDestino] = React.useState(0);
+    const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
+    const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
+    const { register, handleSubmit, errors } = useForm();
+
+    useEffect( () => {
+       getDataForm()
+
+    }, [])
+
     const currencies = [
         {
             value: 'USD',
@@ -29,6 +58,57 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
         },
     ];
 
+    const getDataForm = async () => {
+        try {
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
+            )
+                .then(response => {
+                    setSolicita((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
+            )
+                .then(response => {
+                    setAutoriza((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
+            )
+                .then(response => {
+                    setCcosto((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
+            )
+                .then(response => {
+                    setCargoPresupuesto((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+            )
+                .then(response => {
+                    setTrabajadores((response.data));
+                })
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    const handleProvinciaOrigenChange = (event) => {
+        const selectedProvincia = event.target.value;
+        setProvinciaOrigen(selectedProvincia);
+        setMunicipiosOrigen(municipios[selectedProvincia]);
+    };
+
+    const handleProvinciaDestinoChange = (event) => {
+        const selectedProvincia = event.target.value;
+        setProvinciaDestino(selectedProvincia);
+        setMunicipiosDestino(municipios[selectedProvincia]);
+    };
+
+
     return (
         <div>
             <Dialog
@@ -37,6 +117,8 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                 open={isOpen}
                 className={'p-5'}
                 maxWidth={'xl'}
+                fullWidth={true}
+                classes={{ paper: 'my-custom-dialog' }}
             >
 
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
@@ -56,27 +138,117 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                     <CloseIcon />
                 </IconButton>
 
-                <DialogContent dividers fullWidth={true}>
+                <DialogContent dividers>
                     <div className={'d-flex gap-5'}>
                         <div>
-                            <FieldSelect name_label={'Solicita'} data={currencies} id={'id_solicitante'} name={'solicitante'}/>
-                            <FieldSelect name_label={'Trabajador'} data={currencies} id={'id_trabajador'} name={'trabajador'}/>
-                            <FieldSelect name_label={'Centro Contable'} data={currencies} id={'id_c_contable'} name={'c_contable'}/>
+                            <FieldSelect name_label={'Nombre'}
+                                         data={solicita}
+                                         id={'id_solicitante'}
+                                         name={'solicitante'}
+                                         value_show={'username'}
+                            />
+                            <FieldSelect name_label={'Trabajador'}
+                                         id={'id_trabajador'}
+                                         name={'trabajador'}
+                                         data={trabajadores}
+                                         value_show={'username'}
+                            />
+                            <FieldSelect name_label={'Centro Contable'}
+                                         data={ccosto}
+                                         id={'id_c_contable'}
+                                         name={'c_contable'}
+                                         value_show={'name'}
+                            />
                         </div>
 
                         <div>
-                            <FieldSelect name_label={'Provincia Origen'} data={currencies} id={'id_provincia_o'} name={'provincia_o'}/>
-                            <FieldSelect name_label={'Municipio Origen'} data={currencies} id={'id_municipio_o'} name={'municipio_o'}/>
-                            <FieldSelect name_label={'Provincia Destino'} data={currencies} id={'id_provincia_d'} name={'provincia_d'}/>
-                            <FieldSelect name_label={'Municipio Destino'} data={currencies} id={'id_municipio_d'} name={'municipio_d'}/>
-                            <FieldSelect name_label={'Regreso'} data={currencies} id={'id_regreso'} name={'regreso'}/>
+                            <TextField
+                                select
+                                label="Provincia Origen"
+                                onChange={handleProvinciaOrigenChange}
+                                sx={{ m: 2, width: '300px' }}
+                            >
 
+                                {municipios.map((provincia, index) => (
+                                    <MenuItem key={index} value={index}>
+                                        {provincia[1]}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                select
+                                label="Municipio Origen"
+                                sx={{ m: 2, width: '300px' }}
+                            >
+                                {municipiosOrigen.map((municipio, index) => (
+                                    <MenuItem key={index} value={municipio}>
+                                        {municipio}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                select
+                                label="Provincia Destino"
+                                onChange={handleProvinciaDestinoChange}
+                                sx={{ m: 2, width: '300px' }}
+                            >
+
+                                {municipios.map((provincia, index) => (
+                                    <MenuItem key={index} value={index}>
+                                        {provincia[1]}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                select
+                                label="Municipio Destino"
+                                sx={{ m: 2, width: '300px' }}
+                            >
+                                {municipiosDestino.map((municipio, index) => (
+                                    <MenuItem key={index} value={municipio}>
+                                        {municipio}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                select
+                                label="Regreso"
+                                onChange={handleProvinciaOrigenChange}
+                                sx={{ m: 2, width: '300px' }}
+                            >
+
+                                {municipios.map((provincia, index) => (
+                                    <MenuItem key={index} value={index}>
+                                        {provincia[1]}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                         </div>
 
+
+
                         <div>
-                            <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'} data={currencies} id={'id_parleg'} name={'id_parleg'} />
-                            <FieldSelect name_label={'Con Cargo al Presupuesto:'} data={currencies} id={'id_cargo_presupuesto'} name={'cargo_presupuesto'} />
-                            <FieldSelect name_label={'Autoriza'} data={currencies} id={'id_autoriza'} name={'autoriza'} />
+                            <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
+                                         data={trabajadores}
+                                         id={'id_parleg'}
+                                         name={'id_parleg'}
+                                         value_show={'username'}
+
+                            />
+                            <FieldSelect name_label={'Con Cargo al Presupuesto:'}
+                                         data={cargoPresupuesto}
+                                         id={'id_cargo_presupuesto'}
+                                         name={'cargo_presupuesto'}
+                                         value_show={'account'}
+
+                            />
+
+                            <FieldSelect name_label={'Autoriza'}
+                                         data={autoriza}
+                                         id={'id_autoriza'}
+                                         name={'autoriza'}
+                                         value_show={'username'}
+                            />
                             <TextField
                                 required
                                 type={'date'}
@@ -95,7 +267,9 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
 
                         </div>
 
+
                     </div>
+
 
                     <div className={'mt-3'}>
                         <TextField
@@ -114,7 +288,6 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                         />
                     </div>
 
-
                 </DialogContent>
 
                 <DialogActions sx={{m: 2}}>
@@ -124,6 +297,7 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
 
         </div>
     );
