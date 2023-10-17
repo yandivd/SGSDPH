@@ -1,5 +1,5 @@
-from sistema.models import Solicitud, Persona
-from .serializers import SolicitudSerializer, PersonaSerializer
+from sistema.models import Solicitud, Persona, Aperitivo
+from .serializers import SolicitudSerializer, PersonaSerializer, AperitivoSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -100,3 +100,10 @@ def persona_api_view(request):
         personas = Persona.objects.all()
         personas_serializer = PersonaSerializer(personas, many=True)
         return Response(personas_serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def aperitivo_api_view(request):
+    if request.method == 'GET':
+        apertivos = Aperitivo.objects.all()
+        aperitivos_serializer = AperitivoSerializer(apertivos, many=True)
+        return Response(aperitivos_serializer.data, status=status.HTTP_200_OK)

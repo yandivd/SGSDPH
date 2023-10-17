@@ -11,4 +11,5 @@ urlpatterns = [
     path('autoriza/', autoriza_api_view),
     path('ccostos/', centro_costo_api_view),
     path('cargo_presupuesto/', cPresupuesto_api_view),
+    path('aperitivos/', aperitivo_api_view),
 ]

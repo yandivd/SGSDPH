@@ -9,6 +9,11 @@ class Persona(models.Model):
     ci = models.CharField(max_length=11)
     def __str__(self):
         return self.nombre
+    
+class Aperitivo(models.Model):
+    nombre = models.CharField(max_length=50)
+    def __str__(self):
+        return self.nombre
 
 class Solicitud(models.Model):
     tipo_sol = models.IntegerField(null=True, blank=True)
@@ -40,6 +45,7 @@ class Solicitud(models.Model):
     autoriza=models.ForeignKey(Trabajador, on_delete=models.CASCADE, related_name='Autoriza')
     estado=models.CharField(max_length=200)
     observaciones=models.CharField(max_length=500, blank=True, null=True)
+    aperitivo = models.ManyToManyField(Aperitivo)
     labor=models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):

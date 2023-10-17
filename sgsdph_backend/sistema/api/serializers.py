@@ -10,4 +10,9 @@ class PersonaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Persona
         fields = '__all__'
+
+class AperitivoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Aperitivo
+        fields = '__all__'
         
