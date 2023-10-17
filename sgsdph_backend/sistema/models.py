@@ -52,7 +52,7 @@ class Modelo(models.Model):
     solicitudes=models.ManyToManyField(Solicitud)
     parleg=models.CharField(max_length=200, blank=True, null=True)
     autoriza=models.CharField(max_length=50)
-    cargo_presupuesto=models.CharField(max_length=20)
+    cargo_presupuesto=models.CharField(max_length=50)
     observaciones = models.CharField(max_length=500, blank=True, null=True)
     estado=models.CharField(max_length=10)
     #campos nuevos del autoriza y el solicita
