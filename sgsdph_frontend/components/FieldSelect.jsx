@@ -2,21 +2,22 @@ import React from 'react';
 import TextField from "@mui/material/TextField";
 import {MenuItem} from "@mui/material";
 
-const FieldSelect = ({name_label, data, id, name}) => {
+const FieldSelect = ({name_label, data, id, name, value_show}) => {
+
     return (
         <div>
             <TextField
                 id={id}
                 select
-                fullWidth
                 label={name_label}
                 name={name}
-                defaultValue="-"
                 sx={{ m: 2, width: '300px' }}
             >
                 {data.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                        {option.label}
+                    <MenuItem key={option.id}
+                              value={typeof option[value_show] === 'undefined' ? '' : option[value_show]}
+                    >
+                        {typeof option[value_show] === 'undefined' ? '' : option[value_show]}
                     </MenuItem>
                 ))}
             </TextField>
@@ -24,5 +25,7 @@ const FieldSelect = ({name_label, data, id, name}) => {
         </div>
     );
 };
+
+
 
 export default FieldSelect;
