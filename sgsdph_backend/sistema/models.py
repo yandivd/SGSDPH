@@ -3,11 +3,18 @@ from autentic.models import Trabajador, Unidad_Organizativa, Centro_Costo, Cargo
 
 # Create your models here.
 
+class Persona(models.Model):
+    nombre = models.CharField(max_length=50)
+    apellidos = models.CharField(max_length=100)
+    ci = models.CharField(max_length=11)
+    def __str__(self):
+        return self.nombre
+
 class Solicitud(models.Model):
     tipo_sol = models.IntegerField(null=True, blank=True)
     numero=models.IntegerField() #numero que sale en la columna No (lo asignas  tu en dependencia)
     solicitante=models.ForeignKey(Trabajador, on_delete=models.CASCADE, related_name='Solicitante') #persona que solicitara el modelo (misma para todas las solicitudes)
-    trabajador=models.ForeignKey(Trabajador, on_delete=models.CASCADE) #trabajador para el cual se hace la solicitud (por supuesto cambia)
+    trabajador=models.ForeignKey(Persona, on_delete=models.CASCADE) #trabajador para el cual se hace la solicitud (por supuesto cambia)
     unidad_organizativa=models.ForeignKey(Unidad_Organizativa, on_delete=models.CASCADE) # misma para todos los trabajadores
     c_contable=models.ForeignKey(Centro_Costo, on_delete=models.CASCADE) # mismo para todos los trabajadores
     provincia=models.CharField(max_length=50) ## puedes establecerlo como pred a todos la del primer trabajador pero puede que sea distinta

@@ -1,5 +1,5 @@
-from sistema.models import Solicitud
-from .serializers import SolicitudSerializer
+from sistema.models import Solicitud, Persona
+from .serializers import SolicitudSerializer, PersonaSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -93,3 +93,10 @@ def autoriza_api_view(request):
         solicitantes = Trabajador.objects.all().filter(rol = rol)
         serializer = TrabajadorSerializer(solicitantes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+@api_view(['GET'])
+def persona_api_view(request):
+    if request.method == 'GET':
+        personas = Persona.objects.all()
+        personas_serializer = PersonaSerializer(personas, many=True)
+        return Response(personas_serializer.data, status=status.HTTP_200_OK)

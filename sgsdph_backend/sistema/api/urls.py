@@ -6,6 +6,7 @@ urlpatterns = [
     path('solicitudes/dph/', solicitud_dph_api_view),
     path('solicitudes/<int:id>/', solicitud_detail_api_view),
 
+    path('personas/', persona_api_view),
     path('solicitantes/', solicitante_api_view),
     path('autoriza/', autoriza_api_view),
     path('ccostos/', centro_costo_api_view),
