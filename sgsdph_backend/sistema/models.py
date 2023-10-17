@@ -40,7 +40,7 @@ class Solicitud(models.Model):
     transp_ida = models.CharField(max_length=50, null=True, blank=True)
     transp_vuelta = models.CharField(max_length=50, null=True, blank=True)
     ### estos que siguen son lo mismo para el modelo completo, una vez se pongan en la primera solicitud se pone automatico en las demas
-    parleg=models.ForeignKey(Trabajador, on_delete=models.CASCADE, related_name='Trabajador_parleg', null=True, blank=True)
+    parleg=models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='Trabajador_parleg', null=True, blank=True)
     cargo_presupuesto=models.ForeignKey(Cargo_al_Presupuesto, on_delete=models.CASCADE)
     autoriza=models.ForeignKey(Trabajador, on_delete=models.CASCADE, related_name='Autoriza')
     estado=models.CharField(max_length=200)
