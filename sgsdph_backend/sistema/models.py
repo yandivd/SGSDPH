@@ -76,6 +76,11 @@ class Modelo(models.Model):
     labor=models.CharField(max_length=500, blank=True, null=True)
     fecha=models.DateField(auto_now_add=True)
 
+    #campos de firmas
+    firma_crea = models.ImageField(upload_to='Modelos/Firmas/Creada', null=True, blank=True)
+    firma_solicita = models.ImageField(upload_to='Modelos/Firmas/Solicitada', null=True, blank=True)
+    firma_autoriza = models.ImageField(upload_to='Modelos/Firmas/Autorizada', null=True, blank=True)
+
     def __str__(self):
         return self.nombre
 
