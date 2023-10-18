@@ -1,5 +1,5 @@
 from sistema.models import Solicitud, Persona, Aperitivo, Unidad_Organizativa
-from .serializers import SolicitudSerializer, PersonaSerializer, AperitivoSerializer
+from .serializers import SolicitudSerializer, PersonaSerializer, AperitivoSerializer, UnidadOrganinzativaSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -141,3 +141,13 @@ def aperitivo_api_view(request):
         apertivos = Aperitivo.objects.all()
         aperitivos_serializer = AperitivoSerializer(apertivos, many=True)
         return Response(aperitivos_serializer.data, status=status.HTTP_200_OK)
+    
+@api_view(['GET'])
+def unidad_organizativa_detail_api_view(request, id):
+    try:
+        uo = Unidad_Organizativa.objects.get(id=id)
+        if request.method == 'GET':
+            uo_serializer = UnidadOrganinzativaSerializer(uo)
+            return Response(uo_serializer.data, status=status.HTTP_200_OK)
+    except:
+        return Response({'message': 'Unidad Organizativa Inexistente'}, status=status.HTTP_404_NOT_FOUND)
