@@ -114,6 +114,15 @@ def persona_api_view(request):
         personas = Persona.objects.all()
         personas_serializer = PersonaSerializer(personas, many=True)
         return Response(personas_serializer.data, status=status.HTTP_200_OK)
+    
+@api_view(['GET'])
+def persona_detail_api_view(request, id):
+    try:
+        persona = Persona.objects.get(id=id)
+        persona_serializer = PersonaSerializer(persona)
+        return Response(persona_serializer.data, status=status.HTTP_200_OK)
+    except:
+        return Response({'message': 'Trabajador inexistente'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def aperitivo_api_view(request):
