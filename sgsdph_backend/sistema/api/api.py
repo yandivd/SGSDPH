@@ -100,7 +100,7 @@ def centro_costo_detail_api_view(request, id):
             ccosto_serializer = CCostoSerializer(ccosto)
             return Response(ccosto_serializer.data, status=status.HTTP_200_OK)
     except:
-        return Response({"error": "Centro de Costo no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"message": "Centro de Costo no encontrado"}, status=status.HTTP_404_NOT_FOUND)
     
 
 @api_view(['GET'])

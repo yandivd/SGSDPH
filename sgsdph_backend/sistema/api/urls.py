@@ -14,6 +14,7 @@ urlpatterns = [
     path('solicitantes/', solicitante_api_view),
     path('autoriza/', autoriza_api_view),
     path('ccostos/', centro_costo_api_view),
+    path('ccostos/<int:id>/', centro_costo_detail_api_view),
     path('cargo_presupuesto/', cPresupuesto_api_view),
     path('aperitivos/', aperitivo_api_view),
 ]
