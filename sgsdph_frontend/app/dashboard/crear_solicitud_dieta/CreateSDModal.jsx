@@ -1,33 +1,179 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
-import {DialogActions, MenuItem} from "@mui/material";
+import {DialogActions, FormGroup, FormLabel, MenuItem} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import FieldSelect from "../../../components/FieldSelect";
+import {
+    aperitivos_endpoint,
+    autoriza_endpoint,
+    cargo_presupuesto_endpoint,
+    ccosto_endpoint,
+    solicita_endpoint, trabajadores_endpoint,
+} from "../../../constants/apiRoutes";
+import axios from "axios";
+import {municipios} from "../../../constants/municipios";
+import {Controller, useForm} from "react-hook-form";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import CheckBoxPersonalizate from "../../../components/CheckBoxPersonalizate";
+
+
 
 const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
-    const currencies = [
-        {
-            value: 'USD',
-            label: '$',
-        },
-        {
-            value: 'EUR',
-            label: '€',
-        },
-        {
-            value: 'BTC',
-            label: '฿',
-        },
-        {
-            value: 'JPY',
-            label: '¥',
-        },
-    ];
+    const [solicita, setSolicita] = React.useState('');
+    const [autoriza, setAutoriza] = React.useState('');
+    const [ccosto, setCcosto] = React.useState('');
+    const [cargoPresupuesto, setCargoPresupuesto] = React.useState('');
+    const [trabajadores, setTrabajadores] = React.useState('');
+    const [aperitivo, setAperitivo] = React.useState('');
+    const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
+    const [provinciaDestino, setProvinciaDestino] = React.useState(0);
+    const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
+    const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
+    const { register, control, handleSubmit, errors } = useForm();
+
+    useEffect( () => {
+       getDataForm()
+
+    }, [])
+
+    const getDataForm = async () => {
+        try {
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
+            )
+                .then(response => {
+                    setSolicita((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
+            )
+                .then(response => {
+                    setAutoriza((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
+            )
+                .then(response => {
+                    setCcosto((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
+            )
+                .then(response => {
+                    setCargoPresupuesto((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+            )
+                .then(response => {
+                    setTrabajadores((response.data));
+                })
+
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
+            )
+                .then(response => {
+                    setAperitivo((response.data));
+                })
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    const handleProvinciaOrigenChange = (event) => {
+        const selectedProvincia = event.target.value;
+        setProvinciaOrigen(selectedProvincia);
+        setMunicipiosOrigen(municipios[selectedProvincia]);
+    };
+
+    const handleProvinciaDestinoChange = (event) => {
+        const selectedProvincia = event.target.value;
+        setProvinciaDestino(selectedProvincia);
+        setMunicipiosDestino(municipios[selectedProvincia]);
+    };
+
+    const onSubmit = async (data) => {
+        var aperitivo = [];
+
+        for (var propiedad in data) {
+            if (data.hasOwnProperty(propiedad)) {
+                if(propiedad === "provincia" || propiedad === "prov_destino"){
+                    if( data[propiedad] === 1 ){
+                        data[propiedad] = 'Pinar del Río';
+                    }
+                    if( data[propiedad] === 2 ){
+                        data[propiedad] = 'Artemisa';
+                    }
+                    if( data[propiedad] === 3 ){
+                        data[propiedad] = 'La Habana';
+                    }
+                    if( data[propiedad] === 4 ){
+                        data[propiedad] = 'Mayabeque';
+                    }
+                     if( data[propiedad] === 5 ){
+                        data[propiedad] = 'Matanzas';
+                    }
+                     if( data[propiedad] === 6 ){
+                        data[propiedad] = 'Villa Clara';
+                    }
+                     if( data[propiedad] === 7 ){
+                        data[propiedad] = 'Cienfuegos';
+                    }
+                     if( data[propiedad] === 8 ){
+                        data[propiedad] = 'Sancti Spíritus';
+                    }
+                     if( data[propiedad] === 9 ){
+                        data[propiedad] = 'Ciego de Ávila';
+                    }
+                     if( data[propiedad] === 10 ){
+                        data[propiedad] = 'Camagüey';
+                    }
+                     if( data[propiedad] === 11 ){
+                        data[propiedad] = 'Las Tunas';
+                    }
+                     if( data[propiedad] === 12 ){
+                        data[propiedad] = 'Holguín';
+                    }
+                     if( data[propiedad] === 13 ){
+                        data[propiedad] = 'Granma';
+                    }
+                     if( data[propiedad] === 14 ){
+                        data[propiedad] = 'Santiago de Cuba';
+                    }
+                     if( data[propiedad] === 15 ){
+                        data[propiedad] = 'SGuantánamo';
+                    }
+                     if( data[propiedad] === 16 ){
+                        data[propiedad] = 'Isla de la Juventud';
+                    }
+
+                }
+            }
+
+            if(propiedad.includes("checkbox")){
+                if (data[propiedad] !== ''){
+                    aperitivo.push(data[propiedad])
+                }
+
+                delete data[propiedad];
+            }
+        }
+
+        data.tipo_sol = 1; // Agregar el campo "tipo de solicitud"
+        data.estado = 'stamBy';      // Agregar el campo "estado"
+        data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
+
+        console.log("esta es la data",  data )
+        console.log("esta es la data", JSON.stringify( data ))
+    }
 
     return (
         <div>
@@ -37,6 +183,8 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                 open={isOpen}
                 className={'p-5'}
                 maxWidth={'xl'}
+                fullWidth={true}
+                classes={{ paper: 'my-custom-dialog' }}
             >
 
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
@@ -56,74 +204,247 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                     <CloseIcon />
                 </IconButton>
 
-                <DialogContent dividers fullWidth={true}>
-                    <div className={'d-flex gap-5'}>
-                        <div>
-                            <FieldSelect name_label={'Solicita'} data={currencies} id={'id_solicitante'} name={'solicitante'}/>
-                            <FieldSelect name_label={'Trabajador'} data={currencies} id={'id_trabajador'} name={'trabajador'}/>
-                            <FieldSelect name_label={'Centro Contable'} data={currencies} id={'id_c_contable'} name={'c_contable'}/>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <DialogContent dividers>
+                        <div className={'d-flex gap-5'}>
+                            <div>
+                                <FieldSelect name_label={'Nombre'}
+                                             data={solicita}
+                                             id={'id_solicitante'}
+                                             name={'solicitante'}
+                                             value_show={'username'}
+                                             control={control}
+                                />
+                                <FieldSelect name_label={'Trabajador'}
+                                             id={'id_trabajador'}
+                                             name={'trabajador'}
+                                             data={trabajadores}
+                                             value_show={'nombre'}
+                                             control={control}
+                                />
+                                <FieldSelect name_label={'Centro Contable'}
+                                             data={ccosto}
+                                             id={'id_c_contable'}
+                                             name={'c_contable'}
+                                             value_show={'name'}
+                                             control={control}
+                                />
+                                <FormLabel sx={{ mx: 2}} component="legend">Gasto en comida</FormLabel>
+
+                                <CheckBoxPersonalizate data={aperitivo} control={control} />
+
+                            </div>
+
+
+                            <div>
+                                <Controller
+                                    name='provincia'
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <TextField
+                                            select
+                                            label="Provincia Origen"
+                                            required
+                                            name='provincia'
+                                            {...field}
+                                            sx={{ m: 2, width: '300px' }}
+                                            onChange={(event) => {
+                                                field.onChange(event);
+                                                handleProvinciaOrigenChange(event);
+                                            }}
+                                        >
+                                            {municipios.map((provincia, index) => (
+                                                <MenuItem key={index} value={index}>
+                                                    {provincia[0]}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    )}
+                                />
+
+                                <Controller
+                                    name='origen'
+                                    control={control}
+                                    defaultValue=''
+                                    render={({ field }) => (
+                                        <TextField
+                                            select
+                                            required
+                                            label="Municipio Origen"
+                                            name='origen'
+                                            {...field}
+                                            sx={{ m: 2, width: '300px' }}
+                                        >
+                                            {municipiosOrigen.length > 0 ?
+                                                municipiosOrigen.slice(1).map((municipio, index) => (
+                                                    <MenuItem key={index} value={municipio}>
+                                                        {municipio}
+                                                    </MenuItem>
+                                                ))
+                                                : municipiosOrigen.map((municipio, index) => (
+                                                    <MenuItem key={index} value={municipio}>
+                                                        {municipio}
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                    )}
+                                />
+                                 <Controller
+                                        name='prov_destino'
+                                        control={control}
+                                        defaultValue=""
+                                        render={({ field }) => (
+                                            <TextField
+                                                select
+                                                label="Provincia Destino"
+                                                required
+                                                name='prov_destino'
+                                                {...field}
+                                                sx={{ m: 2, width: '300px' }}
+                                                onChange={(event) => {
+                                                    field.onChange(event);
+                                                    handleProvinciaDestinoChange(event);
+                                                }}
+                                            >
+                                                {municipios.map((provincia, index) => (
+                                                    <MenuItem key={index} value={index}>
+                                                        {provincia[0]}
+                                                    </MenuItem>
+                                                ))}
+                                            </TextField>
+                                        )}
+                                    />
+
+                                <Controller
+                                    name='destino'
+                                    control={control}
+                                    defaultValue=''
+                                    render={({ field }) => (
+                                        <TextField
+                                            select
+                                            required
+                                            label="Municipio Destino"
+                                            name='destino'
+                                            {...field}
+                                            sx={{ m: 2, width: '300px' }}
+                                        >
+                                            {municipiosDestino.slice(1).map((municipio, index) => (
+                                                <MenuItem key={index} value={municipio}>
+                                                    {municipio}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    )}
+                                />
+
+
+                                <Controller
+                                    name='regreso'
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <TextField
+                                            select
+                                            label="Regreso"
+                                            required
+                                            name='regreso'
+                                            {...field}
+                                            sx={{ m: 2, width: '300px' }}
+                                        >
+                                            {municipios.map((provincia, index) => (
+                                                <MenuItem key={index} value={provincia[0]}>
+                                                    {provincia[0]}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    )}
+                                />
+                            </div>
+
+
+
+
+                            <div>
+                                <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
+                                             data={trabajadores}
+                                             id={'id_parleg'}
+                                             name={'id_parleg'}
+                                             value_show={'nombre'}
+                                             control={control}
+
+                                />
+                                <FieldSelect name_label={'Con Cargo al Presupuesto:'}
+                                             data={cargoPresupuesto}
+                                             id={'id_cargo_presupuesto'}
+                                             name={'cargo_presupuesto'}
+                                             value_show={'account'}
+                                             control={control}
+                                />
+
+                                <FieldSelect name_label={'Autoriza'}
+                                             data={autoriza}
+                                             id={'id_autoriza'}
+                                             name={'autoriza'}
+                                             value_show={'username'}
+                                             control={control}
+                                />
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    id="outlined-required"
+                                    label="Fecha de Inicio"
+                                    sx={{ m: 2, width: '300px' }}
+                                    {...register("fecha_inicio_dieta")}
+                                />
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    id="outlined-required"
+                                    label="Fecha Final"
+                                    sx={{ m: 2, width: '300px' }}
+                                    {...register("fecha_final_dieta")}
+
+                                />
+
+
+                            </div>
+
+
                         </div>
 
-                        <div>
-                            <FieldSelect name_label={'Provincia Origen'} data={currencies} id={'id_provincia_o'} name={'provincia_o'}/>
-                            <FieldSelect name_label={'Municipio Origen'} data={currencies} id={'id_municipio_o'} name={'municipio_o'}/>
-                            <FieldSelect name_label={'Provincia Destino'} data={currencies} id={'id_provincia_d'} name={'provincia_d'}/>
-                            <FieldSelect name_label={'Municipio Destino'} data={currencies} id={'id_municipio_d'} name={'municipio_d'}/>
-                            <FieldSelect name_label={'Regreso'} data={currencies} id={'id_regreso'} name={'regreso'}/>
 
-                        </div>
-
-                        <div>
-                            <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'} data={currencies} id={'id_parleg'} name={'id_parleg'} />
-                            <FieldSelect name_label={'Con Cargo al Presupuesto:'} data={currencies} id={'id_cargo_presupuesto'} name={'cargo_presupuesto'} />
-                            <FieldSelect name_label={'Autoriza'} data={currencies} id={'id_autoriza'} name={'autoriza'} />
+                        <div className={'mt-3'}>
                             <TextField
-                                required
-                                type={'date'}
                                 id="outlined-required"
-                                label="Fecha de Inicio"
-                                sx={{ m: 2, width: '300px' }}
+                                label="Labor a Realizar"
+                                defaultValue=""
+                                sx={{ m: 2, width: '92%' }}
+                                {...register("labor")}
                             />
+                        </div>
+                        <div className={'mt-3'}>
                             <TextField
-                                required
-                                type={'date'}
                                 id="outlined-required"
-                                label="Fecha Final"
-                                sx={{ m: 2, width: '300px' }}
+                                label="Observaciones"
+                                defaultValue=""
+                                sx={{ m: 2, width: '92%' }}
+                                {...register("observaciones")}
                             />
-
-
                         </div>
 
-                    </div>
+                    </DialogContent>
 
-                    <div className={'mt-3'}>
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Labor a Realizar"
-                            sx={{ m: 2, width: '92%' }}
-                        />
-                    </div>
-                    <div className={'mt-3'}>
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Observaciones"
-                            sx={{ m: 2, width: '92%' }}
-                        />
-                    </div>
-
-
-                </DialogContent>
-
-                <DialogActions sx={{m: 2}}>
-                    <Button onClick={handleClose} variant="contained" color="error">Cancelar</Button>
-                    <Button onClick={handleClose} variant="contained" autoFocus color="success">
-                        Aceptar
-                    </Button>
-                </DialogActions>
+                    <DialogActions sx={{m: 2}}>
+                        <Button onClick={handleClose} variant="contained" color="error">Cancelar</Button>
+                        <Button  type="submit" variant="contained" autoFocus color="success">
+                            Aceptar
+                        </Button>
+                    </DialogActions>
+                </form>
             </Dialog>
+
 
         </div>
     );

@@ -1,28 +1,42 @@
 import React from 'react';
 import TextField from "@mui/material/TextField";
 import {MenuItem} from "@mui/material";
+import { Controller } from 'react-hook-form';
 
-const FieldSelect = ({name_label, data, id, name}) => {
+const FieldSelect = ({name_label, data, id, name, value_show, control}) => {
+
     return (
         <div>
-            <TextField
-                id={id}
-                select
-                fullWidth
-                label={name_label}
+            <Controller
                 name={name}
-                defaultValue="-"
-                sx={{ m: 2, width: '300px' }}
-            >
-                {data.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                    </MenuItem>
-                ))}
-            </TextField>
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                    <TextField
+                        id={id}
+                        select
+                        required
+                        label={name_label}
+                        name={name}
+                        {...field}
+                        sx={{ m: 2, width: '300px' }}
+                    >
+                        {data.map((option) => (
+                            <MenuItem key={option.id}
+                                      value={typeof option[value_show] === 'undefined' ? '' : option[value_show]}
+                            >
+                                {typeof option[value_show] === 'undefined' ? '' : option[value_show]}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                )}
+            />
+
 
         </div>
     );
 };
+
+
 
 export default FieldSelect;

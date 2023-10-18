@@ -5,6 +5,7 @@ import django
 django.setup()
 
 from autentic.models import Rol
+from sistema.models import Aperitivo
 
 rol = Rol(name='Crea')
 rol.save()
@@ -14,3 +15,12 @@ rol.save()
 
 rol = Rol(name='Autorizador')
 rol.save()
+
+ap = Aperitivo(nombre='Desayuno')
+ap.save()
+
+ap = Aperitivo(nombre='Almuerzo')
+ap.save()
+
+ap = Aperitivo(nombre='Comida')
+ap.save()

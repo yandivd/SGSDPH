@@ -3,11 +3,23 @@ from autentic.models import Trabajador, Unidad_Organizativa, Centro_Costo, Cargo
 
 # Create your models here.
 
+class Persona(models.Model):
+    nombre = models.CharField(max_length=50)
+    apellidos = models.CharField(max_length=100)
+    ci = models.CharField(max_length=11)
+    def __str__(self):
+        return self.nombre
+    
+class Aperitivo(models.Model):
+    nombre = models.CharField(max_length=50)
+    def __str__(self):
+        return self.nombre
+
 class Solicitud(models.Model):
     tipo_sol = models.IntegerField(null=True, blank=True)
     numero=models.IntegerField() #numero que sale en la columna No (lo asignas  tu en dependencia)
     solicitante=models.ForeignKey(Trabajador, on_delete=models.CASCADE, related_name='Solicitante') #persona que solicitara el modelo (misma para todas las solicitudes)
-    trabajador=models.ForeignKey(Trabajador, on_delete=models.CASCADE) #trabajador para el cual se hace la solicitud (por supuesto cambia)
+    trabajador=models.ForeignKey(Persona, on_delete=models.CASCADE) #trabajador para el cual se hace la solicitud (por supuesto cambia)
     unidad_organizativa=models.ForeignKey(Unidad_Organizativa, on_delete=models.CASCADE) # misma para todos los trabajadores
     c_contable=models.ForeignKey(Centro_Costo, on_delete=models.CASCADE) # mismo para todos los trabajadores
     provincia=models.CharField(max_length=50) ## puedes establecerlo como pred a todos la del primer trabajador pero puede que sea distinta
@@ -22,17 +34,18 @@ class Solicitud(models.Model):
     fecha_inicio_hosp=models.DateField(null=True, blank=True)
     fecha_final_hosp=models.DateField(null=True, blank=True)
     ### fechas pasajes ###
-    fecha_inicio_hosp=models.DateField(null=True, blank=True)
-    fecha_final_hosp=models.DateField(null=True, blank=True)
+    fecha_inicio_pasaj=models.DateField(null=True, blank=True)
+    fecha_final_pasaj=models.DateField(null=True, blank=True)
     ### transportacion###
     transp_ida = models.CharField(max_length=50, null=True, blank=True)
     transp_vuelta = models.CharField(max_length=50, null=True, blank=True)
     ### estos que siguen son lo mismo para el modelo completo, una vez se pongan en la primera solicitud se pone automatico en las demas
-    parleg=models.ForeignKey(Trabajador, on_delete=models.CASCADE, related_name='Trabajador_parleg', null=True, blank=True)
+    parleg=models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='Trabajador_parleg', null=True, blank=True)
     cargo_presupuesto=models.ForeignKey(Cargo_al_Presupuesto, on_delete=models.CASCADE)
     autoriza=models.ForeignKey(Trabajador, on_delete=models.CASCADE, related_name='Autoriza')
     estado=models.CharField(max_length=200)
     observaciones=models.CharField(max_length=500, blank=True, null=True)
+    aperitivo = models.ManyToManyField(Aperitivo)
     labor=models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
@@ -52,7 +65,7 @@ class Modelo(models.Model):
     solicitudes=models.ManyToManyField(Solicitud)
     parleg=models.CharField(max_length=200, blank=True, null=True)
     autoriza=models.CharField(max_length=50)
-    cargo_presupuesto=models.CharField(max_length=20)
+    cargo_presupuesto=models.CharField(max_length=50)
     observaciones = models.CharField(max_length=500, blank=True, null=True)
     estado=models.CharField(max_length=10)
     #campos nuevos del autoriza y el solicita
