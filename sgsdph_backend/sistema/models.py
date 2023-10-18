@@ -28,7 +28,7 @@ class Solicitud(models.Model):
     destino=models.CharField(max_length=50) #lo mismo de arriba
     regreso=models.CharField(max_length=50) #lo mismo de arriba
     ### fechas dietas ###
-    fecha_inicio_dieta=models.DateField()
+    fecha_inicio_dieta=models.DateField(null=True, blank=True)
     fecha_final_dieta=models.DateField()
     ### fechas hospedajes ###
     fecha_inicio_hosp=models.DateField(null=True, blank=True)
@@ -82,3 +82,12 @@ class Modelo(models.Model):
     class Meta:
         verbose_name="Modelo de Solicitudes"
         verbose_name_plural="Modelos de Solicitudes"
+
+class PARLEG(models.Model):
+    trabajador=models.ForeignKey(Persona, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return self.trabajador.nombre
+    class Meta:
+        verbose_name="Persona autorizada a recoger y liquidar el Efectivo"
+        verbose_name="Personas autorizadas a recoger y liquidar el Efectivo"

@@ -14,10 +14,13 @@ def solicitud_api_view(request):
         serializer = SolicitudSerializer(solicitudes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        serializer = SolicitudSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(request.data)
+        sol_serializer = SolicitudSerializer(data=request.data)
+        print(sol_serializer)
+        if sol_serializer.is_valid():
+            print('valid')
+            sol_serializer.save()
+            return Response(sol_serializer.data, status=status.HTTP_201_CREATED)
         return Response(SolicitudSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])

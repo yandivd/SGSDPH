@@ -74,11 +74,3 @@ class Trabajador(CustomUser):
         verbose_name="Trabajador"
         verbose_name_plural="Trabajadores"
     
-class PARLEG(models.Model):
-    trabajador=models.ForeignKey(Trabajador, on_delete=models.CASCADE, blank=True, null=True)
-
-    def __str__(self):
-        return self.trabajador.usuario.first_name+' '+self.trabajador.usuario.last_name
-    class Meta:
-        verbose_name="Persona autorizada a recoger y liquidar el Efectivo"
-        verbose_name="Personas autorizadas a recoger y liquidar el Efectivo"
