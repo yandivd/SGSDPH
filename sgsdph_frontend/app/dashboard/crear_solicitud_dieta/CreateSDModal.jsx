@@ -13,7 +13,7 @@ import {
     autoriza_endpoint,
     cargo_presupuesto_endpoint,
     ccosto_endpoint,
-    solicita_endpoint, trabajadores_endpoint,
+    solicita_endpoint, solicitudes_endpoint, trabajadores_endpoint,
 } from "../../../constants/apiRoutes";
 import axios from "axios";
 import {municipios} from "../../../constants/municipios";
@@ -21,10 +21,14 @@ import {Controller, useForm} from "react-hook-form";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import CheckBoxPersonalizate from "../../../components/CheckBoxPersonalizate";
+import {fetchSinToken} from "../../../helper/fetch";
+import {activeUser} from "../../../redux/features/auth/authSlice";
+import Swal from "sweetalert2"
 
 
 
-const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
+
+const CreateSdModal = ({isOpen, handleClose, setOpen, solicitudes}) => {
     const [solicita, setSolicita] = React.useState('');
     const [autoriza, setAutoriza] = React.useState('');
     const [ccosto, setCcosto] = React.useState('');
@@ -101,6 +105,8 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
     };
 
     const onSubmit = async (data) => {
+        const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
+
         var aperitivo = [];
 
         for (var propiedad in data) {
@@ -168,11 +174,26 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
         }
 
         data.tipo_sol = 1; // Agregar el campo "tipo de solicitud"
-        data.estado = 'stamBy';      // Agregar el campo "estado"
+        data.estado = 'StandBye';      // Agregar el campo "estado"
         data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
+        data.numero = solicitudes.length + 1;      // Agregar el campo "numero de solicitud"
+        data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
-        console.log("esta es la data",  data )
-        console.log("esta es la data", JSON.stringify( data ))
+        try {
+            const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
+            const body = await resp.json();
+
+
+            if (resp.status === 201) {
+                Swal.fire('Exito', "Se ha creado correctamente", 'success');
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+        handleClose();
     }
 
     return (
@@ -208,15 +229,13 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                     <DialogContent dividers>
                         <div className={'d-flex gap-5'}>
                             <div>
-                                <FieldSelect name_label={'Nombre'}
+                                <FieldSelect name_label={'Solicita'}
                                              data={solicita}
-                                             id={'id_solicitante'}
                                              name={'solicitante'}
                                              value_show={'username'}
                                              control={control}
                                 />
                                 <FieldSelect name_label={'Trabajador'}
-                                             id={'id_trabajador'}
                                              name={'trabajador'}
                                              data={trabajadores}
                                              value_show={'nombre'}
@@ -224,7 +243,6 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                                 />
                                 <FieldSelect name_label={'Centro Contable'}
                                              data={ccosto}
-                                             id={'id_c_contable'}
                                              name={'c_contable'}
                                              value_show={'name'}
                                              control={control}
@@ -369,15 +387,13 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                             <div>
                                 <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
                                              data={trabajadores}
-                                             id={'id_parleg'}
-                                             name={'id_parleg'}
+                                             name={'parleg'}
                                              value_show={'nombre'}
                                              control={control}
 
                                 />
                                 <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                              data={cargoPresupuesto}
-                                             id={'id_cargo_presupuesto'}
                                              name={'cargo_presupuesto'}
                                              value_show={'account'}
                                              control={control}
@@ -385,7 +401,6 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
 
                                 <FieldSelect name_label={'Autoriza'}
                                              data={autoriza}
-                                             id={'id_autoriza'}
                                              name={'autoriza'}
                                              value_show={'username'}
                                              control={control}
@@ -393,7 +408,6 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                                 <TextField
                                     required
                                     type={'date'}
-                                    id="outlined-required"
                                     label="Fecha de Inicio"
                                     sx={{ m: 2, width: '300px' }}
                                     {...register("fecha_inicio_dieta")}
@@ -401,7 +415,6 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
                                 <TextField
                                     required
                                     type={'date'}
-                                    id="outlined-required"
                                     label="Fecha Final"
                                     sx={{ m: 2, width: '300px' }}
                                     {...register("fecha_final_dieta")}
@@ -438,7 +451,7 @@ const CreateSdModal = ({isOpen, handleClose, setOpen}) => {
 
                     <DialogActions sx={{m: 2}}>
                         <Button onClick={handleClose} variant="contained" color="error">Cancelar</Button>
-                        <Button  type="submit" variant="contained" autoFocus color="success">
+                        <Button type="submit" variant="contained" autoFocus color="success">
                             Aceptar
                         </Button>
                     </DialogActions>
