@@ -34,8 +34,8 @@ class Solicitud(models.Model):
     fecha_inicio_hosp=models.DateField(null=True, blank=True)
     fecha_final_hosp=models.DateField(null=True, blank=True)
     ### fechas pasajes ###
-    fecha_inicio_hosp=models.DateField(null=True, blank=True)
-    fecha_final_hosp=models.DateField(null=True, blank=True)
+    fecha_inicio_pasaj=models.DateField(null=True, blank=True)
+    fecha_final_pasaj=models.DateField(null=True, blank=True)
     ### transportacion###
     transp_ida = models.CharField(max_length=50, null=True, blank=True)
     transp_vuelta = models.CharField(max_length=50, null=True, blank=True)
