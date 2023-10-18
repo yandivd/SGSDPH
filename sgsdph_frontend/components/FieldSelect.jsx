@@ -1,26 +1,37 @@
 import React from 'react';
 import TextField from "@mui/material/TextField";
 import {MenuItem} from "@mui/material";
+import { Controller } from 'react-hook-form';
 
-const FieldSelect = ({name_label, data, id, name, value_show}) => {
+const FieldSelect = ({name_label, data, id, name, value_show, control}) => {
 
     return (
         <div>
-            <TextField
-                id={id}
-                select
-                label={name_label}
+            <Controller
                 name={name}
-                sx={{ m: 2, width: '300px' }}
-            >
-                {data.map((option) => (
-                    <MenuItem key={option.id}
-                              value={typeof option[value_show] === 'undefined' ? '' : option[value_show]}
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                    <TextField
+                        id={id}
+                        select
+                        required
+                        label={name_label}
+                        name={name}
+                        {...field}
+                        sx={{ m: 2, width: '300px' }}
                     >
-                        {typeof option[value_show] === 'undefined' ? '' : option[value_show]}
-                    </MenuItem>
-                ))}
-            </TextField>
+                        {data.map((option) => (
+                            <MenuItem key={option.id}
+                                      value={typeof option[value_show] === 'undefined' ? '' : option[value_show]}
+                            >
+                                {typeof option[value_show] === 'undefined' ? '' : option[value_show]}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                )}
+            />
+
 
         </div>
     );

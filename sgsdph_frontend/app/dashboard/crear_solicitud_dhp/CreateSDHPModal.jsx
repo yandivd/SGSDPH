@@ -25,7 +25,7 @@ const CreateSdhpModal = ({isOpen, handleClose, setOpen}) => {
         },
         {
             value: 'JPY',
-            label: '¥',
+            // label: '¥',
         },
     ];
 

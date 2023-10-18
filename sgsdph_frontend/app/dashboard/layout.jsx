@@ -119,18 +119,20 @@ export default function PersistentDrawerLeft({children}) {
         const userAuthenticated = window.localStorage.getItem('token');
 
         if (userAuthenticated === null) {
-            return router.push('/login')
+            return router.push('/login');
+
         }else{
             fetchConToken(veryfy_token, userAuthenticated, "GET").then((isValid) => {
-                if( isValid){
-                    dispatch(activeUser( {
-                        user: user ,
-                    } ) );
-
-                }else{
+                if( isValid.status === 401){
                     window.localStorage.clear()
                     dispatch(inactiveUser())
                     router.push('/login')
+
+
+                }else{
+                    dispatch(activeUser( {
+                        user: user ,
+                    } ) );
                 }
             })
         }
