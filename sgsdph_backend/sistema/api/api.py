@@ -92,6 +92,16 @@ def centro_costo_api_view(request):
         ccosto_serializer = CCostoSerializer(centro_costo, many=True)
         return Response(ccosto_serializer.data, status=status.HTTP_200_OK)
     
+@api_view(['GET'])
+def centro_costo_detail_api_view(request, id):
+    try:
+        ccosto= Centro_Costo.objects.get(id=id)
+        if request.method == 'GET':
+            ccosto_serializer = CCostoSerializer(ccosto)
+            return Response(ccosto_serializer.data, status=status.HTTP_200_OK)
+    except:
+        return Response({"error": "Centro de Costo no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+    
 
 @api_view(['GET'])
 def cPresupuesto_api_view(request):
@@ -119,8 +129,9 @@ def persona_api_view(request):
 def persona_detail_api_view(request, id):
     try:
         persona = Persona.objects.get(id=id)
-        persona_serializer = PersonaSerializer(persona)
-        return Response(persona_serializer.data, status=status.HTTP_200_OK)
+        if request.method == 'GET':
+            persona_serializer = PersonaSerializer(persona)
+            return Response(persona_serializer.data, status=status.HTTP_200_OK)
     except:
         return Response({'message': 'Trabajador inexistente'}, status=status.HTTP_404_NOT_FOUND)
 
