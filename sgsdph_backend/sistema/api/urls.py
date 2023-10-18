@@ -3,8 +3,10 @@ from .api import *
 
 urlpatterns = [
     path('solicitudes/', solicitud_api_view),
+    path('solicitudes/<int:uo_id>/', solicitud_no_modelo_api_view),
+
     path('solicitudes/dph/', solicitud_dph_api_view),
-    path('solicitudes/<int:id>/', solicitud_detail_api_view),
+    path('solicitudes/dph/<int:id>/', solicitud_detail_api_view),
 
     path('personas/', persona_api_view),
     path('solicitantes/', solicitante_api_view),
