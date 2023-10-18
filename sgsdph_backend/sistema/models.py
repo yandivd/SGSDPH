@@ -61,7 +61,7 @@ class Modelo(models.Model):
     solicitante=models.CharField(max_length=50)
     unidad_organizativa=models.CharField(max_length=100)
     c_contable=models.CharField(max_length=4)
-    consec=models.IntegerField()
+    consec=models.CharField(max_length=8)
     solicitudes=models.ManyToManyField(Solicitud)
     parleg=models.CharField(max_length=200, blank=True, null=True)
     autoriza=models.CharField(max_length=50)
