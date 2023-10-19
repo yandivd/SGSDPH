@@ -44,15 +44,15 @@ def solicitud_detail_api_view(request, id):
     if request.method == 'GET':
         serializer = SolicitudSerializer(solicitud)
         return Response(serializer.data, status=status.HTTP_200_OK)
-        
+            
     elif request.method == 'PUT':
         serializer = SolicitudSerializer(solicitud, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(SolicitudSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-    elif request.methodo == 'DELETE':
+            
+    elif request.method == 'DELETE':
         solicitud.delete()
         return Response({'message':'Solicitud eliminada correctamente'}, status=status.HTTP_204_NO_CONTENT)
 
