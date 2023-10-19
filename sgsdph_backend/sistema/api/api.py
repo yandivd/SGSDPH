@@ -132,7 +132,7 @@ def autoriza_api_view(request):
 @api_view(['GET'])
 def persona_api_view(request):
     if request.method == 'GET':
-        personas = Persona.objects.all()
+        personas = Persona.objects.filter(eliminada=False)
         personas_serializer = PersonaSerializer(personas, many=True)
         return Response(personas_serializer.data, status=status.HTTP_200_OK)
     
