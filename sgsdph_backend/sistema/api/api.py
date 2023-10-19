@@ -1,17 +1,17 @@
-from sistema.models import Solicitud, Persona, Aperitivo, Unidad_Organizativa
-from .serializers import SolicitudSerializer, PersonaSerializer, AperitivoSerializer, UnidadOrganinzativaSerializer
+from sistema.models import *
+from .serializers import *
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from autentic.models import Trabajador, Rol, Centro_Costo, Cargo_al_Presupuesto
-from autentic.api.serializers import TrabajadorSerializer, CCostoSerializer, Cargo_al_presupuestoSerializer
+from autentic.models import *
+from autentic.api.serializers import *
 
 #### Solicitudes de Dietas ####
 @api_view(['GET', 'POST'])
 def solicitud_api_view(request):
     if request.method == 'GET':
         solicitudes = Solicitud.objects.all().filter(tipo_sol=1)
-        serializer = SolicitudSerializer(solicitudes, many=True)
+        serializer = SolicitudSerializerGET(solicitudes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         print(request.data)
@@ -31,7 +31,7 @@ def solicitud_no_modelo_api_view(request, uo_id):
     # uo_test = Trabajador.objects.get(id=id_user).unidad_organizativa
     # print(uo_test)
     solicitudes = Solicitud.objects.filter(tipo_sol=1, unidad_organizativa=uo, estado='StandBye')
-    solicitudes_serializer = SolicitudSerializer(solicitudes, many=True)
+    solicitudes_serializer = SolicitudSerializerGET(solicitudes, many=True)
     return Response(solicitudes_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -42,7 +42,7 @@ def solicitud_dph_no_modelo_api_view(request, uo_id):
     # uo_test = Trabajador.objects.get(id=id_user).unidad_organizativa
     # print(uo_test)
     solicitudes = Solicitud.objects.filter(tipo_sol=2, unidad_organizativa=uo, estado='StandBye')
-    solicitudes_serializer = SolicitudSerializer(solicitudes, many=True)
+    solicitudes_serializer = SolicitudSerializerGET(solicitudes, many=True)
     return Response(solicitudes_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET','PUT','DELETE','PATCH'])
@@ -54,7 +54,7 @@ def solicitud_detail_api_view(request, id):
         return Response({'message':'Solicitud no encontrada'}, status=status.HTTP_404_NOT_FOUND)
     if solicitud:
         if request.method == 'GET':
-            serializer = SolicitudSerializer(solicitud)
+            serializer = SolicitudSerializerGET(solicitud)
             return Response(serializer.data, status=status.HTTP_200_OK)
                 
         elif request.method == 'PUT':
@@ -165,3 +165,34 @@ def unidad_organizativa_detail_api_view(request, id):
             return Response(uo_serializer.data, status=status.HTTP_200_OK)
     except:
         return Response({'message': 'Unidad Organizativa Inexistente'}, status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['GET','POST'])
+def modelo_api_view(request):
+    if request.method == 'GET':
+        modelos = Modelo.objects.all().filter(tipo_model=1)
+        modelos_serializer = ModeloSerializer(modelos, many=True)
+        return Response(modelos_serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        modelo_serializer = ModeloSerializer(data=request.data)
+        if modelo_serializer.is_valid():
+            modelo_serializer.save()
+            return Response(modelo_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(modelo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def modelo_dph_api_view(request):
+    if request.method == 'GET':
+        modelos = Modelo.objects.all().filter(tipo_model=2)
+        modelos_serializer = ModeloSerializer(modelos, many=True)
+        return Response(modelos_serializer.data, status=status.HTTP_200_OK)
+    
+@api_view(['GET','PUT','PATCH','DELETE'])
+def modelo_detail_api_view(request, id):
+    try:
+        modelo = Modelo.objects.get(id=id)
+        if request.method == 'GET':
+            modelo_serializer = ModeloSerializer(modelo)
+            return Response(modelo_serializer.data, status=status.HTTP_200_OK)
+
+    except:
+        return Response({'message':'Modelo no encontrado en el sistema'}, status=status.HTTP_404_NOT_FOUND)

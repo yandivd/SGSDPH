@@ -24,4 +24,13 @@ urlpatterns = [
     path('aperitivos/', aperitivo_api_view),
 
     path('unidad_organizativa/<int:id>/', unidad_organizativa_detail_api_view),
+
+    # este endpoint es para el get de las solicitudes de dietas
+    # y para el post de cualquiera de las solicitudes ya que se le pasa 
+    # el tipo de modelo por parametros
+    path('modelo/dieta/', modelo_api_view),
+    # este endpoint solo recive  un get y devuelve todas los modelos de dietas, pasajes y hospedaje
+    path('modelo/dph/', modelo_dph_api_view),
+    path('modelo/<int:id>/',modelo_detail_api_view),
+
 ]
