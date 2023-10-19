@@ -34,6 +34,17 @@ def solicitud_no_modelo_api_view(request, uo_id):
     solicitudes_serializer = SolicitudSerializer(solicitudes, many=True)
     return Response(solicitudes_serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def solicitud_dph_no_modelo_api_view(request, uo_id):
+    uo = Unidad_Organizativa.objects.get(id=uo_id)
+    # id_user = request.user.id
+    # print(id_user)
+    # uo_test = Trabajador.objects.get(id=id_user).unidad_organizativa
+    # print(uo_test)
+    solicitudes = Solicitud.objects.filter(tipo_sol=2, unidad_organizativa=uo, estado='StandBye')
+    solicitudes_serializer = SolicitudSerializer(solicitudes, many=True)
+    return Response(solicitudes_serializer.data, status=status.HTTP_200_OK)
+
 @api_view(['GET','PUT','DELETE','PATCH'])
 def solicitud_detail_api_view(request, id):
     try:

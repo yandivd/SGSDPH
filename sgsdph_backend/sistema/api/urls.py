@@ -2,13 +2,16 @@ from django.urls import path
 from .api import *
 
 urlpatterns = [
+    #solicitudes de dietas
     path('solicitudes/', solicitud_api_view),
     path('solicitudes/<int:id>/', solicitud_detail_api_view),
 
+    #solicitudes de dietas pero solo las estand bye filtrndo por unidad organizativa
     path('solicitudes/no/<int:uo_id>/', solicitud_no_modelo_api_view),
+    path('solicitudes/dph/no/<int:uo_id>/', solicitud_dph_no_modelo_api_view),
 
+    #solicitudes de dietas pasaje y hospedaje 
     path('solicitudes/dph/', solicitud_dph_api_view),
-    # path('solicitudes/dph/<int:id>/', solicitud_detail_api_view),
 
     path('personas/', persona_api_view),
     path('personas/<int:id>/', persona_detail_api_view),
