@@ -36,9 +36,11 @@ class SolicitudSerializerGET(serializers.ModelSerializer):
     solicitante = TrabajadorSerializer()
     unidad_organizativa = UnidadOrganinzativaSerializer()
     c_contable = CentroCostoSerializer()
+    trabajador = PersonaSerializer()
     cargo_presupuesto  = CargoPresupuestoSerializer()
     autoriza = TrabajadorSerializer()
-    # aperitivo = AperitivoSerializer()
+    aperitivo = AperitivoSerializer(many=True)
+    parleg = PersonaSerializer()
     class Meta:
         model = Solicitud
         fields = '__all__'
