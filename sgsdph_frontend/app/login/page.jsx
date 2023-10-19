@@ -49,11 +49,12 @@ export default function SignIn() {
         setErrorMessage('')
 
         try {
-            const resp = await fetchSinToken('login/', data, "POST");
+            const resp = await fetchSinToken('/login/', data, "POST");
             const body = await resp.json();
 
             if (resp.status === 201) {
                 const rol = body.user.rol;
+                const unidad_organizativa = body.user.unidad_organizativa;
                 const username = body.user.username;
                 const token = body.token;
 
@@ -64,7 +65,7 @@ export default function SignIn() {
 
                 window.localStorage.setItem('rol', rol)
                 window.localStorage.setItem('token', token)
-                window.localStorage.setItem('username', username)
+                window.localStorage.setItem('unidad_organizativa', unidad_organizativa)
 
                 router.push('/dashboard')
             }else{
