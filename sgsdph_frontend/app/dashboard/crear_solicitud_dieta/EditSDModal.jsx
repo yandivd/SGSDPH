@@ -28,7 +28,7 @@ import Swal from "sweetalert2"
 
 
 
-const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
+const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     const [solicita, setSolicita] = React.useState('');
     const [autoriza, setAutoriza] = React.useState('');
     const [ccosto, setCcosto] = React.useState('');
@@ -42,10 +42,11 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     const { register, control, handleSubmit, errors } = useForm();
 
     useEffect( () => {
-       getDataForm()
+        getDataForm()
 
-    }, [])
+    }, [solicitudes])
 
+    console.log('solicitudes labor', solicitudes[0])
     const getDataForm = async () => {
         try {
             await axios.get(
@@ -124,40 +125,40 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                     if( data[propiedad] === 4 ){
                         data[propiedad] = 'Mayabeque';
                     }
-                     if( data[propiedad] === 5 ){
+                    if( data[propiedad] === 5 ){
                         data[propiedad] = 'Matanzas';
                     }
-                     if( data[propiedad] === 6 ){
+                    if( data[propiedad] === 6 ){
                         data[propiedad] = 'Villa Clara';
                     }
-                     if( data[propiedad] === 7 ){
+                    if( data[propiedad] === 7 ){
                         data[propiedad] = 'Cienfuegos';
                     }
-                     if( data[propiedad] === 8 ){
+                    if( data[propiedad] === 8 ){
                         data[propiedad] = 'Sancti Spíritus';
                     }
-                     if( data[propiedad] === 9 ){
+                    if( data[propiedad] === 9 ){
                         data[propiedad] = 'Ciego de Ávila';
                     }
-                     if( data[propiedad] === 10 ){
+                    if( data[propiedad] === 10 ){
                         data[propiedad] = 'Camagüey';
                     }
-                     if( data[propiedad] === 11 ){
+                    if( data[propiedad] === 11 ){
                         data[propiedad] = 'Las Tunas';
                     }
-                     if( data[propiedad] === 12 ){
+                    if( data[propiedad] === 12 ){
                         data[propiedad] = 'Holguín';
                     }
-                     if( data[propiedad] === 13 ){
+                    if( data[propiedad] === 13 ){
                         data[propiedad] = 'Granma';
                     }
-                     if( data[propiedad] === 14 ){
+                    if( data[propiedad] === 14 ){
                         data[propiedad] = 'Santiago de Cuba';
                     }
-                     if( data[propiedad] === 15 ){
+                    if( data[propiedad] === 15 ){
                         data[propiedad] = 'SGuantánamo';
                     }
-                     if( data[propiedad] === 16 ){
+                    if( data[propiedad] === 16 ){
                         data[propiedad] = 'Isla de la Juventud';
                     }
 
@@ -209,7 +210,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
             >
 
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    Agregar solicitud de dieta
+                    Editar solicitud de dieta
                 </DialogTitle>
 
                 <IconButton
@@ -227,7 +228,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <DialogContent dividers>
-                        <div className={'d-flex gap-5'}>
+                       {/* <div className={'d-flex gap-5'}>
                             <div>
                                 <FieldSelect name_label={'Solicita'}
                                              data={solicita}
@@ -309,31 +310,31 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                         </TextField>
                                     )}
                                 />
-                                 <Controller
-                                        name='prov_destino'
-                                        control={control}
-                                        defaultValue=""
-                                        render={({ field }) => (
-                                            <TextField
-                                                select
-                                                label="Provincia Destino"
-                                                required
-                                                name='prov_destino'
-                                                {...field}
-                                                sx={{ m: 2, width: '300px' }}
-                                                onChange={(event) => {
-                                                    field.onChange(event);
-                                                    handleProvinciaDestinoChange(event);
-                                                }}
-                                            >
-                                                {municipios.map((provincia, index) => (
-                                                    <MenuItem key={index} value={index}>
-                                                        {provincia[0]}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
-                                        )}
-                                    />
+                                <Controller
+                                    name='prov_destino'
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <TextField
+                                            select
+                                            label="Provincia Destino"
+                                            required
+                                            name='prov_destino'
+                                            {...field}
+                                            sx={{ m: 2, width: '300px' }}
+                                            onChange={(event) => {
+                                                field.onChange(event);
+                                                handleProvinciaDestinoChange(event);
+                                            }}
+                                        >
+                                            {municipios.map((provincia, index) => (
+                                                <MenuItem key={index} value={index}>
+                                                    {provincia[0]}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    )}
+                                />
 
                                 <Controller
                                     name='destino'
@@ -381,9 +382,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                 />
                             </div>
 
-
-
-
                             <div>
                                 <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
                                              data={trabajadores}
@@ -424,10 +422,9 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
 
                             </div>
 
-
                         </div>
 
-
+*/}
                         <div className={'mt-3'}>
                             <TextField
                                 id="outlined-required"
@@ -442,7 +439,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                 id="outlined-required"
                                 label="Observaciones"
                                 sx={{ m: 2, width: '92%' }}
-                                {...register("observaciones", { value: 'ftf' })}
+                                {...register("observaciones")}
                             />
                         </div>
 
@@ -455,6 +452,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                         </Button>
                     </DialogActions>
                 </form>
+
             </Dialog>
 
 
@@ -462,4 +460,4 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     );
 };
 
-export default CreateSdModal;
+export default EditSDModal;
