@@ -153,7 +153,7 @@ export default function PersistentDrawerLeft({children}) {
             const body = await resp.json();
 
             if (resp.status === 200) {
-                const resp = await LogoutService( '/logout/', body.token, "POST");
+                const resp = await LogoutService( 'logout/', body.token, "POST");
 
                 window.localStorage.clear()
                 dispatch(inactiveUser())
