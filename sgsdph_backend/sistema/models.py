@@ -61,19 +61,19 @@ class Modelo(models.Model):
     nombre=models.CharField(max_length=50) #persona que crea el modelo
     solicitante=models.CharField(max_length=50)
     unidad_organizativa=models.CharField(max_length=100)
-    c_contable=models.CharField(max_length=4)
+    c_contable=models.CharField(max_length=20)
     consec=models.CharField(max_length=8)
     solicitudes=models.ManyToManyField(Solicitud)
     parleg=models.CharField(max_length=200, blank=True, null=True)
     autoriza=models.CharField(max_length=50)
     cargo_presupuesto=models.CharField(max_length=50)
     observaciones = models.CharField(max_length=500, blank=True, null=True)
-    estado=models.CharField(max_length=10)
+    estado=models.CharField(max_length=100)
     #campos nuevos del autoriza y el solicita
     cargo_autoriza=models.CharField(max_length=100)
     dependencia_autoriza=models.CharField(max_length=100)
     cargo_solicita=models.CharField(max_length=100)
-    area_trabajo_solicita=models.CharField(max_length=100)
+    dependencia_solicita=models.CharField(max_length=100)
     labor=models.CharField(max_length=500, blank=True, null=True)
     fecha=models.DateField(auto_now_add=True)
 
