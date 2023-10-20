@@ -10,7 +10,6 @@ const FieldSelect = ({name_label, data, name, value_show, control}) => {
             <Controller
                 name={name}
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
                     <TextField
                         select
