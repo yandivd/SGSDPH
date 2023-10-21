@@ -39,14 +39,13 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, errors } = useForm();
+    const { register, control, handleSubmit, setValue } = useForm();
 
     useEffect( () => {
         getDataForm()
 
-    }, [solicitudes])
+    }, [solicitudes, control])
 
-    console.log('solicitudes labor', solicitudes[0])
     const getDataForm = async () => {
         try {
             await axios.get(
@@ -177,16 +176,17 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
         data.tipo_sol = 1; // Agregar el campo "tipo de solicitud"
         data.estado = 'StandBye';      // Agregar el campo "estado"
         data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
-        data.numero = solicitudes.length + 1;      // Agregar el campo "numero de solicitud"
+        data.numero = solicitudes.numero;      // Agregar el campo "numero de solicitud"
         data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
+        const endpoint = solicitudes_endpoint + solicitudes.id +'/'
+
         try {
-            const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
+            const resp = await fetchSinToken(endpoint, data, "PUT");
             const body = await resp.json();
 
-
-            if (resp.status === 201) {
-                Swal.fire('Exito', "Se ha creado correctamente", 'success');
+            if (resp.status === 200) {
+                Swal.fire('Exito', "Se ha editado correctamente", 'success');
                 refreshFunction();
             }
 
@@ -228,7 +228,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <DialogContent dividers>
-                       {/* <div className={'d-flex gap-5'}>
+                        <div className={'d-flex gap-5'}>
                             <div>
                                 <FieldSelect name_label={'Solicita'}
                                              data={solicita}
@@ -253,6 +253,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                 <CheckBoxPersonalizate data={aperitivo} control={control} />
 
                             </div>
+
 
 
                             <div>
@@ -408,12 +409,14 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                     type={'date'}
                                     label="Fecha de Inicio"
                                     sx={{ m: 2, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_inicio_dieta}
                                     {...register("fecha_inicio_dieta")}
                                 />
                                 <TextField
                                     required
                                     type={'date'}
                                     label="Fecha Final"
+                                    defaultValue= {solicitudes.fecha_final_dieta}
                                     sx={{ m: 2, width: '300px' }}
                                     {...register("fecha_final_dieta")}
 
@@ -422,24 +425,26 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
 
                             </div>
 
+
                         </div>
 
-*/}
+
                         <div className={'mt-3'}>
                             <TextField
-                                id="outlined-required"
+                                id="labor"
                                 label="Labor a Realizar"
-                                defaultValue=""
+                                defaultValue= {solicitudes.labor}
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
                             />
                         </div>
                         <div className={'mt-3'}>
                             <TextField
-                                id="outlined-required"
-                                label="Observaciones"
+                                id='observaciones'
+                                label='Observaciones'
+                                defaultValue= {solicitudes.observaciones}
                                 sx={{ m: 2, width: '92%' }}
-                                {...register("observaciones")}
+                                {...register('observaciones' )}
                             />
                         </div>
 

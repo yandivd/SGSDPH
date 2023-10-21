@@ -28,7 +28,7 @@ import CreateSDModal from "./CreateSDModal";
 import EditSDModal from "./EditSDModal";
 
 
-const DataSolicitudesTable = ({solicitudes, handleRefreshSolicitudes}) => {
+const DataSolicitudesTable = ({solicitudes, refreshFunction}) => {
 
     const [products, setProducts] = React.useState(solicitudes);
     const [productToEdit, setProductToEdit] = React.useState([]);
@@ -68,7 +68,7 @@ const DataSolicitudesTable = ({solicitudes, handleRefreshSolicitudes}) => {
     const confirmEditProduct = (idSolicitud) =>{
         const _products = products.filter((val) => val.id === idSolicitud)
 
-        setProductToEdit(_products)
+        setProductToEdit(_products[0])
         handleOpenEdit()
     }
 
@@ -159,9 +159,9 @@ const DataSolicitudesTable = ({solicitudes, handleRefreshSolicitudes}) => {
             <EditSDModal isOpen={openEdit}
                          handleClose={handleOpenEdit}
                          solicitudes={productToEdit}
-                         refreshFunction={handleRefreshSolicitudes}
-
+                         refreshFunction={refreshFunction}
             />
+
         </div>
     );
 };
