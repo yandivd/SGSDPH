@@ -175,6 +175,14 @@ def modelo_api_view(request):
     elif request.method == 'POST':
         modelo_serializer = ModeloSerializer(data=request.data)
         if modelo_serializer.is_valid():
+
+            # acceder a las solicitudes
+            solicitudes = request.data.get("solicitudes", [])
+            for i in solicitudes:
+                solicitud = Solicitud.objects.get(id=i)
+                solicitud.estado = 'Ok'
+                solicitud.save()
+
             modelo_serializer.save()
             return Response(modelo_serializer.data, status=status.HTTP_201_CREATED)
         return Response(modelo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
