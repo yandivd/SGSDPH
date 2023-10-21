@@ -170,7 +170,7 @@ def unidad_organizativa_detail_api_view(request, id):
 def modelo_api_view(request):
     if request.method == 'GET':
         modelos = Modelo.objects.all().filter(tipo_model=1)
-        modelos_serializer = ModeloSerializer(modelos, many=True)
+        modelos_serializer = ModeloSerializerGET(modelos, many=True)
         return Response(modelos_serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         modelo_serializer = ModeloSerializer(data=request.data)
@@ -183,7 +183,7 @@ def modelo_api_view(request):
 def modelo_dph_api_view(request):
     if request.method == 'GET':
         modelos = Modelo.objects.all().filter(tipo_model=2)
-        modelos_serializer = ModeloSerializer(modelos, many=True)
+        modelos_serializer = ModeloSerializerGET(modelos, many=True)
         return Response(modelos_serializer.data, status=status.HTTP_200_OK)
     
 @api_view(['GET','PUT','PATCH','DELETE'])
@@ -191,7 +191,7 @@ def modelo_detail_api_view(request, id):
     try:
         modelo = Modelo.objects.get(id=id)
         if request.method == 'GET':
-            modelo_serializer = ModeloSerializer(modelo)
+            modelo_serializer = ModeloSerializerGET(modelo)
             return Response(modelo_serializer.data, status=status.HTTP_200_OK)
 
     except:

@@ -49,3 +49,9 @@ class SolicitudSerializer(serializers.ModelSerializer):
     class Meta:
         model = Solicitud
         fields = '__all__'
+
+class ModeloSerializerGET(serializers.ModelSerializer):
+    solicitudes = SolicitudSerializerGET(many=True)
+    class  Meta:
+        model = Modelo
+        fields = '__all__'
