@@ -6,7 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import FieldSelect from "../../../components/FieldSelect";
 import TextField from "@mui/material/TextField";
-import {DialogActions} from "@mui/material";
+import {DialogActions, MenuItem} from "@mui/material";
 import Button from "@mui/material/Button";
 
 const CreateSdhpModal = ({isOpen, handleClose, setOpen}) => {
@@ -32,7 +32,19 @@ const CreateSdhpModal = ({isOpen, handleClose, setOpen}) => {
     return (
         <div>
             <h1> dietas hospedja e...</h1>
-
+            <TextField
+                id="outlined-select-currency"
+                select
+                label="Select"
+                defaultValue="EUR"
+                helperText="Please select your currency"
+            >
+                {currencies.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                    </MenuItem>
+                ))}
+            </TextField>
         </div>
     );
 };

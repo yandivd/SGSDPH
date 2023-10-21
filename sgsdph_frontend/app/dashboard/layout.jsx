@@ -33,6 +33,7 @@ import Loading from "../../components/Loading";
 import {fetchConToken, fetchSinToken} from "../../helper/fetch";
 import {veryfy_token} from "../../constants/apiRoutes";
 import {LogoutService} from "../../helper/LogoutService";
+import Image from "next/image";
 
 const drawerWidth = 260;
 
@@ -209,7 +210,13 @@ export default function PersistentDrawerLeft({children}) {
             >
                 <DrawerHeader className={'justify-content-between'}>
                     <div className={'ps-2  text-capitalize '}>
-                        <Typography>{user}</Typography>
+                        <Image
+                            src={ '/../logoCorto.jpeg'}
+                            alt={ 'Logotipo' }
+                            width={ 180 }
+                            height={ 80 }
+                            className={'bg-sucess'}
+                        />
                     </div>
                     <div>
                         <IconButton onClick={handleDrawerClose}>

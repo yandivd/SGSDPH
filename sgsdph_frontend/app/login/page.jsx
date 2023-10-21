@@ -18,6 +18,8 @@ import {activeUser} from "../../redux/features/auth/authSlice";
 import {useForm} from "react-hook-form";
 import {fetchSinToken} from "../../helper/fetch";
 import {useState} from "react";
+import Image from 'next/image'
+
 
 
 function Copyright(props) {
@@ -66,6 +68,7 @@ export default function SignIn() {
                 window.localStorage.setItem('rol', rol)
                 window.localStorage.setItem('token', token)
                 window.localStorage.setItem('unidad_organizativa', unidad_organizativa)
+                window.localStorage.setItem('username', username)
 
                 router.push('/dashboard')
             }else{
@@ -95,12 +98,16 @@ export default function SignIn() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar  sx={{ m: 1, bgcolor: 'primary.main',  width: 50, height: 50}}  >
-                        <LockOutlinedIcon  sx={{ fontSize: 30 }} />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
+                    <Image
+                        src={ '/../logo.jpg'}
+                        alt={ 'Logotipo' }
+                        width={ 300 }
+                        height={ 150 }
+                        className={'bg-sucess'}
+                    />
+{/*                    <Typography component="h1" variant="h5">
                         Ingrese sus credenciales
-                    </Typography>
+                    </Typography>*/}
                     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"

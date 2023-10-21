@@ -5,17 +5,19 @@ import { Controller } from 'react-hook-form';
 
 const FieldSelect = ({name_label, data, name, value_show, control}) => {
 
+    console.log(data)
+
     return (
         <div>
             <Controller
                 name={name}
                 control={control}
+                defaultValue=""
                 render={({ field }) => (
                     <TextField
                         select
                         required
                         label={name_label}
-                        name={name}
                         {...field}
                         sx={{ m: 2, width: '300px' }}
                     >

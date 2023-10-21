@@ -15,20 +15,61 @@ import {
 import DataSolicitudesTable from "./DataSolicitudesTable";
 import {useDispatch} from "react-redux";
 import {useRouter} from "next/navigation";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import DialogContent from "@mui/material/DialogContent";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import {DialogActions} from "@mui/material";
 
 export default function CrearSolicitudDieta() {
-
     const [open, setOpen] = useState(false);
+    const [openGenerateModelo, setOpenGenerateModelo] = useState(false);
     const [solicitudes, setSolicitudes] = React.useState([]);
     const [refreshSolicitudes, setRefreshSolicitudes] = React.useState(false)
+    const [length, setLength] = React.useState(null)
 
     const handleRefreshSolicitudes = () => {
         setRefreshSolicitudes(!refreshSolicitudes)
     }
-
+    const handleClickOpenGenerateModal = () => {
+        setOpenGenerateModelo(!openGenerateModelo);
+    }
     const handleClickOpen = () => {
         setOpen(!open);
     };
+
+    const handleCreateModel = () => {
+        const firstSolicitud = solicitudes[0]
+        const solicitudes_id = solicitudes.map(objeto => objeto.id);
+        const name = window.localStorage.getItem('username');
+
+        console.log(firstSolicitud)
+
+        const dataModel = {
+            "tipo_model":1,
+            "nombre": name,
+            "solicitante": firstSolicitud.solicitante.username,
+            "unidad_organizativa": firstSolicitud.unidad_organizativa.name,
+            "c_contable": firstSolicitud.c_contable.name,
+            "consec":"1/2023",
+            "solicitudes": solicitudes_id,
+            "parleg": firstSolicitud.parleg.nombre,
+            "autoriza": firstSolicitud.autoriza.username,
+            "cargo_presupuesto": firstSolicitud.cargo_presupuesto.account,
+            "observaciones": firstSolicitud.observaciones,
+            "estado":"PendienteSolicitar",
+            "cargo_autoriza":firstSolicitud.autoriza.cargo,
+            "dependencia_autoriza":"autoriza.dependencia",
+            "cargo_solicita": firstSolicitud.solicitante.cargo,
+            "dependencia_solicita":"solicita.dependencia",
+            "labor": firstSolicitud.labor
+        }
+
+        console.log(dataModel)
+
+    }
 
     useEffect( () => {
         const getData = async () => {
@@ -42,6 +83,7 @@ export default function CrearSolicitudDieta() {
                     .then(response => {
                         console.log(response.data)
                         setSolicitudes(response.data);
+                        setLength(solicitudes.length)
                     })
             } catch (error) {
                 console.log(error)
@@ -62,6 +104,7 @@ export default function CrearSolicitudDieta() {
                            handleClose={handleClickOpen}
                            solicitudes={solicitudes}
                            refreshFunction={handleRefreshSolicitudes}
+                           length={length}
             />
 
             <p className={'text-secondary my-3 ms-2'}>Listado de solicitudes de dietas</p>
@@ -71,7 +114,60 @@ export default function CrearSolicitudDieta() {
                 refreshFunction={handleRefreshSolicitudes}
             />
 
-            <Button variant="contained"  color='success' >Generar modelo</Button>
+            <Button variant="contained"  color='success' onClick={handleClickOpenGenerateModal} >Generar modelo</Button>
+
+            <Dialog
+                onClose={handleClickOpenGenerateModal}
+                aria-labelledby="customized-dialog-title"
+                open={openGenerateModelo}
+                className={'p-5'}
+            >
+
+                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                </DialogTitle>
+
+                <IconButton
+                    aria-label="close"
+                    onClick={handleClickOpenGenerateModal}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+
+                {
+                    solicitudes.length > 0 && length !== null  ?
+                        <div>
+                            <DialogContent className='text-center'>
+                                <h3 className='mt-4'>Estás seguro que desea generar el modelo</h3>
+                            </DialogContent>
+
+                            <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
+                                <Button autoFocus onClick={handleClickOpenGenerateModal} variant="contained" color='error'>
+                                    Cancelar
+                                </Button> <br/>
+                                <Button variant="contained" color='success' onClick={handleCreateModel}>
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </div>
+
+                    :
+                        <div>
+                            <DialogContent className='text-center'>
+                                <ErrorOutlineIcon sx={{ fontSize: 60 }} color="action"  />
+                                <h4 className='mt-4'>No se puede generar el modelo</h4>
+                                <p>Para realizar está acción tienen que existir solicitudes.</p>
+                            </DialogContent>
+                        </div>
+                }
+
+            </Dialog>
+
 
         </div>
     );

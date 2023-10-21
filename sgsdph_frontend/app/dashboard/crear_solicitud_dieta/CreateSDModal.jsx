@@ -28,13 +28,13 @@ import Swal from "sweetalert2"
 
 
 
-const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
-    const [solicita, setSolicita] = React.useState('');
-    const [autoriza, setAutoriza] = React.useState('');
-    const [ccosto, setCcosto] = React.useState('');
-    const [cargoPresupuesto, setCargoPresupuesto] = React.useState('');
-    const [trabajadores, setTrabajadores] = React.useState('');
-    const [aperitivo, setAperitivo] = React.useState('');
+const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, length}) => {
+    const [solicita, setSolicita] = React.useState([]);
+    const [autoriza, setAutoriza] = React.useState([]);
+    const [ccosto, setCcosto] = React.useState([]);
+    const [cargoPresupuesto, setCargoPresupuesto] = React.useState([]);
+    const [trabajadores, setTrabajadores] = React.useState([]);
+    const [aperitivo, setAperitivo] = React.useState([]);
     const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
@@ -44,52 +44,85 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     useEffect( () => {
        getDataForm()
 
-    }, [])
+    }, [solicitudes, length])
 
     const getDataForm = async () => {
-        try {
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
-            )
-                .then(response => {
-                    setSolicita((response.data));
-                })
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
-            )
-                .then(response => {
-                    setAutoriza((response.data));
-                })
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
-            )
-                .then(response => {
-                    setCcosto((response.data));
-                })
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
-            )
-                .then(response => {
-                    setCargoPresupuesto((response.data));
-                })
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
-            )
-                .then(response => {
-                    setTrabajadores((response.data));
-                })
+        if(solicitudes.length > 0 && length !== null){
 
+            const first_solicitud =  solicitudes[0]
+            setSolicita([{
+                'username': first_solicitud.solicitante.username,
+                'id': first_solicitud.solicitante.id
+            }])
+            setCcosto([{
+                'name': first_solicitud.c_contable.name,
+                'id': first_solicitud.c_contable.id
+            }])
+            setTrabajadores([{
+                'nombre': first_solicitud.parleg.nombre,
+                'id': first_solicitud.parleg.id
+            }])
+            setCargoPresupuesto([{
+                'account': first_solicitud.cargo_presupuesto.account,
+                'id': first_solicitud.cargo_presupuesto.id
+            }])
+            setAutoriza([{
+                'username': first_solicitud.autoriza.username,
+                'id': first_solicitud.autoriza.id
+            }])
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
             )
                 .then(response => {
                     setAperitivo((response.data));
                 })
+        }else{
 
-        } catch (error) {
-            console.log(error)
+            if(length !== null){
+                try {
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
+                    )
+                        .then(response => {
+                            setSolicita((response.data));
+                        })
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
+                    )
+                        .then(response => {
+                            setAutoriza((response.data));
+                        })
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
+                    )
+                        .then(response => {
+                            setCcosto((response.data));
+                        })
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
+                    )
+                        .then(response => {
+                            setCargoPresupuesto((response.data));
+                        })
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+                    )
+                        .then(response => {
+                            setTrabajadores((response.data));
+                        })
+
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
+                    )
+                        .then(response => {
+                            setAperitivo((response.data));
+                        })
+
+                } catch (error) {
+                    console.log(error)
+                }
+            }
         }
-
     }
 
     const handleProvinciaOrigenChange = (event) => {
@@ -180,6 +213,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
         data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
         try {
+            console.log(data)
             const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
             const body = await resp.json();
 
@@ -187,6 +221,9 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
             if (resp.status === 201) {
                 Swal.fire('Exito', "Se ha creado correctamente", 'success');
                 refreshFunction();
+            }else{
+                Swal.fire('Error', "Error del servidor", 'error');
+
             }
 
         } catch (error) {
@@ -442,7 +479,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                 id="outlined-required"
                                 label="Observaciones"
                                 sx={{ m: 2, width: '92%' }}
-                                {...register("observaciones", { value: 'ftf' })}
+                                {...register("observaciones")}
                             />
                         </div>
 

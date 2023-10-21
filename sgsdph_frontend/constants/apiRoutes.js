@@ -10,5 +10,9 @@ export const aperitivos_endpoint = '/api/sistema/aperitivos/'
 export const solicitudes_endpoint = '/api/sistema/solicitudes/'
 
 export const unidad_organizativa_endpoint = '/api/sistema/unidad_organizativa/'
+export const modelo_endpoint = '/api/sistema/modelo/dieta/'
+
+
+
 
 
