@@ -204,3 +204,10 @@ def modelo_detail_api_view(request, id):
 
     except:
         return Response({'message':'Modelo no encontrado en el sistema'}, status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['GET'])
+def solicitudes_todas_api_view(request):
+    if request.method == 'GET':
+        solicitudes = Solicitud.objects.all()
+        solicitudes_serializer = SolicitudSerializerGET(solicitudes, many=True)
+        return Response(solicitudes_serializer.data, status=status.HTTP_200_OK)

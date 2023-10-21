@@ -3,6 +3,7 @@ from .api import *
 
 urlpatterns = [
     #solicitudes de dietas
+    path('solicitudes/index/', solicitudes_todas_api_view),
     path('solicitudes/', solicitud_api_view),
     path('solicitudes/<int:id>/', solicitud_detail_api_view),
 
