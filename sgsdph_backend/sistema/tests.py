@@ -10,44 +10,6 @@ class SolicitudAPITestCase(TestCase):
     def setUp(self):
         
         self.factory = APIRequestFactory()
-        self.rol = Rol.objects.create(name='Crea')
-        # Crear objetos de prueba necesarios, por ejemplo, Trabajadores, Unidades Organizativas, etc.
-        self.unidad_organizativa = Unidad_Organizativa.objects.create(name="Ejemplo Unidad Organizativa")
-        self.trabajador = Trabajador.objects.create(rol=self.rol, telf='76857465', cargo='DAWLL', unidad_organizativa=self.unidad_organizativa, dependencia='Direccion Territoria')
-        self.cargo_presupuesto = Cargo_al_Presupuesto.objects.create(account="Ejemplo Cuenta Presupuesto")
-        self.persona = Persona.objects.create(nombre="Ejemplo Persona", apellidos="Ejemplo Apellidos", ci="1234567890")
-        self.c_contable = Centro_Costo.objects.create(name='AR25')
-        self.parleg = PARLEG.objects.create(trabajador=self.persona)
-        self.aperitivo1 = Aperitivo(nombre='Aper1') 
-        self.aperitivo2 = Aperitivo(nombre='Aper2') 
-
-    # def test_crear_solicitud(self):
-    #     datos_solicitud = {
-    #         "tipo_sol":1,
-    #         "numero":2,
-    #         "solicitante":self.trabajador,
-    #         "trabajador":self.persona,
-    #         "unidad_organizativa":self.unidad_organizativa,
-    #         "fecha_inicio_dieta":"2023-10-18",
-    #         "fecha_final_dieta":"2023-10-20",
-    #         "labor":"rggt",
-    #         "observaciones":"dfg",
-    #         "c_contable":self.c_contable,
-    #         "provincia":"La Habana",
-    #         "origen":"Centro Habana",
-    #         "prov_destino":"La Habana",
-    #         "destino":"La Habana Vieja",
-    #         "regreso":"Mayabeque",
-    #         "parleg":self.parleg,
-    #         "cargo_presupuesto":self.cargo_presupuesto,
-    #         "autoriza":self.trabajador,
-    #         "estado":"StandBye",
-    #         "aperitivo":[self.aperitivo1, self.aperitivo2]
-    #     }
-
-    #     request = self.factory.post('/api/sistema/solicitudes/', datos_solicitud)
-    #     response = solicitud_api_view(request)
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_obtener_solicitudes(self):
         request = self.factory.get('/api/sistema/solicitudes/')
