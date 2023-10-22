@@ -31,9 +31,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {activeUser, inactiveUser} from "../../redux/features/auth/authSlice";
 import Loading from "../../components/Loading";
 import {fetchConToken, fetchSinToken} from "../../helper/fetch";
-import {veryfy_token} from "../../constants/apiRoutes";
+import {modelo_endpoint, veryfy_token} from "../../constants/apiRoutes";
 import {LogoutService} from "../../helper/LogoutService";
 import Image from "next/image";
+import axios from "axios";
 
 const drawerWidth = 260;
 
@@ -104,6 +105,7 @@ export default function PersistentDrawerLeft({children}) {
     const {user, isActive, rol} = useSelector((state) => state.auth);
     const router = useRouter();
     const dispatch = useDispatch();
+    const [models, setModels] = React.useState([]);
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
@@ -137,7 +139,6 @@ export default function PersistentDrawerLeft({children}) {
                 }
             })
         }
-
     }, [dispatch,router])
 
     if (isActive === null ) {
@@ -166,6 +167,7 @@ export default function PersistentDrawerLeft({children}) {
             console.log(error)
         }
     }
+
     return (
         <Box sx={{ display: 'flex' }} >
             <CssBaseline />
@@ -211,11 +213,12 @@ export default function PersistentDrawerLeft({children}) {
                 <DrawerHeader className={'justify-content-between'}>
                     <div className={'ps-2  text-capitalize '}>
                         <Image
-                            src={ '/../logoCorto.jpeg'}
-                            alt={ 'Logotipo' }
+                            src= '/../logoCorto.jpeg'
+                            alt= 'Logotipo'
                             width={ 180 }
                             height={ 80 }
                             className={'bg-sucess'}
+                            priority={true}
                         />
                     </div>
                     <div>
@@ -315,7 +318,12 @@ export default function PersistentDrawerLeft({children}) {
                 overflow: 'auto',
             }}>
                 <DrawerHeader />
+
                 {children}
+
+{/*                {React.Children.map(this.props.children, (child) =>
+                    React.cloneElement(child, { models })
+                )}*/}
                 <DrawerHeader />
             </Main>
 

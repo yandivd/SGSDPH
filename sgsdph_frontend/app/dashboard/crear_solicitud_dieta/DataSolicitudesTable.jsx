@@ -9,22 +9,15 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import {
-    ccosto_endpoint,
     solicitudes_endpoint,
-    trabajadores_endpoint,
-    unidad_organizativa_endpoint
 } from "../../../constants/apiRoutes";
-import {useDispatch} from "react-redux";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import {DialogActions} from "@mui/material";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import {fetchSinToken} from "../../../helper/fetch";
-import {activeUser} from "../../../redux/features/auth/authSlice";
 import Swal from "sweetalert2";
-import CreateSDModal from "./CreateSDModal";
 import EditSDModal from "./EditSDModal";
 
 
@@ -102,8 +95,9 @@ const DataSolicitudesTable = ({solicitudes, refreshFunction}) => {
     return (
         <div className="card">
             <DataTable value={products} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
-                <Column field="id" header="ID" sortable style={{ width: '20%' }}></Column>
-                <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }}></Column>
+                <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(products) => (
+                    <div>{products.trabajador.nombre} {products.trabajador.apellidos}</div>
+                )}></Column>
                 <Column field="trabajador.ci" header="CI" sortable style={{ width: '25%' }}></Column>
                 <Column field="unidad_organizativa.name" header="Unidad Organizativa" sortable style={{ width: '15%' }}></Column>
                 <Column field="c_contable.name" header="Centro Contable" sortable style={{ width: '25%' }}></Column>

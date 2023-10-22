@@ -13,6 +13,8 @@ const Loading = ({ infoText }) => {
                     width={ 300 }
                     height={ 150 }
                     className={'bg-sucess'}
+                    priority={true}
+
                 />
                 <h4>{infoText}...</h4>
 

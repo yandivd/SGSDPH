@@ -58,10 +58,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                 'name': first_solicitud.c_contable.name,
                 'id': first_solicitud.c_contable.id
             }])
-            setTrabajadores([{
-                'nombre': first_solicitud.parleg.nombre,
-                'id': first_solicitud.parleg.id
-            }])
             setCargoPresupuesto([{
                 'account': first_solicitud.cargo_presupuesto.account,
                 'id': first_solicitud.cargo_presupuesto.id
@@ -75,6 +71,12 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
             )
                 .then(response => {
                     setAperitivo((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+            )
+                .then(response => {
+                    setTrabajadores((response.data));
                 })
         }else{
 
@@ -290,7 +292,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
 
                             </div>
 
-
                             <div>
                                 <Controller
                                     name='provincia'
@@ -418,16 +419,12 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                 />
                             </div>
 
-
-
-
                             <div>
                                 <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
                                              data={trabajadores}
                                              name={'parleg'}
                                              value_show={'nombre'}
                                              control={control}
-
                                 />
                                 <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                              data={cargoPresupuesto}
@@ -460,7 +457,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
 
 
                             </div>
-
 
                         </div>
 

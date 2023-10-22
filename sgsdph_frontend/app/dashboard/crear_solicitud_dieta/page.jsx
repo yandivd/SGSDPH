@@ -9,7 +9,7 @@ import {
     aperitivos_endpoint,
     autoriza_endpoint,
     cargo_presupuesto_endpoint,
-    ccosto_endpoint,
+    ccosto_endpoint, modelo_endpoint,
     solicita_endpoint, solicitudes_endpoint, trabajadores_endpoint
 } from "../../../constants/apiRoutes";
 import DataSolicitudesTable from "./DataSolicitudesTable";
@@ -22,11 +22,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {DialogActions} from "@mui/material";
+import {fetchSinToken} from "../../../helper/fetch";
+import Swal from "sweetalert2";
 
 export default function CrearSolicitudDieta() {
     const [open, setOpen] = useState(false);
     const [openGenerateModelo, setOpenGenerateModelo] = useState(false);
     const [solicitudes, setSolicitudes] = React.useState([]);
+    const [modelos, setModelos] = React.useState([]);
     const [refreshSolicitudes, setRefreshSolicitudes] = React.useState(false)
     const [length, setLength] = React.useState(null)
 
@@ -40,12 +43,14 @@ export default function CrearSolicitudDieta() {
         setOpen(!open);
     };
 
-    const handleCreateModel = () => {
+    const handleCreateModel = async () => {
         const firstSolicitud = solicitudes[0]
         const solicitudes_id = solicitudes.map(objeto => objeto.id);
         const name = window.localStorage.getItem('username');
 
-        console.log(firstSolicitud)
+        var fechaActual = new Date();
+
+        var year = fechaActual.getFullYear();
 
         const dataModel = {
             "tipo_model":1,
@@ -53,7 +58,7 @@ export default function CrearSolicitudDieta() {
             "solicitante": firstSolicitud.solicitante.username,
             "unidad_organizativa": firstSolicitud.unidad_organizativa.name,
             "c_contable": firstSolicitud.c_contable.name,
-            "consec":"1/2023",
+            "consec": ( modelos.length + 1 )+ '/' + year,
             "solicitudes": solicitudes_id,
             "parleg": firstSolicitud.parleg.nombre,
             "autoriza": firstSolicitud.autoriza.username,
@@ -61,19 +66,36 @@ export default function CrearSolicitudDieta() {
             "observaciones": firstSolicitud.observaciones,
             "estado":"PendienteSolicitar",
             "cargo_autoriza":firstSolicitud.autoriza.cargo,
-            "dependencia_autoriza":"autoriza.dependencia",
+            "dependencia_autoriza":firstSolicitud.autoriza.dependencia,
             "cargo_solicita": firstSolicitud.solicitante.cargo,
-            "dependencia_solicita":"solicita.dependencia",
+            "dependencia_solicita": firstSolicitud.solicitante.dependencia,
             "labor": firstSolicitud.labor
         }
 
-        console.log(dataModel)
+
+        try {
+            const resp = await fetchSinToken(modelo_endpoint, dataModel, "POST");
+            const body = await resp.json();
+
+
+            if (resp.status === 201) {
+                Swal.fire('Exito', "Se ha creado correctamente", 'success');
+                handleRefreshSolicitudes();
+
+            }else{
+                Swal.fire('Error', "Error del servidor", 'error');
+            }
+            handleClickOpenGenerateModal();
+
+        } catch (error) {
+            console.log(error)
+        }
 
     }
 
     useEffect( () => {
+        console.log('entrando al effect')
         const getData = async () => {
-
             const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
 
             try {
@@ -84,6 +106,13 @@ export default function CrearSolicitudDieta() {
                         console.log(response.data)
                         setSolicitudes(response.data);
                         setLength(solicitudes.length)
+                    })
+
+                await axios.get(
+                    process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
+                )
+                    .then(response => {
+                        setModelos(response.data);
                     })
             } catch (error) {
                 console.log(error)
