@@ -202,7 +202,7 @@ def modelo_detail_api_view(request, id):
             modelo_serializer = ModeloSerializerGET(modelo)
             return Response(modelo_serializer.data, status=status.HTTP_200_OK)
         elif request.method == 'PATCH':
-            modelo_serializer = ModeloSerializer(data=request.data, partial=True)
+            modelo_serializer = ModeloSerializer(modelo, data=request.data, partial=True)
             if modelo_serializer.is_valid():
                 modelo_serializer.save()
                 return Response(modelo_serializer.data, status=status.HTTP_200_OK)
