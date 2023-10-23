@@ -46,6 +46,8 @@ export default function PendienteSolicitud() {
 
     }, [])
 
+    console.log('kde', models)
+
 
     return (
         <div>
@@ -53,6 +55,19 @@ export default function PendienteSolicitud() {
             <p className={'text-secondary my-3 ms-2'}>Listado de modelos pendientes a solitar</p>
 
             <DataTable value={models} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+                <Column
+                    field="tipo_model"
+                    header="Tipo de modelo"
+                    sortable
+                    style={{ width: '30%' }}
+                    body={(rowData) => {
+                        if (rowData.tipo_model === 1) {
+                            return 'Dieta';
+                        } else {
+                            return 'Dieta, Pasaje y Hospedaje';
+                        }
+                    }}
+                ></Column>
                 <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                 <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
                 <Column field="solicitante" header="Solicitante" sortable style={{ width: '25%' }}></Column>

@@ -2,27 +2,23 @@
 import * as React from 'react';
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
-import CreateSDModal from "./CreateSDModal";
+import CreateSDHPModal from "./CreateSDHPModal";
+import CreateSDModal from "../crear_solicitud_dieta/CreateSDModal";
+import {fetchSinToken} from "../../../helper/fetch";
+import {modelo_endpoint, solicitudes_endpoint, solicitudesDPH_endpoint} from "../../../constants/apiRoutes";
+import Swal from "sweetalert2";
 import axios from "axios";
-import {
-    aperitivos_endpoint,
-    autoriza_endpoint,
-    cargo_presupuesto_endpoint,
-    ccosto_endpoint, modelo_endpoint,
-    solicita_endpoint, solicitudes_endpoint, trabajadores_endpoint
-} from "../../../constants/apiRoutes";
-import DataSolicitudesTable from "./DataSolicitudesTable";
+import DataSolicitudesTable from "../crear_solicitud_dieta/DataSolicitudesTable";
+import DataSDPHTable from "./DataSDPHTable";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {DialogActions} from "@mui/material";
-import {fetchSinToken} from "../../../helper/fetch";
-import Swal from "sweetalert2";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
-export default function CrearSolicitudDieta() {
+export default function CrearSolicitudDHP() {
     const [open, setOpen] = useState(false);
     const [openGenerateModelo, setOpenGenerateModelo] = useState(false);
     const [solicitudes, setSolicitudes] = React.useState([]);
@@ -40,6 +36,7 @@ export default function CrearSolicitudDieta() {
         setOpen(!open);
     };
 
+
     const handleCreateModel = async () => {
         const firstSolicitud = solicitudes[0]
         const solicitudes_id = solicitudes.map(objeto => objeto.id);
@@ -50,7 +47,7 @@ export default function CrearSolicitudDieta() {
         var year = fechaActual.getFullYear();
 
         const dataModel = {
-            "tipo_model":1,
+            "tipo_model":2,
             "nombre": name,
             "solicitante": firstSolicitud.solicitante.username,
             "unidad_organizativa": firstSolicitud.unidad_organizativa.name,
@@ -74,6 +71,7 @@ export default function CrearSolicitudDieta() {
             const resp = await fetchSinToken(modelo_endpoint, dataModel, "POST");
             const body = await resp.json();
 
+            console.log('body', body)
 
             if (resp.status === 201) {
                 Swal.fire('Exito', "Se ha creado correctamente", 'success');
@@ -96,7 +94,7 @@ export default function CrearSolicitudDieta() {
 
             try {
                 await axios.get(
-                    process.env.NEXT_PUBLIC_API_HOST + solicitudes_endpoint + 'no/' + unidad_organizativa + '/'
+                    process.env.NEXT_PUBLIC_API_HOST + solicitudesDPH_endpoint + 'no/' + unidad_organizativa + '/'
                 )
                     .then(response => {
                         console.log(response.data)
@@ -121,25 +119,23 @@ export default function CrearSolicitudDieta() {
     return (
         <div>
             <div className='d-flex justify-content-end m-4'>
-                <Button variant="contained" onClick={handleClickOpen}> + Agregar Solicitud</Button>
+                <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>
             </div>
 
-            <CreateSDModal isOpen={open}
+            <CreateSDHPModal isOpen={open}
                            handleClose={handleClickOpen}
                            solicitudes={solicitudes}
                            refreshFunction={handleRefreshSolicitudes}
                            length={length}
             />
 
-            <p className={'text-secondary my-3 ms-2'}>Listado de solicitudes de dietas</p>
-
-            <DataSolicitudesTable
+            <DataSDPHTable
                 solicitudes={solicitudes}
                 refreshFunction={handleRefreshSolicitudes}
             />
 
+            <p className={'text-secondary my-3 ms-2'}>Listado de solicitudes de dietas, hospedaje y pasaje</p>
             <Button variant="contained"  color='success' onClick={handleClickOpenGenerateModal} >Generar modelo</Button>
-
             <Dialog
                 onClose={handleClickOpenGenerateModal}
                 aria-labelledby="customized-dialog-title"
@@ -180,7 +176,7 @@ export default function CrearSolicitudDieta() {
                             </DialogActions>
                         </div>
 
-                    :
+                        :
                         <div>
                             <DialogContent className='text-center'>
                                 <ErrorOutlineIcon sx={{ fontSize: 60 }} color="action"  />
@@ -191,8 +187,6 @@ export default function CrearSolicitudDieta() {
                 }
 
             </Dialog>
-
-
         </div>
     );
 }
