@@ -55,16 +55,17 @@ export default function CrearSolicitudDieta() {
         const dataModel = {
             "tipo_model":1,
             "nombre": name,
-            "solicitante": firstSolicitud.solicitante.username,
+            "solicitante": firstSolicitud.solicitante.first_name + ' ' +  firstSolicitud.solicitante.last_name,
             "unidad_organizativa": firstSolicitud.unidad_organizativa.name,
             "c_contable": firstSolicitud.c_contable.name,
             "consec": ( modelos.length + 1 )+ '/' + year,
             "solicitudes": solicitudes_id,
             "parleg": firstSolicitud.parleg.nombre,
-            "autoriza": firstSolicitud.autoriza.username,
+            "autoriza": firstSolicitud.autoriza.first_name + ' ' + firstSolicitud.autoriza.last_name ,
             "cargo_presupuesto": firstSolicitud.cargo_presupuesto.account,
             "observaciones": firstSolicitud.observaciones,
             "estado":"PendienteSolicitar",
+            "telf_solicitante": firstSolicitud.solicitante.telf,
             "cargo_autoriza":firstSolicitud.autoriza.cargo,
             "dependencia_autoriza":firstSolicitud.autoriza.dependencia,
             "cargo_solicita": firstSolicitud.solicitante.cargo,
@@ -76,7 +77,6 @@ export default function CrearSolicitudDieta() {
         try {
             const resp = await fetchSinToken(modelo_endpoint, dataModel, "POST");
             const body = await resp.json();
-
 
             if (resp.status === 201) {
                 Swal.fire('Exito', "Se ha creado correctamente", 'success');
@@ -90,7 +90,6 @@ export default function CrearSolicitudDieta() {
         } catch (error) {
             console.log(error)
         }
-
     }
 
     useEffect( () => {

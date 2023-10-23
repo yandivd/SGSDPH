@@ -15,6 +15,7 @@ export const every_solicituds_endpoint = '/api/sistema/solicitudes/index/'
 
 export const solicitudesDPH_endpoint = '/api/sistema/solicitudes/dph/'
 
+export const modelo_detail_endpoint = '/api/sistema/modelo/'
 
 
 
