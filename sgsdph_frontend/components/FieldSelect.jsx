@@ -5,8 +5,6 @@ import { Controller } from 'react-hook-form';
 
 const FieldSelect = ({name_label, data, name, value_show, control}) => {
 
-    console.log(data)
-
     return (
         <div>
             <Controller

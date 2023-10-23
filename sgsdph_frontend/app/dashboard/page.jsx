@@ -55,6 +55,7 @@ export default function BasicCard() {
             <Typography className={'text-secondary my-2 ms-2'}>Listado de Soliciudes de Dietas</Typography>
 
             <DataTable value={everySolicitudes} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+                <Column field="id" header="id" sortable style={{ width: '25%' }}></Column>
                 <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(everySolicitudes) => (
                     <div>{everySolicitudes.trabajador.nombre} {everySolicitudes.trabajador.apellidos}</div>
                 )}></Column>

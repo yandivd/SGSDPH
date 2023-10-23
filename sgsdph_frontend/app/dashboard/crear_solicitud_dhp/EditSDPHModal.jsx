@@ -4,73 +4,66 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
-import Button from "@mui/material/Button";
-import {DialogActions, FormGroup, FormLabel, MenuItem} from "@mui/material";
-import TextField from "@mui/material/TextField";
 import FieldSelect from "../../../components/FieldSelect";
+import {Controller, useForm} from "react-hook-form";
+import TextField from "@mui/material/TextField";
+import {municipios} from "../../../constants/municipios";
+import {DialogActions, FormLabel, MenuItem} from "@mui/material";
+import CheckBoxPersonalizate from "../../../components/CheckBoxPersonalizate";
+import Button from "@mui/material/Button";
+import axios from "axios";
 import {
     aperitivos_endpoint,
-    autoriza_endpoint,
-    cargo_presupuesto_endpoint,
-    ccosto_endpoint,
-    solicita_endpoint, solicitudes_endpoint, trabajadores_endpoint,
+    autoriza_endpoint, cargo_presupuesto_endpoint, ccosto_endpoint,
+    solicita_endpoint, solicitudes_endpoint,
+    trabajadores_endpoint
 } from "../../../constants/apiRoutes";
-import axios from "axios";
-import {municipios} from "../../../constants/municipios";
-import {Controller, useForm} from "react-hook-form";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import CheckBoxPersonalizate from "../../../components/CheckBoxPersonalizate";
 import {fetchSinToken} from "../../../helper/fetch";
-import {activeUser} from "../../../redux/features/auth/authSlice";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 
-
-
-
-const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
-    const [solicita, setSolicita] = React.useState('');
-    const [autoriza, setAutoriza] = React.useState('');
-    const [ccosto, setCcosto] = React.useState('');
-    const [cargoPresupuesto, setCargoPresupuesto] = React.useState('');
-    const [trabajadores, setTrabajadores] = React.useState('');
-    const [aperitivo, setAperitivo] = React.useState('');
+const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, length}) => {
+    const [solicita, setSolicita] = React.useState([]);
+    const [autoriza, setAutoriza] = React.useState([]);
+    const [ccosto, setCcosto] = React.useState([]);
+    const [cargoPresupuesto, setCargoPresupuesto] = React.useState([]);
+    const [trabajadores, setTrabajadores] = React.useState([]);
+    const [aperitivo, setAperitivo] = React.useState([]);
     const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, setValue } = useForm();
+    const { register, control, handleSubmit, errors } = useForm();
 
     useEffect( () => {
         getDataForm()
 
-    }, [solicitudes, control])
+    }, [solicitudes, length])
 
     const getDataForm = async () => {
-        try {
+        if(solicitudes.length > 0 && length !== null){
+
+            const first_solicitud =  solicitudes[0]
+            setSolicita([{
+                'username': first_solicitud.solicitante.username,
+                'id': first_solicitud.solicitante.id
+            }])
+            setCcosto([{
+                'name': first_solicitud.c_contable.name,
+                'id': first_solicitud.c_contable.id
+            }])
+            setCargoPresupuesto([{
+                'account': first_solicitud.cargo_presupuesto.account,
+                'id': first_solicitud.cargo_presupuesto.id
+            }])
+            setAutoriza([{
+                'username': first_solicitud.autoriza.username,
+                'id': first_solicitud.autoriza.id
+            }])
             await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
+                process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
             )
                 .then(response => {
-                    setSolicita((response.data));
-                })
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
-            )
-                .then(response => {
-                    setAutoriza((response.data));
-                })
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
-            )
-                .then(response => {
-                    setCcosto((response.data));
-                })
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
-            )
-                .then(response => {
-                    setCargoPresupuesto((response.data));
+                    setAperitivo((response.data));
                 })
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
@@ -78,18 +71,53 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                 .then(response => {
                     setTrabajadores((response.data));
                 })
+        }else{
 
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
-            )
-                .then(response => {
-                    setAperitivo((response.data));
-                })
+            if(length !== null){
+                try {
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
+                    )
+                        .then(response => {
+                            setSolicita((response.data));
+                        })
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
+                    )
+                        .then(response => {
+                            setAutoriza((response.data));
+                        })
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
+                    )
+                        .then(response => {
+                            setCcosto((response.data));
+                        })
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
+                    )
+                        .then(response => {
+                            setCargoPresupuesto((response.data));
+                        })
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+                    )
+                        .then(response => {
+                            setTrabajadores((response.data));
+                        })
 
-        } catch (error) {
-            console.log(error)
+                    await axios.get(
+                        process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
+                    )
+                        .then(response => {
+                            setAperitivo((response.data));
+                        })
+
+                } catch (error) {
+                    console.log(error)
+                }
+            }
         }
-
     }
 
     const handleProvinciaOrigenChange = (event) => {
@@ -173,7 +201,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
             }
         }
 
-        data.tipo_sol = 1; // Agregar el campo "tipo de solicitud"
+        data.tipo_sol = 2; // Agregar el campo "tipo de solicitud"
         data.estado = 'StandBye';      // Agregar el campo "estado"
         data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
         data.numero = solicitudes.numero;      // Agregar el campo "numero de solicitud"
@@ -198,7 +226,6 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
 
         handleClose();
     }
-
     return (
         <div>
             <Dialog
@@ -212,7 +239,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
             >
 
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    Editar solicitud de dieta
+                    Agregar solicitud de dieta
                 </DialogTitle>
 
                 <IconButton
@@ -250,13 +277,26 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                              value_show={'name'}
                                              control={control}
                                 />
-                                <FormLabel sx={{ mx: 2}} component="legend">Gasto en comida</FormLabel>
+                                <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
+                                             data={trabajadores}
+                                             name={'parleg'}
+                                             value_show={'nombre'}
+                                             control={control}
+                                />
+                                <FieldSelect name_label={'Con Cargo al Presupuesto:'}
+                                             data={cargoPresupuesto}
+                                             name={'cargo_presupuesto'}
+                                             value_show={'account'}
+                                             control={control}
+                                />
 
-                                <CheckBoxPersonalizate data={aperitivo} control={control} />
-
+                                <FieldSelect name_label={'Autoriza'}
+                                             data={autoriza}
+                                             name={'autoriza'}
+                                             value_show={'username'}
+                                             control={control}
+                                />
                             </div>
-
-
 
                             <div>
                                 <Controller
@@ -383,70 +423,81 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                         </TextField>
                                     )}
                                 />
+                                <FormLabel sx={{ mx: 2}} component="legend">Gasto en comida</FormLabel>
+                                <CheckBoxPersonalizate data={aperitivo} control={control} />
                             </div>
 
                             <div>
-                                <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
-                                             data={trabajadores}
-                                             name={'parleg'}
-                                             value_show={'nombre'}
-                                             control={control}
-
-                                />
-                                <FieldSelect name_label={'Con Cargo al Presupuesto:'}
-                                             data={cargoPresupuesto}
-                                             name={'cargo_presupuesto'}
-                                             value_show={'account'}
-                                             control={control}
-                                />
-
-                                <FieldSelect name_label={'Autoriza'}
-                                             data={autoriza}
-                                             name={'autoriza'}
-                                             value_show={'username'}
-                                             control={control}
-                                />
                                 <TextField
                                     required
                                     type={'date'}
                                     label="Fecha de Inicio"
                                     sx={{ m: 2, width: '300px' }}
-                                    defaultValue= {solicitudes.fecha_inicio_dieta}
+                                    helperText="Fecha Inicio Dieta"
                                     {...register("fecha_inicio_dieta")}
                                 />
                                 <TextField
                                     required
                                     type={'date'}
                                     label="Fecha Final"
-                                    defaultValue= {solicitudes.fecha_final_dieta}
-                                    sx={{ m: 2, width: '300px' }}
+                                    helperText="Fecha Final Dieta"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
                                     {...register("fecha_final_dieta")}
-
                                 />
 
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    label="Fecha de Inicio"
+                                    helperText="Fecha Inicio Pasaje"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    {...register("fecha_inicio_pasaj")}
+                                />
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    label="Fecha Final"
+                                    helperText="Fecha Final Pasaje"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    {...register("fecha_final_pasaj")}
+                                />
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    label="Fecha de Inicio"
+                                    helperText="Fecha Inicio Hospedaje"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    {...register("fecha_inicio_hosp")}
+                                />
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    label="Fecha Final"
+                                    helperText="Fecha Final Hospedaje"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    {...register("fecha_final_hosp")}
+                                />
 
                             </div>
-
 
                         </div>
 
 
                         <div className={'mt-3'}>
                             <TextField
-                                id="labor"
+                                id="outlined-required"
                                 label="Labor a Realizar"
-                                defaultValue= {solicitudes.labor}
+                                defaultValue=""
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
                             />
                         </div>
                         <div className={'mt-3'}>
                             <TextField
-                                id='observaciones'
-                                label='Observaciones'
-                                defaultValue= {solicitudes.observaciones}
+                                id="outlined-required"
+                                label="Observaciones"
                                 sx={{ m: 2, width: '92%' }}
-                                {...register('observaciones' )}
+                                {...register("observaciones")}
                             />
                         </div>
 
@@ -459,7 +510,6 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                         </Button>
                     </DialogActions>
                 </form>
-
             </Dialog>
 
 
@@ -467,4 +517,4 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     );
 };
 
-export default EditSDModal;
+export default EditSDPHModal;

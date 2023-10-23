@@ -13,6 +13,8 @@ export const unidad_organizativa_endpoint = '/api/sistema/unidad_organizativa/'
 export const modelo_endpoint = '/api/sistema/modelo/dieta/'
 export const every_solicituds_endpoint = '/api/sistema/solicitudes/index/'
 
+export const solicitudesDPH_endpoint = '/api/sistema/solicitudes/dph/'
+
 
 
 
