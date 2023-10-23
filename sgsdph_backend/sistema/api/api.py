@@ -169,7 +169,7 @@ def unidad_organizativa_detail_api_view(request, id):
 @api_view(['GET','POST'])
 def modelo_api_view(request):
     if request.method == 'GET':
-        modelos = Modelo.objects.all().filter(tipo_model=1)
+        modelos = Modelo.objects.all()
         modelos_serializer = ModeloSerializerGET(modelos, many=True)
         return Response(modelos_serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
