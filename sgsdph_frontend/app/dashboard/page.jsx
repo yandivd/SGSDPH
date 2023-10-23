@@ -72,8 +72,6 @@ export default function BasicCard() {
                        tableStyle={{ minWidth: '50rem' }}
                        globalFilter={globalFilter}
             >
-                <Column field="id" header="id" sortable style={{ width: '25%' }}></Column>
-
                 <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(everySolicitudes) => (
                     <div>{everySolicitudes.trabajador.nombre} {everySolicitudes.trabajador.apellidos}</div>
                 )}></Column>
