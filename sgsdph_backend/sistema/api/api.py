@@ -82,7 +82,7 @@ def solicitud_detail_api_view(request, id):
 def solicitud_dph_api_view(request):
     if request.method == 'GET':
         solicitudes = Solicitud.objects.all().filter(tipo_sol=2)
-        serializer = SolicitudSerializer(solicitudes, many=True)
+        serializer = SolicitudSerializerGET(solicitudes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = SolicitudSerializer(data=request.data)
