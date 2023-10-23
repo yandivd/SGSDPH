@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -18,11 +18,12 @@ import EditSDModal from "../crear_solicitud_dieta/EditSDModal";
 import 'primereact/resources/themes/lara-light-indigo/theme.css'
 import 'primereact/resources/primereact.min.css'
 import EditSDPHModal from "./EditSDPHModal";
+import {InputText} from "primereact/inputtext";
 
 const DataSdphTable = ({solicitudes, refreshFunction}) => {
     const [products, setProducts] = React.useState(solicitudes);
     const [productToEdit, setProductToEdit] = React.useState([]);
-
+    const [globalFilter, setGlobalFilter] = useState('')
     const [openDelete, setOpenDelete] = React.useState(false);
     const [openEdit, setOpenEdit] = React.useState(false);
     const [id, setId] = React.useState('');
@@ -88,7 +89,20 @@ const DataSdphTable = ({solicitudes, refreshFunction}) => {
 
     return (
         <div className="card">
-            <DataTable value={products} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+            <div className={'p-2'}>
+                <InputText
+                    value={globalFilter}
+                    onChange={(e) => setGlobalFilter(e.target.value)}
+                    placeholder="Filtrar..."
+                    sx={{ mb:3 }}
+                />
+            </div>
+            <DataTable value={products}
+                       paginator rows={5}
+                       rowsPerPageOptions={[5, 10, 25, 50]}
+                       tableStyle={{ minWidth: '50rem' }}
+                       globalFilter={globalFilter}
+            >
                 <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(products) => (
                     <div>{products.trabajador.nombre} {products.trabajador.apellidos}</div>
                 )}></Column>

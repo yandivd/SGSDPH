@@ -11,10 +11,12 @@ import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import 'primereact/resources/themes/lara-light-indigo/theme.css'
 import 'primereact/resources/primereact.min.css'
+import {InputText} from "primereact/inputtext";
 
 export default function BasicCard() {
     const [open, setOpen] = useState(false);
     const [everySolicitudes, setEverySolicitudes] = useState([]);
+    const [globalFilter, setGlobalFilter] = useState('')
 
     const handleClickOpen = () => {
         setOpen(!open);
@@ -46,16 +48,32 @@ export default function BasicCard() {
         <div>
             <CardDescription />
 
-            <div className='d-flex justify-content-end m-2'>
-                <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>
+            <div className='d-flex justify-content-between my-2'>
+                <div>
+                    <InputText
+                        value={globalFilter}
+                        onChange={(e) => setGlobalFilter(e.target.value)}
+                        placeholder="Filtrar..."
+                        sx={{ mb:3 }}
+                    />
+                </div>
+                <div>
+                    <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>
+                </div>
             </div>
 
             <CreateSolicitudModal isOpen={open} handleClose={handleClickOpen} setOpen={setOpen} />
 
-            <Typography className={'text-secondary my-2 ms-2'}>Listado de Soliciudes de Dietas</Typography>
+            <Typography className={'text-secondary my-3 ms-2'}>Listado de Soliciudes de Dietas</Typography>
 
-            <DataTable value={everySolicitudes} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+            <DataTable value={everySolicitudes}
+                       paginator rows={5}
+                       rowsPerPageOptions={[5, 10, 25, 50]}
+                       tableStyle={{ minWidth: '50rem' }}
+                       globalFilter={globalFilter}
+            >
                 <Column field="id" header="id" sortable style={{ width: '25%' }}></Column>
+
                 <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(everySolicitudes) => (
                     <div>{everySolicitudes.trabajador.nombre} {everySolicitudes.trabajador.apellidos}</div>
                 )}></Column>

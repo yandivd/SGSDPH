@@ -21,6 +21,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {DialogActions} from "@mui/material";
 import {fetchSinToken} from "../../../helper/fetch";
 import Swal from "sweetalert2";
+import {InputText} from "primereact/inputtext";
 
 export default function CrearSolicitudDieta() {
     const [open, setOpen] = useState(false);
@@ -29,6 +30,8 @@ export default function CrearSolicitudDieta() {
     const [modelos, setModelos] = React.useState([]);
     const [refreshSolicitudes, setRefreshSolicitudes] = React.useState(false)
     const [length, setLength] = React.useState(null)
+    const [globalFilter, setGlobalFilter] = useState('')
+
 
     const handleRefreshSolicitudes = () => {
         setRefreshSolicitudes(!refreshSolicitudes)
@@ -120,7 +123,7 @@ export default function CrearSolicitudDieta() {
 
     return (
         <div>
-            <div className='d-flex justify-content-end m-4'>
+            <div className='d-flex justify-content-end my-2'>
                 <Button variant="contained" onClick={handleClickOpen}> + Agregar Solicitud</Button>
             </div>
 

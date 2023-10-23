@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {modelo_endpoint} from "../../../constants/apiRoutes";
 import {DataTable} from "primereact/datatable";
@@ -10,9 +10,13 @@ import IconButton from "@mui/material/IconButton";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckIcon from '@mui/icons-material/Check';
+import {InputText} from "primereact/inputtext";
+import Button from "@mui/material/Button";
 
 export default function PendienteSolicitud() {
     const [models, setModels] = React.useState([]);
+    const [globalFilter, setGlobalFilter] = useState('')
+
 
     const getModels = async () => {
 
@@ -52,9 +56,24 @@ export default function PendienteSolicitud() {
     return (
         <div>
 
-            <p className={'text-secondary my-3 ms-2'}>Listado de modelos pendientes a solitar</p>
+            <p className={'text-secondary my-4 ms-2'}>Listado de modelos pendientes a solitar</p>
+            <div>
+                <InputText
+                    value={globalFilter}
+                    onChange={(e) => setGlobalFilter(e.target.value)}
+                    placeholder="Filtrar..."
+                    sx={{ mb:3 }}
+                />
+            </div>
 
-            <DataTable value={models} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+            <br/>
+
+            <DataTable value={models}
+                       paginator rows={5}
+                       rowsPerPageOptions={[5, 10, 25, 50]}
+                       tableStyle={{ minWidth: '50rem' }}
+                       globalFilter={globalFilter}
+            >
                 <Column
                     field="tipo_model"
                     header="Tipo de modelo"

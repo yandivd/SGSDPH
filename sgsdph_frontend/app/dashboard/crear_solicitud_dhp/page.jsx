@@ -17,6 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import {DialogActions} from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import {InputText} from "primereact/inputtext";
 
 export default function CrearSolicitudDHP() {
     const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function CrearSolicitudDHP() {
     const [modelos, setModelos] = React.useState([]);
     const [refreshSolicitudes, setRefreshSolicitudes] = React.useState(false)
     const [length, setLength] = React.useState(null)
+    const [globalFilter, setGlobalFilter] = useState('')
 
     const handleRefreshSolicitudes = () => {
         setRefreshSolicitudes(!refreshSolicitudes)
@@ -118,9 +120,8 @@ export default function CrearSolicitudDHP() {
 
     return (
         <div>
-            <div className='d-flex justify-content-end m-4'>
-                <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>
-            </div>
+            <div className='d-flex justify-content-end my-2'>
+                <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>            </div>
 
             <CreateSDHPModal isOpen={open}
                            handleClose={handleClickOpen}
@@ -128,13 +129,13 @@ export default function CrearSolicitudDHP() {
                            refreshFunction={handleRefreshSolicitudes}
                            length={length}
             />
+            <p className={'text-secondary my-3 ms-2'}>Listado de solicitudes de dietas, hospedaje y pasaje</p>
 
             <DataSDPHTable
                 solicitudes={solicitudes}
                 refreshFunction={handleRefreshSolicitudes}
             />
 
-            <p className={'text-secondary my-3 ms-2'}>Listado de solicitudes de dietas, hospedaje y pasaje</p>
             <Button variant="contained"  color='success' onClick={handleClickOpenGenerateModal} >Generar modelo</Button>
             <Dialog
                 onClose={handleClickOpenGenerateModal}

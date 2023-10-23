@@ -434,6 +434,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                     label="Fecha de Inicio"
                                     sx={{ m: 2, width: '300px' }}
                                     helperText="Fecha Inicio Dieta"
+                                    defaultValue= {solicitudes.fecha_inicio_dieta}
                                     {...register("fecha_inicio_dieta")}
                                 />
                                 <TextField
@@ -442,6 +443,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                     label="Fecha Final"
                                     helperText="Fecha Final Dieta"
                                     sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_final_dieta}
                                     {...register("fecha_final_dieta")}
                                 />
 
@@ -451,6 +453,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                     label="Fecha de Inicio"
                                     helperText="Fecha Inicio Pasaje"
                                     sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_inicio_pasaj}
                                     {...register("fecha_inicio_pasaj")}
                                 />
                                 <TextField
@@ -459,6 +462,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                     label="Fecha Final"
                                     helperText="Fecha Final Pasaje"
                                     sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_final_pasaj}
                                     {...register("fecha_final_pasaj")}
                                 />
                                 <TextField
@@ -467,6 +471,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                     label="Fecha de Inicio"
                                     helperText="Fecha Inicio Hospedaje"
                                     sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_inicio_hosp}
                                     {...register("fecha_inicio_hosp")}
                                 />
                                 <TextField
@@ -475,6 +480,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                     label="Fecha Final"
                                     helperText="Fecha Final Hospedaje"
                                     sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_final_hosp}
                                     {...register("fecha_final_hosp")}
                                 />
 
