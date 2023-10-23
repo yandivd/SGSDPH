@@ -60,6 +60,7 @@ class Modelo(models.Model):
     tipo_model = models.IntegerField(null=True, blank=True)
     nombre=models.CharField(max_length=50) #persona que crea el modelo
     solicitante=models.CharField(max_length=50)
+    telf_solicitante = models.CharField(max_length=10, null=True, blank=True)
     unidad_organizativa=models.CharField(max_length=100)
     c_contable=models.CharField(max_length=20)
     consec=models.CharField(max_length=8)
