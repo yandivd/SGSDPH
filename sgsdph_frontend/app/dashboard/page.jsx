@@ -1,5 +1,5 @@
 'use client'
-import * as React from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import CardDescription from "../../components/CardDescription";
 import CreateSolicitudModal from "../../components/CreateSolicitudModal";

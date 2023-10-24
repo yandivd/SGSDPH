@@ -9,10 +9,13 @@ import 'primereact/resources/primereact.min.css'
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {InputText} from "primereact/inputtext";
+import {useRouter} from "next/navigation";
+
 
 export default function SolicitudesCanceladas() {
     const [models, setModels] = React.useState([]);
-    const [globalFilter, setGlobalFilter] = useState('')
+    const [globalFilter, setGlobalFilter] = useState('');
+    const router = useRouter();
 
 
     const getModels = async () => {
@@ -26,10 +29,14 @@ export default function SolicitudesCanceladas() {
             })
     }
 
+    const handleViewModel = (id) => {
+        router.push(`/previsualizar-model/${id}`);
+    }
+
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-                <IconButton size="large" className="text-primary">
+                <IconButton size="large" className="text-primary" onClick={() => handleViewModel(rowData.id)}>
                     <VisibilityIcon fontSize="inherit" />
                 </IconButton>
             </>

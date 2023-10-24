@@ -1,5 +1,5 @@
 'use client'
-import * as React from 'react';
+import React from 'react';
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import CreateSDHPModal from "./CreateSDHPModal";
@@ -43,6 +43,7 @@ export default function CrearSolicitudDHP() {
         const firstSolicitud = solicitudes[0]
         const solicitudes_id = solicitudes.map(objeto => objeto.id);
         const name = window.localStorage.getItem('username');
+        const last_name = window.localStorage.getItem('last_name');
 
         var fechaActual = new Date();
 
@@ -50,14 +51,14 @@ export default function CrearSolicitudDHP() {
 
         const dataModel = {
             "tipo_model":2,
-            "nombre": name,
+            "nombre": name + ' ' + last_name,
             "solicitante": firstSolicitud.solicitante.first_name + ' ' +  firstSolicitud.solicitante.last_name,
             "unidad_organizativa": firstSolicitud.unidad_organizativa.name,
             "c_contable": firstSolicitud.c_contable.name,
             "consec": ( modelos.length + 1 )+ '/' + year,
             "solicitudes": solicitudes_id,
-            "parleg": firstSolicitud.parleg.nombre,
-            "autoriza": firstSolicitud.autoriza.first_name + + ' ' + firstSolicitud.autoriza.last_name ,
+            "parleg": firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos,
+            "autoriza": firstSolicitud.autoriza.first_name + ' ' + firstSolicitud.autoriza.last_name ,
             "cargo_presupuesto": firstSolicitud.cargo_presupuesto.account,
             "observaciones": firstSolicitud.observaciones,
             "estado":"PendienteSolicitar",

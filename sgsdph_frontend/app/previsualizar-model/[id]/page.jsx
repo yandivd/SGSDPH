@@ -2,11 +2,9 @@
 import React, {useEffect} from 'react';
 import Image from "next/image";
 import TableSolicitaAutoriza from "../TableSolicitaAutoriza";
-import {useRouter} from "next/navigation";
 import {modelo_detail_endpoint, modelo_endpoint} from "../../../constants/apiRoutes";
-import {fetchSinToken} from "../../../helper/fetch";
-import Swal from "sweetalert2";
 import axios from "axios";
+import TableDataAll from "../TableDataAll";
 
 
 const Page = ({params}) => {
@@ -26,14 +24,15 @@ const Page = ({params}) => {
 
     useEffect( () => {
         getData();
+        window.print();
 
     }, [])
 
-    console.log(model)
+    console.log('mdel',model)
 
     return (
 
-        <div className={'py-2 px-4 '}>
+        <div className={'pt-2 pb-5 px-4 '}>
             <div className={'d-flex justify-content-between align-items-center me-5'}>
                 <Image
                     src={ '/../logo.jpg'}
@@ -67,7 +66,6 @@ const Page = ({params}) => {
 
             </div>
 
-
             <div className={'d-flex justify-content-between align-items-center my-4 w-50'}>
                 <h6>TIPO DE SOLICITUD (5):</h6>
                 <div>
@@ -75,6 +73,8 @@ const Page = ({params}) => {
                     <span>Prórroga:____</span>
                 </div>
             </div>
+
+            <TableDataAll model={model} />
 
         </div>
 

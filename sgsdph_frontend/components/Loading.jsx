@@ -1,6 +1,5 @@
 import React from 'react'
 import { CircularProgress } from '@mui/material'
-import Typography from "@mui/material/Typography";
 import Image from "next/image";
 
 const Loading = ({ infoText }) => {
