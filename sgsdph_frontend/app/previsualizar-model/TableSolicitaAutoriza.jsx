@@ -1,27 +1,27 @@
 import React from 'react';
 
-const TableSolicitaAutoriza = ({ data, tittle, name, cargo, dependencia }) => {
+const TableSolicitaAutoriza = ({ tittle, name, cargo, dependencia }) => {
     return (
         <table style={{ borderCollapse: 'collapse', width: '450px', padding: "20px"}} >
             <tbody>
                 <tr>
-                    <td style={{ border: '1px solid #000', fontWeight: 'normal' }}>{tittle}</td>
+                    <td className={'tablePrevizualizar'}>{tittle}</td>
                 </tr>
                 <tr>
-                    <td style={{ border: '1px solid #000', fontWeight: 'normal' }}>Firma</td>
-                    <td style={{ border: '1px solid #000', fontWeight: 'normal' }}></td>
+                    <td className={'tablePrevizualizar'}>Firma</td>
+                    <td className={'tablePrevizualizar'}></td>
                 </tr>
                 <tr>
-                    <td style={{ border: '1px solid #000', fontWeight: 'normal' }}>Nombre y Apellidos</td>
-                    <td style={{ border: '1px solid #000', fontWeight: 'normal' }}>{name}</td>
+                    <td className={'tablePrevizualizar'}>Nombre y Apellidos</td>
+                    <td className={'tablePrevizualizar'}>{name}</td>
                 </tr>
                 <tr>
-                    <td style={{ border: '1px solid #000', fontWeight: 'normal' }}>Cargo:</td>
-                    <td style={{ border: '1px solid #000', fontWeight: 'normal' }}>{cargo}</td>
+                    <td className={'tablePrevizualizar'}>Cargo:</td>
+                    <td className={'tablePrevizualizar'}>{cargo}</td>
                 </tr>
                 <tr>
-                    <td style={{ border: '1px solid #000', fontWeight: 'normal' }}>Dependencia</td>
-                    <td style={{ border: '1px solid #000', fontWeight: 'normal' }}>{dependencia}</td>
+                    <td className={'tablePrevizualizar'}>Dependencia</td>
+                    <td className={'tablePrevizualizar'}>{dependencia}</td>
                 </tr>
             </tbody>
 
