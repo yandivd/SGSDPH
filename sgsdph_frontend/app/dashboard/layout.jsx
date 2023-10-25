@@ -30,8 +30,8 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {activeUser, inactiveUser} from "../../redux/features/auth/authSlice";
 import Loading from "../../components/Loading";
-import {fetchConToken} from "../../helper/fetch";
-import { veryfy_token} from "../../constants/apiRoutes";
+import {fetchConToken, fetchSinToken} from "../../helper/fetch";
+import {modelo_detail_endpoint, trabajadores_endpoint, veryfy_token} from "../../constants/apiRoutes";
 import {LogoutService} from "../../helper/LogoutService";
 import Image from "next/image";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
@@ -45,6 +45,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {DialogActions} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import {useForm} from "react-hook-form";
+import Swal from "sweetalert2";
 
 const drawerWidth = 260;
 
@@ -184,7 +185,35 @@ export default function PersistentDrawerLeft({children}) {
     }
 
     const handleSubmitFirm = async(data) => {
-        console.log('firma', data)
+        const id = window.localStorage.getItem('id');
+        const method = "PATCH";
+        const url = process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint + id + '/';
+
+        const formData= {
+            "firma": data.firma[0]
+        }
+        console.log('formData', formData)
+
+        try {
+            const resp = await fetch( url, {
+                method,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: formData
+            });
+
+            console.log('response', resp)
+
+            if (resp.status === 200) {
+                Swal.fire('Exito', "Operación finaliza con éxito", 'success');
+            }else{
+                Swal.fire('Error', "Error del servidor", 'error');
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
 
     }
 

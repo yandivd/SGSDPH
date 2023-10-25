@@ -14,7 +14,7 @@ import {
     aperitivos_endpoint,
     autoriza_endpoint, cargo_presupuesto_endpoint, ccosto_endpoint,
     solicita_endpoint, solicitudes_endpoint,
-    trabajadores_endpoint
+    personas_endpoint
 } from "../../../constants/apiRoutes";
 import {municipios} from "../../../constants/municipios";
 import {fetchSinToken} from "../../../helper/fetch";
@@ -66,7 +66,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                     setAperitivo((response.data));
                 })
             await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+                process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
             )
                 .then(response => {
                     setTrabajadores((response.data));
@@ -100,7 +100,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                             setCargoPresupuesto((response.data));
                         })
                     await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+                        process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
                     )
                         .then(response => {
                             setTrabajadores((response.data));
