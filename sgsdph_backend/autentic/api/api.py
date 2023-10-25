@@ -23,17 +23,18 @@ def trabajdor_api_view(request):
 def trabajador_detail_api_view(request, id):
     try:
         trabajador = Trabajador.objects.get(id=id)
-        if request.method == 'GET':
-            trabajador_serializer = TrabajadorSerializer(trabajador)
-            return Response(trabajador_serializer.data, status=status.HTTP_200_OK)
-        elif request.method == 'PATCH':
-            trabajador_serializer = TrabajadorSerializer(trabajador, data=request.data, partial=True)
-            if trabajador_serializer.is_valid():
-                trabajador_serializer.save()
-                return Response(trabajador_serializer.data, status=status.HTTP_200_OK)
+
     except Exception as e:
         print(e)
         return Response({'message':'Trabajador no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        trabajador_serializer = TrabajadorSerializer(trabajador)
+        return Response(trabajador_serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'PATCH':
+        trabajador_serializer = TrabajadorSerializer(trabajador, data=request.data, partial=True)
+        if trabajador_serializer.is_valid():
+            trabajador_serializer.save()
+            return Response(trabajador_serializer.data, status=status.HTTP_200_OK)
     
 @api_view(['GET'])
 def rol_api_view(request):

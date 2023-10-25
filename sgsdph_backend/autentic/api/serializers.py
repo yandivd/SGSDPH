@@ -14,9 +14,17 @@ class TrabajadorSerializer(serializers.ModelSerializer):
         return user
     
     def update(self, instance, validated_data):
-        updated_user = super().update(instance, validated_data)
-        updated_user.set_password(validated_data['password'])
-        updated_user.save()
+        # Verificar el método HTTP de la solicitud
+        request = self.context.get('request')
+        if request.method == 'POST':
+            # Si es una solicitud POST, actualiza la contraseña
+            updated_user = super().update(instance, validated_data)
+            updated_user.set_password(validated_data['password'])
+            updated_user.save()
+        else:
+            # Si es una solicitud PATCH, actualiza los otros campos sin cambiar la contraseña
+            updated_user = super().update(instance, validated_data)
+
         return updated_user
     
 class RolSerializer(serializers.ModelSerializer):
