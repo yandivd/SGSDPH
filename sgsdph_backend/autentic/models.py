@@ -68,6 +68,7 @@ class Trabajador(CustomUser):
     cargo = models.CharField(max_length=400, null=True, blank=True, verbose_name='Cargo')
     unidad_organizativa = models.ForeignKey(Unidad_Organizativa, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Unidad Organizativa')
     firma = models.ImageField(upload_to='Firmas', null=True, blank=True)
+    dependencia = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.first_name+' '+self.last_name
