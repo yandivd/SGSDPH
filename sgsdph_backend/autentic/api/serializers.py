@@ -14,18 +14,18 @@ class TrabajadorSerializer(serializers.ModelSerializer):
         return user
     
     def update(self, instance, validated_data):
-        # Verificar el método HTTP de la solicitud
-        request = self.context.get('request')
-        if request.method == 'POST':
-            # Si es una solicitud POST, actualiza la contraseña
-            updated_user = super().update(instance, validated_data)
-            updated_user.set_password(validated_data['password'])
-            updated_user.save()
-        else:
-            # Si es una solicitud PATCH, actualiza los otros campos sin cambiar la contraseña
-            updated_user = super().update(instance, validated_data)
+        # Elimina 'password' del diccionario de datos
+        password = validated_data.pop('password', None)
 
-        return updated_user
+        # Actualiza los otros campos
+        instance = super().update(instance, validated_data)
+
+        # Si se proporciona una nueva contraseña, actualízala
+        if password is not None:
+            instance.set_password(password)
+            instance.save()
+
+        return instance
     
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
