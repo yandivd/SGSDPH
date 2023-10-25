@@ -9,7 +9,7 @@ import TableDataAll from "../TableDataAll";
 
 const Page = ({params}) => {
     const [model, setModel] = React.useState([]);
-
+    const [show, setShow] = React.useState(false);
 
     const getData = async () => {
         const endpoint = modelo_detail_endpoint + params.id +'/'
@@ -19,20 +19,25 @@ const Page = ({params}) => {
         )
             .then(response => {
                 setModel(response.data);
+                setShow(true)
             })
     }
 
     useEffect( () => {
         getData();
-        window.print();
 
-    }, [])
+        if( model.length !== 0 && show){
+            window.print();
+            setShow(false)
+        }
+
+    }, [show])
 
     console.log('mdel',model)
 
     return (
 
-        <div className={'pt-2 pb-5 px-4 '}>
+        <div className={'p-4'} style={{ width: 'max-content' }}>
             <div className={'d-flex justify-content-between align-items-center me-5'}>
                 <Image
                     src={ '/../logo.jpg'}
