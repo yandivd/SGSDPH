@@ -67,6 +67,7 @@ class Trabajador(CustomUser):
     telf = models.CharField(max_length=10, verbose_name='Teléfono',null=True, blank=True)
     cargo = models.CharField(max_length=400, null=True, blank=True, verbose_name='Cargo')
     unidad_organizativa = models.ForeignKey(Unidad_Organizativa, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Unidad Organizativa')
+    dependencia = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.first_name+' '+self.last_name
@@ -74,11 +75,3 @@ class Trabajador(CustomUser):
         verbose_name="Trabajador"
         verbose_name_plural="Trabajadores"
     
-class PARLEG(models.Model):
-    trabajador=models.ForeignKey(Trabajador, on_delete=models.CASCADE, blank=True, null=True)
-
-    def __str__(self):
-        return self.trabajador.usuario.first_name+' '+self.trabajador.usuario.last_name
-    class Meta:
-        verbose_name="Persona autorizada a recoger y liquidar el Efectivo"
-        verbose_name="Personas autorizadas a recoger y liquidar el Efectivo"

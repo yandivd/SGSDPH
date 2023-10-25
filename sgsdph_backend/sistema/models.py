@@ -7,6 +7,7 @@ class Persona(models.Model):
     nombre = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=100)
     ci = models.CharField(max_length=11)
+    eliminada = models.BooleanField(default=False)
     def __str__(self):
         return self.nombre
     
@@ -28,7 +29,7 @@ class Solicitud(models.Model):
     destino=models.CharField(max_length=50) #lo mismo de arriba
     regreso=models.CharField(max_length=50) #lo mismo de arriba
     ### fechas dietas ###
-    fecha_inicio_dieta=models.DateField()
+    fecha_inicio_dieta=models.DateField(null=True, blank=True)
     fecha_final_dieta=models.DateField()
     ### fechas hospedajes ###
     fecha_inicio_hosp=models.DateField(null=True, blank=True)
@@ -59,20 +60,21 @@ class Modelo(models.Model):
     tipo_model = models.IntegerField(null=True, blank=True)
     nombre=models.CharField(max_length=50) #persona que crea el modelo
     solicitante=models.CharField(max_length=50)
+    telf_solicitante = models.CharField(max_length=10, null=True, blank=True)
     unidad_organizativa=models.CharField(max_length=100)
-    c_contable=models.CharField(max_length=4)
-    consec=models.IntegerField()
+    c_contable=models.CharField(max_length=20)
+    consec=models.CharField(max_length=8)
     solicitudes=models.ManyToManyField(Solicitud)
     parleg=models.CharField(max_length=200, blank=True, null=True)
     autoriza=models.CharField(max_length=50)
     cargo_presupuesto=models.CharField(max_length=50)
     observaciones = models.CharField(max_length=500, blank=True, null=True)
-    estado=models.CharField(max_length=10)
+    estado=models.CharField(max_length=100)
     #campos nuevos del autoriza y el solicita
     cargo_autoriza=models.CharField(max_length=100)
     dependencia_autoriza=models.CharField(max_length=100)
     cargo_solicita=models.CharField(max_length=100)
-    area_trabajo_solicita=models.CharField(max_length=100)
+    dependencia_solicita=models.CharField(max_length=100)
     labor=models.CharField(max_length=500, blank=True, null=True)
     fecha=models.DateField(auto_now_add=True)
 
@@ -82,3 +84,12 @@ class Modelo(models.Model):
     class Meta:
         verbose_name="Modelo de Solicitudes"
         verbose_name_plural="Modelos de Solicitudes"
+
+class PARLEG(models.Model):
+    trabajador=models.ForeignKey(Persona, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return self.trabajador.nombre
+    class Meta:
+        verbose_name="Persona autorizada a recoger y liquidar el Efectivo"
+        verbose_name="Personas autorizadas a recoger y liquidar el Efectivo"

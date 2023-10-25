@@ -30,3 +30,24 @@
     height: 92vh; /* Altura personalizada */
     max-height: none; /* Altura máxima personalizada */
 }
+
+.tablePrevizualizar{
+    border: 1px solid #000;
+    font-weight: normal;
+    padding-left: 5px;
+    text-align: left!important;
+
+}
+
+.tableLarge th, td{
+    border: 0.5px solid #000;
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 14px;
+    padding: 1px;
+}
+
+@page {
+    size: landscape;
+    margin: 0.5cm;
+}

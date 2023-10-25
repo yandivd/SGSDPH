@@ -4,31 +4,24 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
-import Button from "@mui/material/Button";
-import {DialogActions, FormGroup, FormLabel, MenuItem} from "@mui/material";
-import TextField from "@mui/material/TextField";
 import FieldSelect from "../../../components/FieldSelect";
+import {Controller, useForm} from "react-hook-form";
+import TextField from "@mui/material/TextField";
+import {municipios} from "../../../constants/municipios";
+import {DialogActions, FormLabel, MenuItem} from "@mui/material";
+import CheckBoxPersonalizate from "../../../components/CheckBoxPersonalizate";
+import Button from "@mui/material/Button";
+import axios from "axios";
 import {
     aperitivos_endpoint,
-    autoriza_endpoint,
-    cargo_presupuesto_endpoint,
-    ccosto_endpoint,
-    solicita_endpoint, solicitudes_endpoint, trabajadores_endpoint,
+    autoriza_endpoint, cargo_presupuesto_endpoint, ccosto_endpoint,
+    solicita_endpoint, solicitudes_endpoint,
+    trabajadores_endpoint
 } from "../../../constants/apiRoutes";
-import axios from "axios";
-import {municipios} from "../../../constants/municipios";
-import {Controller, useForm} from "react-hook-form";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import CheckBoxPersonalizate from "../../../components/CheckBoxPersonalizate";
 import {fetchSinToken} from "../../../helper/fetch";
-import {activeUser} from "../../../redux/features/auth/authSlice";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 
-
-
-
-const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, length}) => {
+const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, length}) => {
     const [solicita, setSolicita] = React.useState([]);
     const [autoriza, setAutoriza] = React.useState([]);
     const [ccosto, setCcosto] = React.useState([]);
@@ -42,7 +35,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
     const { register, control, handleSubmit, errors } = useForm();
 
     useEffect( () => {
-       getDataForm()
+        getDataForm()
 
     }, [solicitudes, length])
 
@@ -159,40 +152,40 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                     if( data[propiedad] === 4 ){
                         data[propiedad] = 'Mayabeque';
                     }
-                     if( data[propiedad] === 5 ){
+                    if( data[propiedad] === 5 ){
                         data[propiedad] = 'Matanzas';
                     }
-                     if( data[propiedad] === 6 ){
+                    if( data[propiedad] === 6 ){
                         data[propiedad] = 'Villa Clara';
                     }
-                     if( data[propiedad] === 7 ){
+                    if( data[propiedad] === 7 ){
                         data[propiedad] = 'Cienfuegos';
                     }
-                     if( data[propiedad] === 8 ){
+                    if( data[propiedad] === 8 ){
                         data[propiedad] = 'Sancti Spíritus';
                     }
-                     if( data[propiedad] === 9 ){
+                    if( data[propiedad] === 9 ){
                         data[propiedad] = 'Ciego de Ávila';
                     }
-                     if( data[propiedad] === 10 ){
+                    if( data[propiedad] === 10 ){
                         data[propiedad] = 'Camagüey';
                     }
-                     if( data[propiedad] === 11 ){
+                    if( data[propiedad] === 11 ){
                         data[propiedad] = 'Las Tunas';
                     }
-                     if( data[propiedad] === 12 ){
+                    if( data[propiedad] === 12 ){
                         data[propiedad] = 'Holguín';
                     }
-                     if( data[propiedad] === 13 ){
+                    if( data[propiedad] === 13 ){
                         data[propiedad] = 'Granma';
                     }
-                     if( data[propiedad] === 14 ){
+                    if( data[propiedad] === 14 ){
                         data[propiedad] = 'Santiago de Cuba';
                     }
-                     if( data[propiedad] === 15 ){
+                    if( data[propiedad] === 15 ){
                         data[propiedad] = 'SGuantánamo';
                     }
-                     if( data[propiedad] === 16 ){
+                    if( data[propiedad] === 16 ){
                         data[propiedad] = 'Isla de la Juventud';
                     }
 
@@ -208,24 +201,23 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
             }
         }
 
-        data.tipo_sol = 1; // Agregar el campo "tipo de solicitud"
+        data.tipo_sol = 2; // Agregar el campo "tipo de solicitud"
         data.estado = 'StandBye';      // Agregar el campo "estado"
         data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
-        data.numero = solicitudes.length + 1;      // Agregar el campo "numero de solicitud"
+        data.numero = solicitudes.numero;      // Agregar el campo "numero de solicitud"
         data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
+        const endpoint = solicitudes_endpoint + solicitudes.id +'/'
+
         try {
-            console.log(data)
-            const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
+            const resp = await fetchSinToken(endpoint, data, "PUT");
             const body = await resp.json();
 
-
-            if (resp.status === 201) {
-                Swal.fire('Exito', "Se ha creado correctamente", 'success');
+            if (resp.status === 200) {
+                Swal.fire('Exito', "Se ha editado correctamente", 'success');
                 refreshFunction();
             }else{
                 Swal.fire('Error', "Error del servidor", 'error');
-
             }
 
         } catch (error) {
@@ -234,7 +226,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
 
         handleClose();
     }
-
     return (
         <div>
             <Dialog
@@ -286,10 +277,25 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                              value_show={'name'}
                                              control={control}
                                 />
-                                <FormLabel sx={{ mx: 2}} component="legend">Gasto en comida</FormLabel>
+                                <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
+                                             data={trabajadores}
+                                             name={'parleg'}
+                                             value_show={'nombre'}
+                                             control={control}
+                                />
+                                <FieldSelect name_label={'Con Cargo al Presupuesto:'}
+                                             data={cargoPresupuesto}
+                                             name={'cargo_presupuesto'}
+                                             value_show={'account'}
+                                             control={control}
+                                />
 
-                                <CheckBoxPersonalizate data={aperitivo} control={control} />
-
+                                <FieldSelect name_label={'Autoriza'}
+                                             data={autoriza}
+                                             name={'autoriza'}
+                                             value_show={'username'}
+                                             control={control}
+                                />
                             </div>
 
                             <div>
@@ -347,31 +353,31 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                         </TextField>
                                     )}
                                 />
-                                 <Controller
-                                        name='prov_destino'
-                                        control={control}
-                                        defaultValue=""
-                                        render={({ field }) => (
-                                            <TextField
-                                                select
-                                                label="Provincia Destino"
-                                                required
-                                                name='prov_destino'
-                                                {...field}
-                                                sx={{ m: 2, width: '300px' }}
-                                                onChange={(event) => {
-                                                    field.onChange(event);
-                                                    handleProvinciaDestinoChange(event);
-                                                }}
-                                            >
-                                                {municipios.map((provincia, index) => (
-                                                    <MenuItem key={index} value={index}>
-                                                        {provincia[0]}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
-                                        )}
-                                    />
+                                <Controller
+                                    name='prov_destino'
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <TextField
+                                            select
+                                            label="Provincia Destino"
+                                            required
+                                            name='prov_destino'
+                                            {...field}
+                                            sx={{ m: 2, width: '300px' }}
+                                            onChange={(event) => {
+                                                field.onChange(event);
+                                                handleProvinciaDestinoChange(event);
+                                            }}
+                                        >
+                                            {municipios.map((provincia, index) => (
+                                                <MenuItem key={index} value={index}>
+                                                    {provincia[0]}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    )}
+                                />
 
                                 <Controller
                                     name='destino'
@@ -417,44 +423,66 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                         </TextField>
                                     )}
                                 />
+                                <FormLabel sx={{ mx: 2}} component="legend">Gasto en comida</FormLabel>
+                                <CheckBoxPersonalizate data={aperitivo} control={control} />
                             </div>
 
                             <div>
-                                <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
-                                             data={trabajadores}
-                                             name={'parleg'}
-                                             value_show={'nombre'}
-                                             control={control}
-                                />
-                                <FieldSelect name_label={'Con Cargo al Presupuesto:'}
-                                             data={cargoPresupuesto}
-                                             name={'cargo_presupuesto'}
-                                             value_show={'account'}
-                                             control={control}
-                                />
-
-                                <FieldSelect name_label={'Autoriza'}
-                                             data={autoriza}
-                                             name={'autoriza'}
-                                             value_show={'username'}
-                                             control={control}
-                                />
                                 <TextField
                                     required
                                     type={'date'}
                                     label="Fecha de Inicio"
                                     sx={{ m: 2, width: '300px' }}
+                                    helperText="Fecha Inicio Dieta"
+                                    defaultValue= {solicitudes.fecha_inicio_dieta}
                                     {...register("fecha_inicio_dieta")}
                                 />
                                 <TextField
                                     required
                                     type={'date'}
                                     label="Fecha Final"
-                                    sx={{ m: 2, width: '300px' }}
+                                    helperText="Fecha Final Dieta"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_final_dieta}
                                     {...register("fecha_final_dieta")}
-
                                 />
 
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    label="Fecha de Inicio"
+                                    helperText="Fecha Inicio Pasaje"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_inicio_pasaj}
+                                    {...register("fecha_inicio_pasaj")}
+                                />
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    label="Fecha Final"
+                                    helperText="Fecha Final Pasaje"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_final_pasaj}
+                                    {...register("fecha_final_pasaj")}
+                                />
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    label="Fecha de Inicio"
+                                    helperText="Fecha Inicio Hospedaje"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_inicio_hosp}
+                                    {...register("fecha_inicio_hosp")}
+                                />
+                                <TextField
+                                    required
+                                    type={'date'}
+                                    label="Fecha Final"
+                                    helperText="Fecha Final Hospedaje"
+                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_final_hosp}
+                                    {...register("fecha_final_hosp")}
+                                />
 
                             </div>
 
@@ -495,4 +523,4 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
     );
 };
 
-export default CreateSdModal;
+export default EditSDPHModal;

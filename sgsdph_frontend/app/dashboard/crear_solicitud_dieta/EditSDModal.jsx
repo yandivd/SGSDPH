@@ -28,49 +28,49 @@ import Swal from "sweetalert2"
 
 
 
-const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, length}) => {
-    const [solicita, setSolicita] = React.useState([]);
-    const [autoriza, setAutoriza] = React.useState([]);
-    const [ccosto, setCcosto] = React.useState([]);
-    const [cargoPresupuesto, setCargoPresupuesto] = React.useState([]);
-    const [trabajadores, setTrabajadores] = React.useState([]);
-    const [aperitivo, setAperitivo] = React.useState([]);
+const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
+    const [solicita, setSolicita] = React.useState('');
+    const [autoriza, setAutoriza] = React.useState('');
+    const [ccosto, setCcosto] = React.useState('');
+    const [cargoPresupuesto, setCargoPresupuesto] = React.useState('');
+    const [trabajadores, setTrabajadores] = React.useState('');
+    const [aperitivo, setAperitivo] = React.useState('');
     const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, errors } = useForm();
+    const { register, control, handleSubmit, setValue } = useForm();
 
     useEffect( () => {
-       getDataForm()
+        getDataForm()
 
-    }, [solicitudes, length])
+    }, [solicitudes, control])
 
     const getDataForm = async () => {
-        if(solicitudes.length > 0 && length !== null){
-
-            const first_solicitud =  solicitudes[0]
-            setSolicita([{
-                'username': first_solicitud.solicitante.username,
-                'id': first_solicitud.solicitante.id
-            }])
-            setCcosto([{
-                'name': first_solicitud.c_contable.name,
-                'id': first_solicitud.c_contable.id
-            }])
-            setCargoPresupuesto([{
-                'account': first_solicitud.cargo_presupuesto.account,
-                'id': first_solicitud.cargo_presupuesto.id
-            }])
-            setAutoriza([{
-                'username': first_solicitud.autoriza.username,
-                'id': first_solicitud.autoriza.id
-            }])
+        try {
             await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
+                process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
             )
                 .then(response => {
-                    setAperitivo((response.data));
+                    setSolicita((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
+            )
+                .then(response => {
+                    setAutoriza((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
+            )
+                .then(response => {
+                    setCcosto((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
+            )
+                .then(response => {
+                    setCargoPresupuesto((response.data));
                 })
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
@@ -78,53 +78,18 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                 .then(response => {
                     setTrabajadores((response.data));
                 })
-        }else{
 
-            if(length !== null){
-                try {
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
-                    )
-                        .then(response => {
-                            setSolicita((response.data));
-                        })
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
-                    )
-                        .then(response => {
-                            setAutoriza((response.data));
-                        })
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
-                    )
-                        .then(response => {
-                            setCcosto((response.data));
-                        })
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
-                    )
-                        .then(response => {
-                            setCargoPresupuesto((response.data));
-                        })
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
-                    )
-                        .then(response => {
-                            setTrabajadores((response.data));
-                        })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
+            )
+                .then(response => {
+                    setAperitivo((response.data));
+                })
 
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
-                    )
-                        .then(response => {
-                            setAperitivo((response.data));
-                        })
-
-                } catch (error) {
-                    console.log(error)
-                }
-            }
+        } catch (error) {
+            console.log(error)
         }
+
     }
 
     const handleProvinciaOrigenChange = (event) => {
@@ -159,40 +124,40 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                     if( data[propiedad] === 4 ){
                         data[propiedad] = 'Mayabeque';
                     }
-                     if( data[propiedad] === 5 ){
+                    if( data[propiedad] === 5 ){
                         data[propiedad] = 'Matanzas';
                     }
-                     if( data[propiedad] === 6 ){
+                    if( data[propiedad] === 6 ){
                         data[propiedad] = 'Villa Clara';
                     }
-                     if( data[propiedad] === 7 ){
+                    if( data[propiedad] === 7 ){
                         data[propiedad] = 'Cienfuegos';
                     }
-                     if( data[propiedad] === 8 ){
+                    if( data[propiedad] === 8 ){
                         data[propiedad] = 'Sancti Spíritus';
                     }
-                     if( data[propiedad] === 9 ){
+                    if( data[propiedad] === 9 ){
                         data[propiedad] = 'Ciego de Ávila';
                     }
-                     if( data[propiedad] === 10 ){
+                    if( data[propiedad] === 10 ){
                         data[propiedad] = 'Camagüey';
                     }
-                     if( data[propiedad] === 11 ){
+                    if( data[propiedad] === 11 ){
                         data[propiedad] = 'Las Tunas';
                     }
-                     if( data[propiedad] === 12 ){
+                    if( data[propiedad] === 12 ){
                         data[propiedad] = 'Holguín';
                     }
-                     if( data[propiedad] === 13 ){
+                    if( data[propiedad] === 13 ){
                         data[propiedad] = 'Granma';
                     }
-                     if( data[propiedad] === 14 ){
+                    if( data[propiedad] === 14 ){
                         data[propiedad] = 'Santiago de Cuba';
                     }
-                     if( data[propiedad] === 15 ){
+                    if( data[propiedad] === 15 ){
                         data[propiedad] = 'SGuantánamo';
                     }
-                     if( data[propiedad] === 16 ){
+                    if( data[propiedad] === 16 ){
                         data[propiedad] = 'Isla de la Juventud';
                     }
 
@@ -211,21 +176,20 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
         data.tipo_sol = 1; // Agregar el campo "tipo de solicitud"
         data.estado = 'StandBye';      // Agregar el campo "estado"
         data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
-        data.numero = solicitudes.length + 1;      // Agregar el campo "numero de solicitud"
+        data.numero = solicitudes.numero;      // Agregar el campo "numero de solicitud"
         data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
+        const endpoint = solicitudes_endpoint + solicitudes.id +'/'
+
         try {
-            console.log(data)
-            const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
+            const resp = await fetchSinToken(endpoint, data, "PUT");
             const body = await resp.json();
 
-
-            if (resp.status === 201) {
-                Swal.fire('Exito', "Se ha creado correctamente", 'success');
+            if (resp.status === 200) {
+                Swal.fire('Exito', "Se ha editado correctamente", 'success');
                 refreshFunction();
             }else{
                 Swal.fire('Error', "Error del servidor", 'error');
-
             }
 
         } catch (error) {
@@ -248,7 +212,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
             >
 
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    Agregar solicitud de dieta
+                    Editar solicitud de dieta
                 </DialogTitle>
 
                 <IconButton
@@ -291,6 +255,8 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                 <CheckBoxPersonalizate data={aperitivo} control={control} />
 
                             </div>
+
+
 
                             <div>
                                 <Controller
@@ -347,31 +313,31 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                         </TextField>
                                     )}
                                 />
-                                 <Controller
-                                        name='prov_destino'
-                                        control={control}
-                                        defaultValue=""
-                                        render={({ field }) => (
-                                            <TextField
-                                                select
-                                                label="Provincia Destino"
-                                                required
-                                                name='prov_destino'
-                                                {...field}
-                                                sx={{ m: 2, width: '300px' }}
-                                                onChange={(event) => {
-                                                    field.onChange(event);
-                                                    handleProvinciaDestinoChange(event);
-                                                }}
-                                            >
-                                                {municipios.map((provincia, index) => (
-                                                    <MenuItem key={index} value={index}>
-                                                        {provincia[0]}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
-                                        )}
-                                    />
+                                <Controller
+                                    name='prov_destino'
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <TextField
+                                            select
+                                            label="Provincia Destino"
+                                            required
+                                            name='prov_destino'
+                                            {...field}
+                                            sx={{ m: 2, width: '300px' }}
+                                            onChange={(event) => {
+                                                field.onChange(event);
+                                                handleProvinciaDestinoChange(event);
+                                            }}
+                                        >
+                                            {municipios.map((provincia, index) => (
+                                                <MenuItem key={index} value={index}>
+                                                    {provincia[0]}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    )}
+                                />
 
                                 <Controller
                                     name='destino'
@@ -425,6 +391,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                              name={'parleg'}
                                              value_show={'nombre'}
                                              control={control}
+
                                 />
                                 <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                              data={cargoPresupuesto}
@@ -444,12 +411,14 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                     type={'date'}
                                     label="Fecha de Inicio"
                                     sx={{ m: 2, width: '300px' }}
+                                    defaultValue= {solicitudes.fecha_inicio_dieta}
                                     {...register("fecha_inicio_dieta")}
                                 />
                                 <TextField
                                     required
                                     type={'date'}
                                     label="Fecha Final"
+                                    defaultValue= {solicitudes.fecha_final_dieta}
                                     sx={{ m: 2, width: '300px' }}
                                     {...register("fecha_final_dieta")}
 
@@ -458,24 +427,26 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
 
                             </div>
 
+
                         </div>
 
 
                         <div className={'mt-3'}>
                             <TextField
-                                id="outlined-required"
+                                id="labor"
                                 label="Labor a Realizar"
-                                defaultValue=""
+                                defaultValue= {solicitudes.labor}
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
                             />
                         </div>
                         <div className={'mt-3'}>
                             <TextField
-                                id="outlined-required"
-                                label="Observaciones"
+                                id='observaciones'
+                                label='Observaciones'
+                                defaultValue= {solicitudes.observaciones}
                                 sx={{ m: 2, width: '92%' }}
-                                {...register("observaciones")}
+                                {...register('observaciones' )}
                             />
                         </div>
 
@@ -488,6 +459,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                         </Button>
                     </DialogActions>
                 </form>
+
             </Dialog>
 
 
@@ -495,4 +467,4 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
     );
 };
 
-export default CreateSdModal;
+export default EditSDModal;
