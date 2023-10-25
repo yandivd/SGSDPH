@@ -30,7 +30,7 @@ class Solicitud(models.Model):
     regreso=models.CharField(max_length=50) #lo mismo de arriba
     ### fechas dietas ###
     fecha_inicio_dieta=models.DateField(null=True, blank=True)
-    fecha_final_dieta=models.DateField()
+    fecha_final_dieta=models.DateField(null=True, blank=True)
     ### fechas hospedajes ###
     fecha_inicio_hosp=models.DateField(null=True, blank=True)
     fecha_final_hosp=models.DateField(null=True, blank=True)
@@ -77,6 +77,11 @@ class Modelo(models.Model):
     dependencia_solicita=models.CharField(max_length=100)
     labor=models.CharField(max_length=500, blank=True, null=True)
     fecha=models.DateField(auto_now_add=True)
+
+    #campos de firmas
+    firma_crea = models.ImageField(upload_to='Modelos/Firmas/Creada', null=True, blank=True)
+    firma_solicita = models.ImageField(upload_to='Modelos/Firmas/Solicitada', null=True, blank=True)
+    firma_autoriza = models.ImageField(upload_to='Modelos/Firmas/Autorizada', null=True, blank=True)
 
     def __str__(self):
         return self.nombre
