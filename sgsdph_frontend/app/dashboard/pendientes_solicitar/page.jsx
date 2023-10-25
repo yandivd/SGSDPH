@@ -27,6 +27,7 @@ export default function PendienteSolicitud() {
     const [models, setModels] = React.useState([]);
     const [globalFilter, setGlobalFilter] = useState('')
     const [openCancel, setOpenCancel] = React.useState(false);
+    const [openSolicitar, setOpenSolicitar] = React.useState(false);
     const [id, setId] = React.useState('');
     const router = useRouter();
 
@@ -46,14 +47,23 @@ export default function PendienteSolicitud() {
         handleOpenCancel()
     }
 
+    const confirmSolicitar = (idSolicitud) =>{
+        setId(idSolicitud)
+        handleOpenSolicitar()
+    }
+
+
     const handleOpenCancel = () => {
         setOpenCancel(!openCancel);
+    };
+
+    const handleOpenSolicitar = () => {
+        setOpenSolicitar(!openSolicitar);
     };
 
     const handleViewModel = (id) => {
         router.push(`/previsualizar-model/${id}`);
     }
-
 
     const actionBodyTemplate = (rowData) => {
         return (
@@ -61,7 +71,7 @@ export default function PendienteSolicitud() {
                 <IconButton size="large" className="text-primary" onClick={() => handleViewModel(rowData.id)}>
                     <VisibilityIcon fontSize="inherit" />
                 </IconButton>
-                <IconButton size="large" color="success">
+                <IconButton size="large" color="success" onClick={() => confirmSolicitar(rowData.id)}>
                     <CheckIcon fontSize="inherit" />
                 </IconButton>
                 <IconButton size="large" color="error" onClick={() => confirmCancelModel(rowData.id)}>
@@ -71,18 +81,18 @@ export default function PendienteSolicitud() {
         )
     }
 
-    const handleCancelarSolicitud = async () => {
+    const handleChangeState = async (state) => {
         const endpoint = modelo_detail_endpoint + id +'/'
 
         const data = {
-            estado: "Cancelado"
+            estado: state
         }
 
         try {
             const resp = await fetchSinToken(endpoint, data, "PATCH");
 
             if (resp.status === 200) {
-                Swal.fire('Exito', "Se ha cancelado correctamente", 'success');
+                Swal.fire('Exito', "Operación finaliza con éxito", 'success');
             }else{
                 Swal.fire('Error', "Error del servidor", 'error');
             }
@@ -90,7 +100,15 @@ export default function PendienteSolicitud() {
         } catch (error) {
             console.log(error)
         }
-        handleOpenCancel();
+
+        if(openCancel){
+            handleOpenCancel();
+        }
+
+        if(openSolicitar){
+            handleOpenSolicitar();
+        }
+
     }
 
     useEffect( () => {
@@ -134,6 +152,7 @@ export default function PendienteSolicitud() {
                         }
                     }}
                 ></Column>
+                <Column field="id" header="id" sortable style={{ width: '25%' }}></Column>
                 <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                 <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
                 <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>
@@ -151,8 +170,6 @@ export default function PendienteSolicitud() {
 
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
                 </DialogTitle>
-
-
 
                 <IconButton
                     aria-label="close"
@@ -176,8 +193,47 @@ export default function PendienteSolicitud() {
                     <Button autoFocus onClick={handleOpenCancel} variant="contained" color='error'>
                         Cancelar
                     </Button> <br/>
-                    <Button onClick={handleCancelarSolicitud} variant="contained">
+                    <Button onClick={() => handleChangeState('Cancelado')} variant="contained">
                         Aceptar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                onClose={handleOpenSolicitar}
+                aria-labelledby="customized-dialog-title"
+                open={openSolicitar}
+                className={'p-5'}
+            >
+
+                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                </DialogTitle>
+
+                <IconButton
+                    aria-label="close"
+                    onClick={handleOpenSolicitar}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+
+                <DialogContent className='text-center'>
+                    <h4 className='mt-4'>Estás seguro de solicitar este modelo?</h4>
+                </DialogContent>
+
+                <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
+                    <Button variant="contained" >
+                        Firmar
+                    </Button> <br/>
+                    <Button variant="contained"
+                            color='success'
+                            onClick={() => handleChangeState('PendienteAutorizo')}>
+                        Solicitar
                     </Button>
                 </DialogActions>
             </Dialog>

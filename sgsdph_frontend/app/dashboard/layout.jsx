@@ -301,7 +301,7 @@ export default function PersistentDrawerLeft({children}) {
                                     <ListItemIcon>
                                         <HowToRegIcon />
                                     </ListItemIcon>
-                                    <ListItemText>Pendientes a Aprobar</ListItemText>
+                                    <ListItemText>Pendientes a Autorizar</ListItemText>
                                 </ListItemButton>
                             </Link>
                         </ListItem>
