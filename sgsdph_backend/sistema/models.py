@@ -30,7 +30,7 @@ class Solicitud(models.Model):
     regreso=models.CharField(max_length=50) #lo mismo de arriba
     ### fechas dietas ###
     fecha_inicio_dieta=models.DateField(null=True, blank=True)
-    fecha_final_dieta=models.DateField()
+    fecha_final_dieta=models.DateField(null=True, blank=True)
     ### fechas hospedajes ###
     fecha_inicio_hosp=models.DateField(null=True, blank=True)
     fecha_final_hosp=models.DateField(null=True, blank=True)
