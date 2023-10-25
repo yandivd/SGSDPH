@@ -40,10 +40,10 @@ const Page = ({params}) => {
         <div className={'p-4'} style={{ width: 'max-content' }}>
             <div className={'d-flex justify-content-between align-items-center me-5'}>
                 <Image
-                    src={ '/../logo.jpg'}
+                    src={ '/../logo-model.png'}
                     alt={ 'Logotipo' }
-                    width={ 200 }
-                    height={ 100 }
+                    width={ 180 }
+                    height={ 70 }
                     className={'bg-sucess'}
                 />
                 <h6 style={{ display: 'flex', justifyContent: 'center' }}>SOLICITUD DE DIETAS</h6>

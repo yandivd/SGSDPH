@@ -215,7 +215,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
         data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
         try {
-            console.log(data)
             const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
             const body = await resp.json();
 
