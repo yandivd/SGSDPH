@@ -14,10 +14,18 @@ class TrabajadorSerializer(serializers.ModelSerializer):
         return user
     
     def update(self, instance, validated_data):
-        updated_user = super().update(instance, validated_data)
-        updated_user.set_password(validated_data['password'])
-        updated_user.save()
-        return updated_user
+        # Elimina 'password' del diccionario de datos
+        password = validated_data.pop('password', None)
+
+        # Actualiza los otros campos
+        instance = super().update(instance, validated_data)
+
+        # Si se proporciona una nueva contraseña, actualízala
+        if password is not None:
+            instance.set_password(password)
+            instance.save()
+
+        return instance
     
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
