@@ -239,6 +239,14 @@ export default function PersistentDrawerLeft({children}) {
                             </ListItemButton>
                         </Link>
                     </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <DashboardIcon />
+                            </ListItemIcon>
+                            <ListItemText>Firma</ListItemText>
+                        </ListItemButton>
+                     </ListItem>
                     <ListItem disablePadding >
                         <Link  href={'http://localhost:8000/admin'} className='link-sidebar'>
                             <ListItemButton>
