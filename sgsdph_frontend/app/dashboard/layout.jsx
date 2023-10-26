@@ -31,10 +31,21 @@ import {useDispatch, useSelector} from "react-redux";
 import {activeUser, inactiveUser} from "../../redux/features/auth/authSlice";
 import Loading from "../../components/Loading";
 import {fetchConToken, fetchSinToken} from "../../helper/fetch";
-import {modelo_endpoint, veryfy_token} from "../../constants/apiRoutes";
+import {modelo_detail_endpoint, trabajadores_endpoint, veryfy_token} from "../../constants/apiRoutes";
 import {LogoutService} from "../../helper/LogoutService";
 import Image from "next/image";
-import axios from "axios";
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import CloseIcon from "@mui/icons-material/Close";
+import DialogContent from "@mui/material/DialogContent";
+import Button from "@mui/material/Button";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import {DialogActions} from "@mui/material";
+import TextField from "@mui/material/TextField";
+import {useForm} from "react-hook-form";
+import Swal from "sweetalert2";
 
 const drawerWidth = 260;
 
@@ -105,10 +116,15 @@ export default function PersistentDrawerLeft({children}) {
     const {user, isActive, rol} = useSelector((state) => state.auth);
     const router = useRouter();
     const dispatch = useDispatch();
-    const [models, setModels] = React.useState([]);
-
+    const { register, control, handleSubmit, errors } = useForm();
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
+    const [openFirm, setOpenFirm] = React.useState(false);
+
+    const handleFirmOpen = () => {
+        setOpenFirm(!openFirm);
+    };
+
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -168,174 +184,258 @@ export default function PersistentDrawerLeft({children}) {
         }
     }
 
+    const handleSubmitFirm = async(data) => {
+
+        console.log('data', data)
+        const id = window.localStorage.getItem('id');
+        const method = "PATCH";
+        const url = process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint + id + '/';
+
+/*        const formData= {
+            "firma": data.firma[0]
+        }*/
+
+        const dataToSend = new FormData()
+        dataToSend.append( 'firma', data.firma[0])
+
+        try {
+            const resp = await fetch( url, {
+                method,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: dataToSend
+            });
+
+            if (resp.status === 200) {
+                Swal.fire('Exito', "Operación finaliza con éxito", 'success');
+            }else{
+                Swal.fire('Error', "Error del servidor", 'error');
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
     return (
-        <Box sx={{ display: 'flex' }} >
-            <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 2, ...(open && { display: 'none' }) }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <div className='d-flex w-100 align-items-center justify-content-between'>
-                        <Typography variant='h6' noWrap component='div'>
-                            Sistema de solcitud de dietas, hospedaje y pasaje
-                        </Typography>
-                        <div onClick={handleLogout} className={'logoutStyle'} >
-                            <ListItemText>
-                                Cerrar Sesión
-                            </ListItemText>
-                            <ListItemIcon className={'ms-2 text-white'}>
-                                <LogoutIcon />
-                            </ListItemIcon>
-                        </div>
-                    </div>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-                }}
-                variant="persistent"
-                anchor="left"
-                open={open}
-            >
-                <DrawerHeader className={'justify-content-between'}>
-                    <div className={'ps-2  text-capitalize '}>
-                        <Image
-                            src= '/../logoCorto.jpeg'
-                            alt= 'Logotipo'
-                            width={ 180 }
-                            height={ 80 }
-                            className={'bg-sucess'}
-                            priority={true}
-                        />
-                    </div>
-                    <div>
-                        <IconButton onClick={handleDrawerClose}>
-                            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+        <div>
+            <Box sx={{ display: 'flex' }} >
+                <CssBaseline />
+                <AppBar position="fixed" open={open}>
+                    <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+                        >
+                            <MenuIcon />
                         </IconButton>
-                    </div>
-                </DrawerHeader>
-                <Divider className='bg-dark'/>
-                <List>
-                    <ListItem disablePadding>
-                        <Link href={'/dashboard/'} className='link-sidebar'>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <DashboardIcon />
+                        <div className='d-flex w-100 align-items-center justify-content-between'>
+                            <Typography variant='h6' noWrap component='div'>
+                                Sistema de solcitud de dietas, hospedaje y pasaje
+                            </Typography>
+                            <div onClick={handleLogout} className={'logoutStyle'} >
+                                <ListItemText>
+                                    Cerrar Sesión
+                                </ListItemText>
+                                <ListItemIcon className={'ms-2 text-white'}>
+                                    <LogoutIcon />
                                 </ListItemIcon>
-                                <ListItemText>Inicio</ListItemText>
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <DashboardIcon />
-                            </ListItemIcon>
-                            <ListItemText>Firma</ListItemText>
-                        </ListItemButton>
-                     </ListItem>
-                    <ListItem disablePadding >
-                        <Link  href={'http://localhost:8000/admin'} className='link-sidebar'>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <SupervisorAccountIcon />
-                                </ListItemIcon>
-                                <ListItemText>Admin</ListItemText>
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
-                </List>
-                <Divider className='bg-dark'/>
-                <List>
-                    <ListItem disablePadding className={'ps-3 text-underline'}>
-                        <ListItemText>Solicitudes </ListItemText>
-                    </ListItem>
-
-                    <ListItem disablePadding disableGutters>
-                        <Link href={'/dashboard/pendientes_solicitar'} className='link-sidebar'>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <LibraryBooksIcon />
-                                </ListItemIcon>
-                                <ListItemText>Pendientes a Solicitar</ListItemText>
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <Link href={'/dashboard/pendientes_aprobar'} className='link-sidebar'>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <HowToRegIcon />
-                                </ListItemIcon>
-                                <ListItemText>Pendientes a Aprobar</ListItemText>
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <Link href={'/dashboard/solicitudes_anticipo_pago'}  className='link-sidebar'>
-                            <ListItemButton>
-                                <ListItemIcon >
-                                    <PaidIcon/>
-                                </ListItemIcon>
-                                <ListItemText>Pendientes a Anticipo</ListItemText>
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
+                            </div>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    sx={{
+                        width: drawerWidth,
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                    variant="persistent"
+                    anchor="left"
+                    open={open}
+                >
+                    <DrawerHeader className={'justify-content-between'}>
+                        <div className={'ps-2  text-capitalize '}>
+                            <Image
+                                src= '/../logoCorto.jpeg'
+                                alt= 'Logotipo'
+                                width={ 180 }
+                                height={ 80 }
+                                className={'bg-sucess'}
+                                priority={true}
+                            />
+                        </div>
+                        <div>
+                            <IconButton onClick={handleDrawerClose}>
+                                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                            </IconButton>
+                        </div>
+                    </DrawerHeader>
                     <Divider className='bg-dark'/>
-                    <ListItem disablePadding>
-                        <Link href={'/dashboard/solicitudes_archivadas'} className='link-sidebar'>
-                            <ListItemButton>
+                    <List>
+                        <ListItem disablePadding>
+                            <Link href={'/dashboard/'} className='link-sidebar'>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <DashboardIcon />
+                                    </ListItemIcon>
+                                    <ListItemText>Inicio</ListItemText>
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={handleFirmOpen}>
                                 <ListItemIcon>
-                                    <ArchiveIcon />
+                                    <BorderColorIcon />
                                 </ListItemIcon>
-                                <ListItemText>Archivadas</ListItemText>
+                                <ListItemText>Firma</ListItemText>
                             </ListItemButton>
-                        </Link>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <Link href={'/dashboard/solicitudes_canceladas'}  className='link-sidebar'>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <CancelIcon />
-                                </ListItemIcon>
-                                <ListItemText>Canceladas</ListItemText>
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
-                </List>
-            </Drawer>
-            <Main open={open}  sx={{
-                backgroundColor: (theme) =>
-                    theme.palette.mode === 'light'
-                        ? theme.palette.grey[100]
-                        : theme.palette.grey[900],
-                height: '100vh',
-                overflow: 'auto',
-            }}>
-                <DrawerHeader />
+                        </ListItem>
+                        <ListItem disablePadding >
+                            <Link  href={'http://localhost:8000/admin'} className='link-sidebar'>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <SupervisorAccountIcon />
+                                    </ListItemIcon>
+                                    <ListItemText>Admin</ListItemText>
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                    </List>
+                    <Divider className='bg-dark'/>
+                    <List>
+                        <ListItem disablePadding className={'ps-3 text-underline'}>
+                            <ListItemText>Solicitudes </ListItemText>
+                        </ListItem>
 
-                {children}
+                        <ListItem disablePadding disableGutters>
+                            <Link href={'/dashboard/pendientes_solicitar'} className='link-sidebar'>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <LibraryBooksIcon />
+                                    </ListItemIcon>
+                                    <ListItemText>Pendientes a Solicitar</ListItemText>
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <Link href={'/dashboard/pendientes_aprobar'} className='link-sidebar'>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <HowToRegIcon />
+                                    </ListItemIcon>
+                                    <ListItemText>Pendientes a Autorizar</ListItemText>
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <Link href={'/dashboard/solicitudes_anticipo_pago'}  className='link-sidebar'>
+                                <ListItemButton>
+                                    <ListItemIcon >
+                                        <PaidIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText>Pendientes a Anticipo</ListItemText>
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                        <Divider className='bg-dark'/>
+                        <ListItem disablePadding>
+                            <Link href={'/dashboard/solicitudes_archivadas'} className='link-sidebar'>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <ArchiveIcon />
+                                    </ListItemIcon>
+                                    <ListItemText>Archivadas</ListItemText>
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <Link href={'/dashboard/solicitudes_canceladas'}  className='link-sidebar'>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <CancelIcon />
+                                    </ListItemIcon>
+                                    <ListItemText>Canceladas</ListItemText>
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                    </List>
+                </Drawer>
+                <Main open={open}  sx={{
+                    backgroundColor: (theme) =>
+                        theme.palette.mode === 'light'
+                            ? theme.palette.grey[100]
+                            : theme.palette.grey[900],
+                    height: '100vh',
+                    overflow: 'auto',
+                }}>
+                    <DrawerHeader />
 
-{/*                {React.Children.map(this.props.children, (child) =>
+                    {children}
+
+                    {/*                {React.Children.map(this.props.children, (child) =>
                     React.cloneElement(child, { models })
                 )}*/}
-                <DrawerHeader />
-            </Main>
+                    <DrawerHeader />
+                </Main>
 
-        </Box>
+            </Box>
+
+            <div>
+                <Dialog
+                    onClose={handleFirmOpen}
+                    aria-labelledby="customized-dialog-title"
+                    open={openFirm}
+                    className={'p-5'}
+                >
+
+                    <IconButton
+                        aria-label="close"
+                        onClick={handleFirmOpen}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+
+                    <form onSubmit={handleSubmit(handleSubmitFirm)}>
+                        <DialogContent className='text-center'>
+                            <h4 className='mt-4'>Introduzca su firma digital</h4>
+                            <TextField
+                                required
+                                type={'file'}
+                                helperText="Firma"
+                                sx={{ mx: 2, mt: 3, width: '300px' }}
+                                {...register("firma")}
+                            />
+
+                            <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
+                                <Button autoFocus onClick={handleFirmOpen} variant="contained" color='error'>
+                                    Cancelar
+                                </Button> <br/>
+                                <Button variant="contained" type="submit">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </DialogContent>
+                    </form>
+                </Dialog>
+
+            </div>
+        </div>
+
     );
 }
 

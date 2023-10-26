@@ -62,6 +62,7 @@ export default function SignIn() {
                 const username = body.user.username;
                 const token = body.token;
                 const last_name = body.user.last_name;
+                const id = body.user.id;
 
                 dispatch(activeUser( {
                     user: username ,
@@ -73,6 +74,7 @@ export default function SignIn() {
                 window.localStorage.setItem('unidad_organizativa', unidad_organizativa)
                 window.localStorage.setItem('username', username)
                 window.localStorage.setItem('last_name', last_name)
+                window.localStorage.setItem('id', id)
 
                 router.push('/dashboard')
             }else{
