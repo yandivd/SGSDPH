@@ -2,6 +2,7 @@ from autentic.models import Trabajador, Rol, Centro_Costo, Cargo_al_Presupuesto
 from rest_framework import serializers
 
 class TrabajadorSerializer(serializers.ModelSerializer):
+    firma = serializers.ImageField(required=False)
     class Meta:
         model = Trabajador
         fields = '__all__'
