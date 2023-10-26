@@ -35,6 +35,7 @@ def trabajador_detail_api_view(request, id):
         if trabajador_serializer.is_valid():
             trabajador_serializer.save()
             return Response(trabajador_serializer.data, status=status.HTTP_200_OK)
+        return Response(trabajador_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])
 def rol_api_view(request):
