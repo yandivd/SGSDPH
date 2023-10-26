@@ -185,14 +185,18 @@ export default function PersistentDrawerLeft({children}) {
     }
 
     const handleSubmitFirm = async(data) => {
+
+        console.log('data', data)
         const id = window.localStorage.getItem('id');
         const method = "PATCH";
         const url = process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint + id + '/';
 
-        const formData= {
+/*        const formData= {
             "firma": data.firma[0]
-        }
-        console.log('formData', formData)
+        }*/
+
+        const dataToSend = new FormData()
+        dataToSend.append( 'firma', data.firma[0])
 
         try {
             const resp = await fetch( url, {
@@ -200,10 +204,8 @@ export default function PersistentDrawerLeft({children}) {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
-                body: formData
+                body: dataToSend
             });
-
-            console.log('response', resp)
 
             if (resp.status === 200) {
                 Swal.fire('Exito', "Operación finaliza con éxito", 'success');
