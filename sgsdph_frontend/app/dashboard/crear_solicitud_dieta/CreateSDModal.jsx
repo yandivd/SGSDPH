@@ -13,7 +13,7 @@ import {
     autoriza_endpoint,
     cargo_presupuesto_endpoint,
     ccosto_endpoint,
-    solicita_endpoint, solicitudes_endpoint, trabajadores_endpoint,
+    solicita_endpoint, solicitudes_endpoint, personas_endpoint,
 } from "../../../constants/apiRoutes";
 import axios from "axios";
 import {municipios} from "../../../constants/municipios";
@@ -73,7 +73,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                     setAperitivo((response.data));
                 })
             await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+                process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
             )
                 .then(response => {
                     setTrabajadores((response.data));
@@ -107,7 +107,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                             setCargoPresupuesto((response.data));
                         })
                     await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+                        process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
                     )
                         .then(response => {
                             setTrabajadores((response.data));
@@ -215,7 +215,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
         data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
         try {
-            console.log(data)
             const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
             const body = await resp.json();
 

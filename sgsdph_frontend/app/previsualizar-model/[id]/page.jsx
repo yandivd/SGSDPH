@@ -2,14 +2,22 @@
 import React, {useEffect} from 'react';
 import Image from "next/image";
 import TableSolicitaAutoriza from "../TableSolicitaAutoriza";
-import {modelo_detail_endpoint, modelo_endpoint} from "../../../constants/apiRoutes";
+import {modelo_detail_endpoint, modelo_endpoint, veryfy_token} from "../../../constants/apiRoutes";
 import axios from "axios";
 import TableDataAll from "../TableDataAll";
+import {fetchConToken} from "../../../helper/fetch";
+import {activeUser, inactiveUser} from "../../../redux/features/auth/authSlice";
+import Loading from "../../../components/Loading";
+import {useDispatch, useSelector} from "react-redux";
+import {useRouter} from "next/navigation";
 
 
 const Page = ({params}) => {
     const [model, setModel] = React.useState([]);
     const [show, setShow] = React.useState(false);
+    const {user, isActive, rol} = useSelector((state) => state.auth);
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     const getData = async () => {
         const endpoint = modelo_detail_endpoint + params.id +'/'
@@ -24,26 +32,54 @@ const Page = ({params}) => {
     }
 
     useEffect( () => {
-        getData();
+        const userAuthenticated = window.localStorage.getItem('token');
 
-        if( model.length !== 0 && show){
-            window.print();
-            setShow(false)
+        if (userAuthenticated === null) {
+            return router.push('/login');
+
+        }else{
+            fetchConToken(veryfy_token, userAuthenticated, "GET").then((isValid) => {
+                if( isValid.status === 401){
+                    window.localStorage.clear()
+                    dispatch(inactiveUser())
+                    router.push('/login')
+
+
+                }else{
+                    dispatch(activeUser( {
+                        user: user ,
+                    } ) );
+                }
+            })
         }
+    }, [dispatch,router])
 
+    useEffect( () => {
+        if(user !== null){
+            getData();
+
+            if( model.length !== 0 && show){
+                window.print();
+                setShow(false)
+            }
+        }
     }, [show])
 
-    console.log('mdel',model)
+    if (isActive === null ) {
+        return (
+            <Loading infoText='Verificando permisos' />
+        )
+    }
 
     return (
 
         <div className={'p-4'} style={{ width: 'max-content' }}>
             <div className={'d-flex justify-content-between align-items-center me-5'}>
                 <Image
-                    src={ '/../logo.jpg'}
+                    src={ '/../logo-model.png'}
                     alt={ 'Logotipo' }
-                    width={ 200 }
-                    height={ 100 }
+                    width={ 180 }
+                    height={ 70 }
                     className={'bg-sucess'}
                 />
                 <h6 style={{ display: 'flex', justifyContent: 'center' }}>SOLICITUD DE DIETAS</h6>
