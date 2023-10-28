@@ -394,25 +394,31 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                     )}
                                 />
 
-
                                 <Controller
                                     name='regreso'
                                     control={control}
-                                    defaultValue=""
+                                    defaultValue=''
                                     render={({ field }) => (
                                         <TextField
                                             select
-                                            label="Regreso"
                                             required
-                                            name='regreso'
+                                            label="Regreso"
+                                            name='origen'
                                             {...field}
                                             sx={{ m: 2, width: '300px' }}
                                         >
-                                            {municipios.map((provincia, index) => (
-                                                <MenuItem key={index} value={provincia[0]}>
-                                                    {provincia[0]}
-                                                </MenuItem>
-                                            ))}
+                                            {municipiosOrigen.length > 0 ?
+                                                municipiosOrigen.slice(1).map((municipio, index) => (
+                                                    <MenuItem key={index} value={municipio}>
+                                                        {municipio}
+                                                    </MenuItem>
+                                                ))
+                                                : municipiosOrigen.map((municipio, index) => (
+                                                    <MenuItem key={index} value={municipio}>
+                                                        {municipio}
+                                                    </MenuItem>
+                                                ))
+                                            }
                                         </TextField>
                                     )}
                                 />

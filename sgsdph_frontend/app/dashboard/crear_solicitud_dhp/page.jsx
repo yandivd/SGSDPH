@@ -42,7 +42,7 @@ export default function CrearSolicitudDHP() {
     const handleCreateModel = async () => {
         const firstSolicitud = solicitudes[0]
         const solicitudes_id = solicitudes.map(objeto => objeto.id);
-        const name = window.localStorage.getItem('username');
+        const name = window.localStorage.getItem('first_name');
         const last_name = window.localStorage.getItem('last_name');
 
         var fechaActual = new Date();

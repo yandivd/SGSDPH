@@ -30,18 +30,15 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {activeUser, inactiveUser} from "../../redux/features/auth/authSlice";
 import Loading from "../../components/Loading";
-import {fetchConToken, fetchSinToken} from "../../helper/fetch";
-import {modelo_detail_endpoint, trabajadores_endpoint, veryfy_token} from "../../constants/apiRoutes";
+import {fetchConToken} from "../../helper/fetch";
+import {trabajadores_endpoint, veryfy_token} from "../../constants/apiRoutes";
 import {LogoutService} from "../../helper/LogoutService";
 import Image from "next/image";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {DialogActions} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import {useForm} from "react-hook-form";
@@ -219,6 +216,7 @@ export default function PersistentDrawerLeft({children}) {
 
     }
 
+    console.log(router );
     return (
         <div>
             <Box sx={{ display: 'flex' }} >

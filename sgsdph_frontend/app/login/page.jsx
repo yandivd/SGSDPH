@@ -59,6 +59,7 @@ export default function SignIn() {
             if (resp.status === 201) {
                 const rol = body.user.rol;
                 const unidad_organizativa = body.user.unidad_organizativa;
+                const first_name = body.user.first_name;
                 const username = body.user.username;
                 const token = body.token;
                 const last_name = body.user.last_name;
@@ -72,7 +73,7 @@ export default function SignIn() {
                 window.localStorage.setItem('rol', rol)
                 window.localStorage.setItem('token', token)
                 window.localStorage.setItem('unidad_organizativa', unidad_organizativa)
-                window.localStorage.setItem('username', username)
+                window.localStorage.setItem('first_name', first_name)
                 window.localStorage.setItem('last_name', last_name)
                 window.localStorage.setItem('id', id)
 
