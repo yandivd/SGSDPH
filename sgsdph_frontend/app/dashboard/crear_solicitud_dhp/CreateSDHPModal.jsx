@@ -265,30 +265,40 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                                  name={'solicitante'}
                                                  value_show={'username'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
                                     <FieldSelect name_label={'Trabajador'}
                                                  name={'trabajador'}
                                                  data={trabajadores}
                                                  value_show={'nombre'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
                                     <FieldSelect name_label={'Centro Contable'}
                                                  data={ccosto}
                                                  name={'c_contable'}
                                                  value_show={'name'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
                                     <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
                                                  data={trabajadores}
                                                  name={'parleg'}
                                                  value_show={'nombre'}
                                                  control={control}
+                                                 isRequired={false}
+
                                     />
                                     <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                                  data={cargoPresupuesto}
                                                  name={'cargo_presupuesto'}
                                                  value_show={'account'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
 
                                     <FieldSelect name_label={'Autoriza'}
@@ -296,6 +306,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                                  name={'autoriza'}
                                                  value_show={'username'}
                                                  control={control}
+                                                 isRequired={true}
                                     />
                                 </div>
 
