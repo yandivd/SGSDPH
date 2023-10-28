@@ -33,11 +33,15 @@ export default function PendienteSolicitud() {
 
     const getModels = async () => {
 
+        const first_name = window.localStorage.getItem('first_name');
+        const last_name = window.localStorage.getItem('last_name');
+
         await axios.get(
             process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
         )
             .then(response => {
-                const data = response.data.filter(objeto => objeto.estado === "PendienteSolicitar" );
+                const data = response.data.filter(objeto => objeto.estado === "PendienteSolicitar" &&
+                    objeto.solicitante === (first_name + ' ' + last_name)  );
                 setModels(data);
             })
     }
@@ -114,7 +118,9 @@ export default function PendienteSolicitud() {
     useEffect( () => {
         getModels();
 
-    }, [models])
+    }, [])
+
+    console.log(models)
 
 
 

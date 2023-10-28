@@ -114,7 +114,7 @@ export default function PendientesAprobar() {
     useEffect( () => {
         getModels();
 
-    }, [models])
+    }, [])
 
     return (
         <div>
