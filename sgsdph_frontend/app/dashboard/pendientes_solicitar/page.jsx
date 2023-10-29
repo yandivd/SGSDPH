@@ -56,7 +56,6 @@ export default function PendienteSolicitud() {
         handleOpenSolicitar()
     }
 
-
     const handleOpenCancel = () => {
         setOpenCancel(!openCancel);
     };
@@ -87,6 +86,8 @@ export default function PendienteSolicitud() {
 
     const handleChangeState = async (state) => {
         const endpoint = modelo_detail_endpoint + id +'/'
+        const new_models = models.filter(objeto => objeto.id !== id );
+        setModels(new_models);
 
         const data = {
             estado: state
@@ -112,17 +113,12 @@ export default function PendienteSolicitud() {
         if(openSolicitar){
             handleOpenSolicitar();
         }
-
     }
 
     useEffect( () => {
         getModels();
 
     }, [])
-
-    console.log(models)
-
-
 
     return (
         <div>
