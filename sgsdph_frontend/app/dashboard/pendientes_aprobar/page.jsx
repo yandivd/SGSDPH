@@ -84,6 +84,9 @@ export default function PendientesAprobar() {
     const handleChangeState = async (state) => {
         const endpoint = modelo_detail_endpoint + id +'/'
 
+        const new_models = models.filter(objeto => objeto.id !== id );
+        setModels(new_models);
+
         const data = {
             estado: state
         }
@@ -114,7 +117,7 @@ export default function PendientesAprobar() {
     useEffect( () => {
         getModels();
 
-    }, [models])
+    }, [])
 
     return (
         <div>

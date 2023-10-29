@@ -2,7 +2,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import CardDescription from "../../components/CardDescription";
-import CreateSolicitudModal from "../../components/CreateSolicitudModal";
+import CreateSolicitudModal from "../../components/models/CreateSolicitudModal";
 import {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
@@ -28,7 +28,6 @@ export default function BasicCard() {
                 process.env.NEXT_PUBLIC_API_HOST + every_solicituds_endpoint
             )
                 .then(response => {
-                    console.log(response.data)
                     setEverySolicitudes(response.data);
                 })
 

@@ -33,11 +33,15 @@ export default function PendienteSolicitud() {
 
     const getModels = async () => {
 
+        const first_name = window.localStorage.getItem('first_name');
+        const last_name = window.localStorage.getItem('last_name');
+
         await axios.get(
             process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
         )
             .then(response => {
-                const data = response.data.filter(objeto => objeto.estado === "PendienteSolicitar" );
+                const data = response.data.filter(objeto => objeto.estado === "PendienteSolicitar" &&
+                    objeto.solicitante === (first_name + ' ' + last_name)  );
                 setModels(data);
             })
     }
@@ -51,7 +55,6 @@ export default function PendienteSolicitud() {
         setId(idSolicitud)
         handleOpenSolicitar()
     }
-
 
     const handleOpenCancel = () => {
         setOpenCancel(!openCancel);
@@ -83,6 +86,8 @@ export default function PendienteSolicitud() {
 
     const handleChangeState = async (state) => {
         const endpoint = modelo_detail_endpoint + id +'/'
+        const new_models = models.filter(objeto => objeto.id !== id );
+        setModels(new_models);
 
         const data = {
             estado: state
@@ -108,15 +113,12 @@ export default function PendienteSolicitud() {
         if(openSolicitar){
             handleOpenSolicitar();
         }
-
     }
 
     useEffect( () => {
         getModels();
 
-    }, [models])
-
-
+    }, [])
 
     return (
         <div>
@@ -152,7 +154,6 @@ export default function PendienteSolicitud() {
                         }
                     }}
                 ></Column>
-                <Column field="id" header="id" sortable style={{ width: '25%' }}></Column>
                 <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                 <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
                 <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>

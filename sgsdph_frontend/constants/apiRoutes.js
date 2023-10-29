@@ -19,6 +19,9 @@ export const solicitudesDPH_endpoint = '/api/sistema/solicitudes/dph/'
 
 export const modelo_detail_endpoint = '/api/sistema/modelo/'
 
+export const rol_endpoint = '/api/rol/'
+
+
 
 
 

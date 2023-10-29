@@ -3,6 +3,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_HOST;
 export const fetchSinToken = ( endpoint, data, method = 'GET' ) => {
 
     const url = `${ baseUrl }${ endpoint }`;
+    console.log(data)
 
     if ( method === 'GET' ) {
         return fetch( url );

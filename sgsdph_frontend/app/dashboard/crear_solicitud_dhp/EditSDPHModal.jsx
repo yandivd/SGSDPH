@@ -14,7 +14,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import {
     aperitivos_endpoint,
-    autoriza_endpoint, cargo_presupuesto_endpoint, ccosto_endpoint,
+    autoriza_endpoint, cargo_presupuesto_endpoint, ccosto_endpoint, personas_endpoint,
     solicita_endpoint, solicitudes_endpoint,
     trabajadores_endpoint
 } from "../../../constants/apiRoutes";
@@ -100,7 +100,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                             setCargoPresupuesto((response.data));
                         })
                     await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+                        process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
                     )
                         .then(response => {
                             setTrabajadores((response.data));
@@ -262,39 +262,54 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                 <FieldSelect name_label={'Solicita'}
                                              data={solicita}
                                              name={'solicitante'}
-                                             value_show={'username'}
+                                             value_show1={'first_name'}
+                                             value_show2={'last_name'}
                                              control={control}
+                                             isRequired={true}
+
                                 />
                                 <FieldSelect name_label={'Trabajador'}
                                              name={'trabajador'}
                                              data={trabajadores}
-                                             value_show={'nombre'}
+                                             value_show1={'nombre'}
+                                             value_show2={'apellidos'}
                                              control={control}
+                                             isRequired={true}
+
                                 />
                                 <FieldSelect name_label={'Centro Contable'}
                                              data={ccosto}
                                              name={'c_contable'}
-                                             value_show={'name'}
+                                             value_show1={'name'}
                                              control={control}
+                                             isRequired={true}
+
                                 />
                                 <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
                                              data={trabajadores}
                                              name={'parleg'}
-                                             value_show={'nombre'}
+                                             value_show1={'nombre'}
+                                             value_show2={'apellidos'}
                                              control={control}
+                                             isRequired={false}
+
                                 />
                                 <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                              data={cargoPresupuesto}
                                              name={'cargo_presupuesto'}
-                                             value_show={'account'}
+                                             value_show1={'account'}
                                              control={control}
+                                             isRequired={true}
+
                                 />
 
                                 <FieldSelect name_label={'Autoriza'}
                                              data={autoriza}
                                              name={'autoriza'}
-                                             value_show={'username'}
+                                             value_show1={'first_name'}
+                                             value_show2={'last_name'}
                                              control={control}
+                                             isRequired={true}
                                 />
                             </div>
 
@@ -405,21 +420,28 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                 <Controller
                                     name='regreso'
                                     control={control}
-                                    defaultValue=""
+                                    defaultValue=''
                                     render={({ field }) => (
                                         <TextField
                                             select
-                                            label="Regreso"
                                             required
-                                            name='regreso'
+                                            label="Regreso"
+                                            name='origen'
                                             {...field}
                                             sx={{ m: 2, width: '300px' }}
                                         >
-                                            {municipios.map((provincia, index) => (
-                                                <MenuItem key={index} value={provincia[0]}>
-                                                    {provincia[0]}
-                                                </MenuItem>
-                                            ))}
+                                            {municipiosOrigen.length > 0 ?
+                                                municipiosOrigen.slice(1).map((municipio, index) => (
+                                                    <MenuItem key={index} value={municipio}>
+                                                        {municipio}
+                                                    </MenuItem>
+                                                ))
+                                                : municipiosOrigen.map((municipio, index) => (
+                                                    <MenuItem key={index} value={municipio}>
+                                                        {municipio}
+                                                    </MenuItem>
+                                                ))
+                                            }
                                         </TextField>
                                     )}
                                 />
@@ -494,6 +516,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                 id="outlined-required"
                                 label="Labor a Realizar"
                                 defaultValue=""
+                                type='text'
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
                             />
@@ -501,6 +524,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                         <div className={'mt-3'}>
                             <TextField
                                 id="outlined-required"
+                                type='text'
                                 label="Observaciones"
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("observaciones")}

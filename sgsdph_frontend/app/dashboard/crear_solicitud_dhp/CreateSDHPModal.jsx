@@ -44,7 +44,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
 
             const first_solicitud =  solicitudes[0]
             setSolicita([{
-                'username': first_solicitud.solicitante.username,
+                'first_name': first_solicitud.solicitante.first_name,
+                'last_name': first_solicitud.solicitante.last_name,
                 'id': first_solicitud.solicitante.id
             }])
             setCcosto([{
@@ -56,7 +57,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                 'id': first_solicitud.cargo_presupuesto.id
             }])
             setAutoriza([{
-                'username': first_solicitud.autoriza.username,
+                'first_name': first_solicitud.autoriza.first_name,
+                'last_name': first_solicitud.autoriza.last_name,
                 'id': first_solicitud.autoriza.id
             }])
             await axios.get(
@@ -208,7 +210,6 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
         data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
         try {
-            console.log(data)
             const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
             const body = await resp.json();
 
@@ -263,39 +264,54 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <FieldSelect name_label={'Solicita'}
                                                  data={solicita}
                                                  name={'solicitante'}
-                                                 value_show={'username'}
+                                                 value_show1={'first_name'}
+                                                 value_show2={'last_name'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
                                     <FieldSelect name_label={'Trabajador'}
                                                  name={'trabajador'}
                                                  data={trabajadores}
-                                                 value_show={'nombre'}
+                                                 value_show1={'nombre'}
+                                                 value_show2={'apellidos'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
                                     <FieldSelect name_label={'Centro Contable'}
                                                  data={ccosto}
                                                  name={'c_contable'}
-                                                 value_show={'name'}
+                                                 value_show1={'name'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
                                     <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
                                                  data={trabajadores}
                                                  name={'parleg'}
-                                                 value_show={'nombre'}
+                                                 value_show1={'nombre'}
+                                                 value_show2={'apellidos'}
                                                  control={control}
+                                                 isRequired={false}
+
                                     />
                                     <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                                  data={cargoPresupuesto}
                                                  name={'cargo_presupuesto'}
-                                                 value_show={'account'}
+                                                 value_show1={'account'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
 
                                     <FieldSelect name_label={'Autoriza'}
                                                  data={autoriza}
                                                  name={'autoriza'}
-                                                 value_show={'username'}
+                                                 value_show1={'first_name'}
+                                                 value_show2={'last_name'}
                                                  control={control}
+                                                 isRequired={true}
                                     />
                                 </div>
 
@@ -406,21 +422,28 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <Controller
                                         name='regreso'
                                         control={control}
-                                        defaultValue=""
+                                        defaultValue=''
                                         render={({ field }) => (
                                             <TextField
                                                 select
-                                                label="Regreso"
                                                 required
-                                                name='regreso'
+                                                label="Regreso"
+                                                name='origen'
                                                 {...field}
                                                 sx={{ m: 2, width: '300px' }}
                                             >
-                                                {municipios.map((provincia, index) => (
-                                                    <MenuItem key={index} value={provincia[0]}>
-                                                        {provincia[0]}
-                                                    </MenuItem>
-                                                ))}
+                                                {municipiosOrigen.length > 0 ?
+                                                    municipiosOrigen.slice(1).map((municipio, index) => (
+                                                        <MenuItem key={index} value={municipio}>
+                                                            {municipio}
+                                                        </MenuItem>
+                                                    ))
+                                                    : municipiosOrigen.map((municipio, index) => (
+                                                        <MenuItem key={index} value={municipio}>
+                                                            {municipio}
+                                                        </MenuItem>
+                                                    ))
+                                                }
                                             </TextField>
                                         )}
                                     />
@@ -489,6 +512,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     id="outlined-required"
                                     label="Labor a Realizar"
                                     defaultValue=""
+                                    type='text'
                                     sx={{ m: 2, width: '92%' }}
                                     {...register("labor")}
                                 />
@@ -496,6 +520,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                             <div className={'mt-3'}>
                                 <TextField
                                     id="outlined-required"
+                                    type='text'
                                     label="Observaciones"
                                     sx={{ m: 2, width: '92%' }}
                                     {...register("observaciones")}

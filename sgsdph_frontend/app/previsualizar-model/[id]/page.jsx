@@ -26,10 +26,13 @@ const Page = ({params}) => {
             process.env.NEXT_PUBLIC_API_HOST + endpoint
         )
             .then(response => {
+                console.log('response', response)
                 setModel(response.data);
                 setShow(true)
             })
     }
+
+    console.log(model)
 
     useEffect( () => {
         const userAuthenticated = window.localStorage.getItem('token');
@@ -55,7 +58,9 @@ const Page = ({params}) => {
     }, [dispatch,router])
 
     useEffect( () => {
-        if(user !== null){
+        const userAuthenticated = window.localStorage.getItem('token');
+
+        if (userAuthenticated !== null) {
             getData();
 
             if( model.length !== 0 && show){
@@ -63,6 +68,7 @@ const Page = ({params}) => {
                 setShow(false)
             }
         }
+
     }, [show])
 
     if (isActive === null ) {

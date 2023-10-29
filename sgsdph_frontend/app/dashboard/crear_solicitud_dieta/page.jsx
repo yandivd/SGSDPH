@@ -46,14 +46,12 @@ export default function CrearSolicitudDieta() {
     const handleCreateModel = async () => {
         const firstSolicitud = solicitudes[0]
         const solicitudes_id = solicitudes.map(objeto => objeto.id);
-        const name = window.localStorage.getItem('username');
+        const name = window.localStorage.getItem('first_name');
         const last_name = window.localStorage.getItem('last_name');
 
         var fechaActual = new Date();
 
         var year = fechaActual.getFullYear();
-
-        console.log(firstSolicitud)
 
         const dataModel = {
             "tipo_model":1,
@@ -63,7 +61,7 @@ export default function CrearSolicitudDieta() {
             "c_contable": firstSolicitud.c_contable.name,
             "consec": ( modelos.length + 1 )+ '/' + year,
             "solicitudes": solicitudes_id,
-            "parleg": firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos,
+            "parleg": (firstSolicitud.parleg === null ? ''  :  firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos),
             "autoriza": firstSolicitud.autoriza.first_name + ' ' + firstSolicitud.autoriza.last_name ,
             "cargo_presupuesto": firstSolicitud.cargo_presupuesto.account,
             "observaciones": firstSolicitud.observaciones,
@@ -75,8 +73,6 @@ export default function CrearSolicitudDieta() {
             "dependencia_solicita": firstSolicitud.solicitante.dependencia,
             "labor": firstSolicitud.labor
         }
-
-        console.log(dataModel)
 
 
         try {
@@ -106,7 +102,6 @@ export default function CrearSolicitudDieta() {
                     process.env.NEXT_PUBLIC_API_HOST + solicitudes_endpoint + 'no/' + unidad_organizativa + '/'
                 )
                     .then(response => {
-                        console.log(response.data)
                         setSolicitudes(response.data);
                         setLength(solicitudes.length)
                     })
