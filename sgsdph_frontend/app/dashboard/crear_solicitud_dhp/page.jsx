@@ -45,9 +45,6 @@ export default function CrearSolicitudDHP() {
         const name = window.localStorage.getItem('first_name');
         const last_name = window.localStorage.getItem('last_name');
 
-        console.log(firstSolicitud)
-        console.log(typeof  firstSolicitud.parleg)
-
         var fechaActual = new Date();
 
         var year = fechaActual.getFullYear();
@@ -78,8 +75,6 @@ export default function CrearSolicitudDHP() {
             const resp = await fetchSinToken(modelo_endpoint, dataModel, "POST");
             const body = await resp.json();
 
-            console.log('body', body)
-
             if (resp.status === 201) {
                 Swal.fire('Exito', "Se ha creado correctamente", 'success');
                 handleRefreshSolicitudes();
@@ -104,7 +99,6 @@ export default function CrearSolicitudDHP() {
                     process.env.NEXT_PUBLIC_API_HOST + solicitudesDPH_endpoint + 'no/' + unidad_organizativa + '/'
                 )
                     .then(response => {
-                        console.log(response.data)
                         setSolicitudes(response.data);
                         setLength(solicitudes.length)
                     })

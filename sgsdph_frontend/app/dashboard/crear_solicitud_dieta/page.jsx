@@ -53,8 +53,6 @@ export default function CrearSolicitudDieta() {
 
         var year = fechaActual.getFullYear();
 
-        console.log(firstSolicitud)
-
         const dataModel = {
             "tipo_model":1,
             "nombre": name + ' ' + last_name,
@@ -75,8 +73,6 @@ export default function CrearSolicitudDieta() {
             "dependencia_solicita": firstSolicitud.solicitante.dependencia,
             "labor": firstSolicitud.labor
         }
-
-        console.log(dataModel)
 
 
         try {
@@ -106,7 +102,6 @@ export default function CrearSolicitudDieta() {
                     process.env.NEXT_PUBLIC_API_HOST + solicitudes_endpoint + 'no/' + unidad_organizativa + '/'
                 )
                     .then(response => {
-                        console.log(response.data)
                         setSolicitudes(response.data);
                         setLength(solicitudes.length)
                     })

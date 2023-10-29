@@ -236,7 +236,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
         handleClose();
     }
 
-    console.log(trabajadores)
     return (
         <div>
             <Dialog
@@ -483,6 +482,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                             <TextField
                                 id="outlined-required"
                                 label="Labor a Realizar"
+                                type='text'
                                 defaultValue=""
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
@@ -492,6 +492,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                             <TextField
                                 id="outlined-required"
                                 label="Observaciones"
+                                type='text'
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("observaciones")}
                             />

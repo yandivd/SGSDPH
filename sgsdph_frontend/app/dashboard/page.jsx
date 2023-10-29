@@ -28,7 +28,6 @@ export default function BasicCard() {
                 process.env.NEXT_PUBLIC_API_HOST + every_solicituds_endpoint
             )
                 .then(response => {
-                    console.log(response.data)
                     setEverySolicitudes(response.data);
                 })
 

@@ -516,6 +516,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                 id="outlined-required"
                                 label="Labor a Realizar"
                                 defaultValue=""
+                                type='text'
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
                             />
@@ -523,6 +524,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                         <div className={'mt-3'}>
                             <TextField
                                 id="outlined-required"
+                                type='text'
                                 label="Observaciones"
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("observaciones")}

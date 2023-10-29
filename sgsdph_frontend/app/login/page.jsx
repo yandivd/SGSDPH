@@ -70,7 +70,7 @@ export default function SignIn() {
                     rol: rol
                 } ) );
 
-                window.localStorage.setItem('rol', rol)
+                window.localStorage.setItem('username', username)
                 window.localStorage.setItem('token', token)
                 window.localStorage.setItem('unidad_organizativa', unidad_organizativa)
                 window.localStorage.setItem('first_name', first_name)

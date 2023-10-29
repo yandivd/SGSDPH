@@ -92,8 +92,6 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
 
     }
 
-    console.log(trabajadores)
-
     const handleProvinciaOrigenChange = (event) => {
         const selectedProvincia = event.target.value;
         setProvinciaOrigen(selectedProvincia);
@@ -453,6 +451,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                             <TextField
                                 id="labor"
                                 label="Labor a Realizar"
+                                type='text'
                                 defaultValue= {solicitudes.labor}
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
@@ -462,6 +461,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                             <TextField
                                 id='observaciones'
                                 label='Observaciones'
+                                type='text'
                                 defaultValue= {solicitudes.observaciones}
                                 sx={{ m: 2, width: '92%' }}
                                 {...register('observaciones' )}

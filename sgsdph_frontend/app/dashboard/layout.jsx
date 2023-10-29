@@ -45,6 +45,7 @@ import {useForm} from "react-hook-form";
 import Swal from "sweetalert2";
 import FirmModal from "../../components/models/FirmModal";
 import AddTrabajadorModal from "../../components/models/AddTrabajadorModal";
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 const drawerWidth = 260;
 
@@ -120,6 +121,7 @@ export default function PersistentDrawerLeft({children}) {
     const [open, setOpen] = React.useState(true);
     const [openFirm, setOpenFirm] = React.useState(false);
     const [openAddTrabajador, setOpenAddTrabajador] = React.useState(false);
+    const [username, setUsername] = React.useState('');
 
     const handleFirmOpen = () => {
         setOpenFirm(!openFirm);
@@ -155,6 +157,8 @@ export default function PersistentDrawerLeft({children}) {
                     dispatch(activeUser( {
                         user: user ,
                     } ) );
+                    setUsername(window.localStorage.getItem('username') );
+
                 }
             })
         }
@@ -208,13 +212,16 @@ export default function PersistentDrawerLeft({children}) {
                             <Typography variant='h6' noWrap component='div'>
                                 Sistema de solcitud de dietas, hospedaje y pasaje
                             </Typography>
-                            <div onClick={handleLogout} className={'logoutStyle'} >
-                                <ListItemText>
-                                    Cerrar Sesión
-                                </ListItemText>
-                                <ListItemIcon className={'ms-2 text-white'}>
-                                    <LogoutIcon />
-                                </ListItemIcon>
+
+                            <div className={'d-flex align-items-center justify-content-between'}>
+                                <Typography variant='h6' noWrap component='div'>
+                                    {username}
+                                </Typography>
+                                <div onClick={handleLogout} className={'logoutStyle ms-3'}>
+                                    <ListItemIcon className={'text-white'}>
+                                        <LogoutIcon />
+                                    </ListItemIcon>
+                                </div>
                             </div>
                         </div>
                     </Toolbar>
@@ -269,14 +276,6 @@ export default function PersistentDrawerLeft({children}) {
                                 <ListItemText>Firma</ListItemText>
                             </ListItemButton>
                         </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton onClick={handleAddTrabajadorOpen}>
-                                <ListItemIcon>
-                                    <BorderColorIcon />
-                                </ListItemIcon>
-                                <ListItemText>Agregar Trabajador</ListItemText>
-                            </ListItemButton>
-                        </ListItem>
                         <ListItem disablePadding >
                             <Link  href={'http://localhost:8000/admin'} className='link-sidebar'>
                                 <ListItemButton>
@@ -287,11 +286,19 @@ export default function PersistentDrawerLeft({children}) {
                                 </ListItemButton>
                             </Link>
                         </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={handleAddTrabajadorOpen}>
+                                <ListItemIcon>
+                                    <PersonAddAlt1Icon />
+                                </ListItemIcon>
+                                <ListItemText>Agregar Trabajador</ListItemText>
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                     <Divider className='bg-dark'/>
                     <List>
                         <ListItem disablePadding className={'ps-3 text-underline'}>
-                            <ListItemText>Solicitudes </ListItemText>
+                            <ListItemText>Solicitudes</ListItemText>
                         </ListItem>
 
                         <ListItem disablePadding disableGutters>
@@ -369,14 +376,10 @@ export default function PersistentDrawerLeft({children}) {
 
             <FirmModal handleFirmOpen={handleFirmOpen}
                        openFirm={openFirm}
-                       register={register}
-                       handleSubmit={handleSubmit}
             />
 
             <AddTrabajadorModal handleAddTrabajadorOpen={handleAddTrabajadorOpen}
                                 openAddTrabajador={openAddTrabajador}
-                                register={register}
-                                handleSubmit={handleSubmit}
             />
 
             </div>

@@ -8,8 +8,11 @@ import {DialogActions} from "@mui/material";
 import Button from "@mui/material/Button";
 import {trabajadores_endpoint} from "../../constants/apiRoutes";
 import Swal from "sweetalert2";
+import {useForm} from "react-hook-form";
 
-const FirmModal = ({handleFirmOpen,openFirm, register, handleSubmit }) => {
+const FirmModal = ({handleFirmOpen,openFirm}) => {
+    const { register, handleSubmit } = useForm();
+
     const handleSubmitFirm = async(data) => {
 
         console.log('data', data)

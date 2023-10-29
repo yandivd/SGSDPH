@@ -210,7 +210,6 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
         data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
         try {
-            console.log(data)
             const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
             const body = await resp.json();
 
@@ -513,6 +512,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     id="outlined-required"
                                     label="Labor a Realizar"
                                     defaultValue=""
+                                    type='text'
                                     sx={{ m: 2, width: '92%' }}
                                     {...register("labor")}
                                 />
@@ -520,6 +520,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                             <div className={'mt-3'}>
                                 <TextField
                                     id="outlined-required"
+                                    type='text'
                                     label="Observaciones"
                                     sx={{ m: 2, width: '92%' }}
                                     {...register("observaciones")}
