@@ -157,6 +157,12 @@ def aperitivo_api_view(request):
         return Response(aperitivos_serializer.data, status=status.HTTP_200_OK)
     
 @api_view(['GET'])
+def unidad_organizativa_api_view(request):
+    uo = Unidad_Organizativa.objects.all()
+    uo_serializer = UnidadOrganinzativaSerializer(uo, many=True)
+    return Response(uo_serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
 def unidad_organizativa_detail_api_view(request, id):
     try:
         uo = Unidad_Organizativa.objects.get(id=id)

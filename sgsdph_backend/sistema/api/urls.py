@@ -25,6 +25,7 @@ urlpatterns = [
     path('aperitivos/', aperitivo_api_view),
 
     path('unidad_organizativa/<int:id>/', unidad_organizativa_detail_api_view),
+    path('unidad_organizativa/', unidad_organizativa_api_view),
 
     # este endpoint es para el get de las solicitudes de dietas
     # y para el post de cualquiera de las solicitudes ya que se le pasa 
