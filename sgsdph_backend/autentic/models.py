@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 
 # Create your models here.
 class CustomUser(AbstractUser):
-    ci = models.CharField(max_length=11, verbose_name='Carnet de Identidad')
+    ci = models.CharField(max_length=11, verbose_name='Carnet de Identidad', unique=True)
     # Cambia related_name para groups
     groups = models.ManyToManyField(
         Group,
