@@ -63,7 +63,7 @@ export default function CrearSolicitudDieta() {
             "c_contable": firstSolicitud.c_contable.name,
             "consec": ( modelos.length + 1 )+ '/' + year,
             "solicitudes": solicitudes_id,
-            "parleg": firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos,
+            "parleg": (firstSolicitud.parleg === null ? ''  :  firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos),
             "autoriza": firstSolicitud.autoriza.first_name + ' ' + firstSolicitud.autoriza.last_name ,
             "cargo_presupuesto": firstSolicitud.cargo_presupuesto.account,
             "observaciones": firstSolicitud.observaciones,

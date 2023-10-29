@@ -44,7 +44,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
 
             const first_solicitud =  solicitudes[0]
             setSolicita([{
-                'username': first_solicitud.solicitante.username,
+                'first_name': first_solicitud.solicitante.first_name,
+                'last_name': first_solicitud.solicitante.last_name,
                 'id': first_solicitud.solicitante.id
             }])
             setCcosto([{
@@ -56,7 +57,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                 'id': first_solicitud.cargo_presupuesto.id
             }])
             setAutoriza([{
-                'username': first_solicitud.autoriza.username,
+                'first_name': first_solicitud.autoriza.first_name,
+                'last_name': first_solicitud.autoriza.last_name,
                 'id': first_solicitud.autoriza.id
             }])
             await axios.get(
@@ -263,7 +265,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <FieldSelect name_label={'Solicita'}
                                                  data={solicita}
                                                  name={'solicitante'}
-                                                 value_show={'username'}
+                                                 value_show1={'first_name'}
+                                                 value_show2={'last_name'}
                                                  control={control}
                                                  isRequired={true}
 
@@ -271,7 +274,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <FieldSelect name_label={'Trabajador'}
                                                  name={'trabajador'}
                                                  data={trabajadores}
-                                                 value_show={'nombre'}
+                                                 value_show1={'nombre'}
+                                                 value_show2={'apellidos'}
                                                  control={control}
                                                  isRequired={true}
 
@@ -279,7 +283,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <FieldSelect name_label={'Centro Contable'}
                                                  data={ccosto}
                                                  name={'c_contable'}
-                                                 value_show={'name'}
+                                                 value_show1={'name'}
                                                  control={control}
                                                  isRequired={true}
 
@@ -287,7 +291,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
                                                  data={trabajadores}
                                                  name={'parleg'}
-                                                 value_show={'nombre'}
+                                                 value_show1={'nombre'}
+                                                 value_show2={'apellidos'}
                                                  control={control}
                                                  isRequired={false}
 
@@ -295,7 +300,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                                  data={cargoPresupuesto}
                                                  name={'cargo_presupuesto'}
-                                                 value_show={'account'}
+                                                 value_show1={'account'}
                                                  control={control}
                                                  isRequired={true}
 
@@ -304,7 +309,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <FieldSelect name_label={'Autoriza'}
                                                  data={autoriza}
                                                  name={'autoriza'}
-                                                 value_show={'username'}
+                                                 value_show1={'first_name'}
+                                                 value_show2={'last_name'}
                                                  control={control}
                                                  isRequired={true}
                                     />

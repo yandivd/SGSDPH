@@ -45,6 +45,9 @@ export default function CrearSolicitudDHP() {
         const name = window.localStorage.getItem('first_name');
         const last_name = window.localStorage.getItem('last_name');
 
+        console.log(firstSolicitud)
+        console.log(typeof  firstSolicitud.parleg)
+
         var fechaActual = new Date();
 
         var year = fechaActual.getFullYear();
@@ -57,7 +60,7 @@ export default function CrearSolicitudDHP() {
             "c_contable": firstSolicitud.c_contable.name,
             "consec": ( modelos.length + 1 )+ '/' + year,
             "solicitudes": solicitudes_id,
-            "parleg": firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos,
+            "parleg": (firstSolicitud.parleg === null ? ''  :  firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos),
             "autoriza": firstSolicitud.autoriza.first_name + ' ' + firstSolicitud.autoriza.last_name ,
             "cargo_presupuesto": firstSolicitud.cargo_presupuesto.account,
             "observaciones": firstSolicitud.observaciones,
