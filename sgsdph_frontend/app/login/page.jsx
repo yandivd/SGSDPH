@@ -42,7 +42,7 @@ export default function SignIn() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const { register, handleSubmit, errors } = useForm();
+    const { register, handleSubmit, formState: { errors }  } = useForm();
     const {isActive} = useSelector((state) => state.auth);
 
     const onSubmit = async (data) => {
@@ -119,7 +119,7 @@ export default function SignIn() {
                         <TextField
                             margin="normal"
                             fullWidth
-                            id="user"
+                            id="username"
                             label="Usuario"
                             name="username"
                             type="text"
@@ -128,8 +128,8 @@ export default function SignIn() {
                             {...register("username", {
                                 required: 'Campo requerido'
                             })}
-                            //error={errors}
-                            //helperText={errors.username.message}
+                           /* error={errors}
+                            helperText={errors.username && errors.username.message}*/
                         />
                         <TextField
                             margin="normal"
@@ -140,12 +140,10 @@ export default function SignIn() {
                             id="password"
                             disabled={loading}
                             {...register('password',
-                                { minLength: { value: 4, message: 'Minimo 6 caracteres'},
-                                        required: 'Campo requerido'
-                            })}
+                                {required: 'Campo requerido'})}
 
-                            //error={errors.password}
-                            //helperText={errors}
+                            /*error={errors.password}
+                            helperText={errors.password && errors.password.message}*/
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}

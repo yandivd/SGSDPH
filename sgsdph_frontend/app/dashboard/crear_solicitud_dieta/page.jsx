@@ -53,6 +53,18 @@ export default function CrearSolicitudDieta() {
 
         var year = fechaActual.getFullYear();
 
+        var gastos_comida = '';
+
+        if(firstSolicitud.aperitivo.length > 0){
+            gastos_comida = ' Gastos en';
+            for (var it in firstSolicitud.aperitivo) {
+                gastos_comida += ' ' + (firstSolicitud.aperitivo[it].nombre);
+                if(it < (firstSolicitud.aperitivo.length - 1) ){
+                    gastos_comida += ','
+                }
+            }
+        }
+
         const dataModel = {
             "tipo_model":1,
             "nombre": name + ' ' + last_name,
@@ -64,7 +76,7 @@ export default function CrearSolicitudDieta() {
             "parleg": (firstSolicitud.parleg === null ? ''  :  firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos),
             "autoriza": firstSolicitud.autoriza.first_name + ' ' + firstSolicitud.autoriza.last_name ,
             "cargo_presupuesto": firstSolicitud.cargo_presupuesto.account,
-            "observaciones": firstSolicitud.observaciones,
+            "observaciones": firstSolicitud.observaciones + gastos_comida,
             "estado":"PendienteSolicitar",
             "telf_solicitante": firstSolicitud.solicitante.telf,
             "cargo_autoriza":firstSolicitud.autoriza.cargo,
@@ -119,6 +131,8 @@ export default function CrearSolicitudDieta() {
         getData()
 
     }, [refreshSolicitudes])
+
+    console.log(solicitudes)
 
     return (
         <div>

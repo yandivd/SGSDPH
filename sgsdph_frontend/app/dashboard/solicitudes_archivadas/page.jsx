@@ -50,8 +50,9 @@ export default function Solicitudesrchivadas() {
 
     return (
         <div>
-            <p className={'text-secondary my-4 ms-2'}>Listado de modelos archivados</p>
-            <div>
+            <div className={'d-flex align-items-end justify-content-between mt-4'}>
+                <p className={'text-secondary ms-2'}>Listado de modelos archivador</p>
+
                 <InputText
                     value={globalFilter}
                     onChange={(e) => setGlobalFilter(e.target.value)}
@@ -59,7 +60,6 @@ export default function Solicitudesrchivadas() {
                     sx={{ mb:3 }}
                 />
             </div>
-
             <br/>
 
             <DataTable value={models}

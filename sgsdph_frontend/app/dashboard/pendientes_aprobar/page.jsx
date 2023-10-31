@@ -122,8 +122,9 @@ export default function PendientesAprobar() {
     return (
         <div>
 
-            <p className={'text-secondary my-4 ms-2'}>Listado de modelos pendientes a autorizo</p>
-            <div>
+            <div className={'d-flex align-items-end justify-content-between mt-4'}>
+                <p className={'text-secondary ms-2'}>Listado de modelos pendientes a autorizo</p>
+
                 <InputText
                     value={globalFilter}
                     onChange={(e) => setGlobalFilter(e.target.value)}
