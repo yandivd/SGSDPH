@@ -17,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from "next/link";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
@@ -108,6 +108,7 @@ function Copyright(props) {
 export default function PersistentDrawerLeft({children}) {
     const {user, isActive} = useSelector((state) => state.auth);
     const router = useRouter();
+    const pathname = usePathname()
     const dispatch = useDispatch();
     const { register, control, handleSubmit, errors } = useForm();
     const theme = useTheme();
@@ -191,8 +192,6 @@ export default function PersistentDrawerLeft({children}) {
         }
     }
 
-    console.log(rol)
-
     return (
         <div>
             <Box sx={{ display: 'flex' }} >
@@ -259,7 +258,9 @@ export default function PersistentDrawerLeft({children}) {
                     <Divider className='bg-dark'/>
                     <List>
                         <ListItem disablePadding>
-                            <Link href={'/dashboard/'} className='link-sidebar'>
+                            <Link href={'/dashboard/'}
+                                  className={`link-sidebar ${pathname === '/dashboard' ? 'active' : ''}`}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <DashboardIcon />
@@ -316,7 +317,9 @@ export default function PersistentDrawerLeft({children}) {
                         { (rol === '2' || rol === '5'  ) &&
                             (
                                 <ListItem disablePadding disableGutters>
-                                    <Link href={'/dashboard/pendientes_solicitar'} className='link-sidebar'>
+                                    <Link href={'/dashboard/pendientes_solicitar'}
+                                          className={`link-sidebar ${pathname === '/dashboard/pendientes_solicitar' ? 'active' : ''}`}
+                                    >
                                         <ListItemButton>
                                             <ListItemIcon>
                                                 <LibraryBooksIcon />
@@ -330,7 +333,9 @@ export default function PersistentDrawerLeft({children}) {
                          { (rol === '3' || rol === '5'  ) &&
                             (
                                 <ListItem disablePadding>
-                                    <Link href={'/dashboard/pendientes_aprobar'} className='link-sidebar'>
+                                    <Link href={'/dashboard/pendientes_aprobar'}
+                                          className={`link-sidebar ${pathname === '/dashboard/pendientes_aprobar' ? 'active' : ''}`}
+                                    >
                                         <ListItemButton>
                                             <ListItemIcon>
                                                 <HowToRegIcon />
@@ -344,7 +349,9 @@ export default function PersistentDrawerLeft({children}) {
                         { (rol === '4' || rol === '5'  ) &&
                             (
                                 <ListItem disablePadding>
-                                    <Link href={'/dashboard/solicitudes_anticipo_pago'}  className='link-sidebar'>
+                                    <Link href={'/dashboard/solicitudes_anticipo_pago'}
+                                          className={`link-sidebar ${pathname === '/dashboard/solicitudes_anticipo_pago' ? 'active' : ''}`}
+                                    >
                                         <ListItemButton>
                                             <ListItemIcon >
                                                 <PaidIcon/>
@@ -358,7 +365,9 @@ export default function PersistentDrawerLeft({children}) {
                         }
                         <Divider className='bg-dark'/>
                         <ListItem disablePadding>
-                            <Link href={'/dashboard/solicitudes_archivadas'} className='link-sidebar'>
+                            <Link href={'/dashboard/solicitudes_archivadas'}
+                                  className={`link-sidebar ${pathname === '/dashboard/solicitudes_archivadas' ? 'active' : ''}`}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <ArchiveIcon />
@@ -368,7 +377,9 @@ export default function PersistentDrawerLeft({children}) {
                             </Link>
                         </ListItem>
                         <ListItem disablePadding>
-                            <Link href={'/dashboard/solicitudes_canceladas'}  className='link-sidebar'>
+                            <Link href={'/dashboard/solicitudes_canceladas'}
+                                  className={`link-sidebar ${pathname === '/dashboard/solicitudes_canceladas' ? 'active' : ''}`}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <CancelIcon />
