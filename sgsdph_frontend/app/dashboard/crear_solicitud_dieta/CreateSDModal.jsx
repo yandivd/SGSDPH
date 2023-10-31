@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
@@ -40,6 +40,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
     const { register, control, handleSubmit, errors } = useForm();
+    const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
        getDataForm()
@@ -142,6 +143,8 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
     };
 
     const onSubmit = async (data) => {
+        setErrorMessage('')
+
         const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
 
         var aperitivo = [];
@@ -216,24 +219,30 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
         data.numero = solicitudes.length + 1;      // Agregar el campo "numero de solicitud"
         data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
-        try {
-            const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
-            const body = await resp.json();
+        if( aperitivo.length === 0){
+            setErrorMessage('Tiene que marcar al menos un tipo de gasto en comida ')
+
+        }else{
+            try {
+                const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
+                const body = await resp.json();
 
 
-            if (resp.status === 201) {
-                Swal.fire('Exito', "Se ha creado correctamente", 'success');
-                refreshFunction();
-            }else{
-                Swal.fire('Error', "Error del servidor", 'error');
+                if (resp.status === 201) {
+                    Swal.fire('Exito', "Se ha creado correctamente", 'success');
+                    refreshFunction();
+                }else{
+                    Swal.fire('Error', "Error del servidor", 'error');
 
+                }
+
+            } catch (error) {
+                console.log(error)
             }
 
-        } catch (error) {
-            console.log(error)
+            handleClose();
         }
 
-        handleClose();
     }
 
     return (
@@ -497,6 +506,8 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                 {...register("observaciones")}
                             />
                         </div>
+
+                        {errorMessage && <div className='error-message text-danger ms-3'>{errorMessage}</div>}
 
                     </DialogContent>
 
