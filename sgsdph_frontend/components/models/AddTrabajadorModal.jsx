@@ -24,10 +24,8 @@ const AddTrabajadorModal = ({handleAddTrabajadorOpen,openAddTrabajador }) => {
     const [unidadOrganizativa, setUnidadOrganizativa] = React.useState([]);
     const [errorMessage, setErrorMessage] = useState('')
 
-
     const handleSubmitWoker = async(data) => {
         setErrorMessage('')
-
 
         try {
             const resp = await fetchSinToken(trabajadores_endpoint, data, "POST");

@@ -54,8 +54,6 @@ export default function SignIn() {
             const resp = await fetchSinToken('/login/', data, "POST");
             const body = await resp.json();
 
-            console.log(body)
-
             if (resp.status === 201) {
                 const rol = body.user.rol;
                 const unidad_organizativa = body.user.unidad_organizativa;
@@ -76,6 +74,7 @@ export default function SignIn() {
                 window.localStorage.setItem('first_name', first_name)
                 window.localStorage.setItem('last_name', last_name)
                 window.localStorage.setItem('id', id)
+                window.localStorage.setItem('rol', rol)
 
                 router.push('/dashboard')
             }else{

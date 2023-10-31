@@ -22,6 +22,7 @@ import {DialogActions} from "@mui/material";
 import {fetchSinToken} from "../../../helper/fetch";
 import Swal from "sweetalert2";
 import {InputText} from "primereact/inputtext";
+import {useRouter} from "next/navigation";
 
 export default function CrearSolicitudDieta() {
     const [open, setOpen] = useState(false);
@@ -30,7 +31,9 @@ export default function CrearSolicitudDieta() {
     const [modelos, setModelos] = React.useState([]);
     const [refreshSolicitudes, setRefreshSolicitudes] = React.useState(false)
     const [length, setLength] = React.useState(null)
-    const [globalFilter, setGlobalFilter] = useState('')
+    const [rol, setRol] = React.useState(0);
+    const [show, setShow] = React.useState(false);
+    const router = useRouter();
 
 
     const handleRefreshSolicitudes = () => {
@@ -105,34 +108,43 @@ export default function CrearSolicitudDieta() {
         }
     }
 
+    const getData = async () => {
+        const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
+
+        try {
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + solicitudes_endpoint + 'no/' + unidad_organizativa + '/'
+            )
+                .then(response => {
+                    setSolicitudes(response.data);
+                    setLength(solicitudes.length)
+                })
+
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
+            )
+                .then(response => {
+                    setModelos(response.data);
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect( () => {
-        const getData = async () => {
-            const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
+        setRol(window.localStorage.getItem('rol'));
 
-            try {
-                await axios.get(
-                    process.env.NEXT_PUBLIC_API_HOST + solicitudes_endpoint + 'no/' + unidad_organizativa + '/'
-                )
-                    .then(response => {
-                        setSolicitudes(response.data);
-                        setLength(solicitudes.length)
-                    })
-
-                await axios.get(
-                    process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
-                )
-                    .then(response => {
-                        setModelos(response.data);
-                    })
-            } catch (error) {
-                console.log(error)
+        if(rol === 0 ){
+            setShow(!show)
+        }else{
+            { rol !== '1' && rol !== '5' ?
+                router.push('/login')
+                :
+                getData()
             }
         }
-        getData()
 
-    }, [refreshSolicitudes])
-
-    console.log(solicitudes)
+    }, [show, refreshSolicitudes])
 
     return (
         <div>
