@@ -39,7 +39,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, setValue } = useForm();
+    const { register, control, handleSubmit, formState: { errors } } = useForm();
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
@@ -433,24 +433,27 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                              control={control}
                                              isRequired={true}
                                 />
+
                                 <TextField
-                                    required
                                     type={'date'}
-                                    label="Fecha de Inicio"
+                                    required
                                     sx={{ m: 2, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_inicio_dieta}
-                                    {...register("fecha_inicio_dieta")}
+                                    {...register('fecha_inicio_dieta',
+                                        {required: 'Campo requerido'})}
+                                    helperText="Fecha Inicio Dieta"
+
                                 />
                                 <TextField
-                                    required
                                     type={'date'}
-                                    label="Fecha Final"
+                                    required
+                                    sx={{ mx: 2, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_final_dieta}
-                                    sx={{ m: 2, width: '300px' }}
-                                    {...register("fecha_final_dieta")}
+                                    {...register('fecha_final_dieta',
+                                        {required: 'Campo requerido'})}
+                                    helperText="Fecha Final Dieta"
 
                                 />
-
 
                             </div>
 

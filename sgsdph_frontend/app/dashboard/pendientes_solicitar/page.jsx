@@ -21,6 +21,14 @@ import {DialogActions} from "@mui/material";
 import Swal from "sweetalert2";
 import {fetchSinToken} from "../../../helper/fetch";
 import {useRouter} from "next/navigation";
+import ListItem from "@mui/material/ListItem";
+import Link from "next/link";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import ListItemText from "@mui/material/ListItemText";
+import Loading from "../../../components/Loading";
+import {useSelector} from "react-redux";
 
 
 export default function PendienteSolicitud() {
@@ -30,6 +38,9 @@ export default function PendienteSolicitud() {
     const [openSolicitar, setOpenSolicitar] = React.useState(false);
     const [id, setId] = React.useState('');
     const router = useRouter();
+    const [rol, setRol] = React.useState(0);
+    const [show, setShow] = React.useState(false);
+
 
     const getModels = async () => {
 
@@ -40,9 +51,12 @@ export default function PendienteSolicitud() {
             process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
         )
             .then(response => {
-                const data = response.data.filter(objeto => objeto.estado === "PendienteSolicitar" &&
-                    objeto.solicitante === (first_name + ' ' + last_name)  );
-                setModels(data);
+                const data = response.data.filter(objeto => objeto.estado === "PendienteSolicitar")
+                if(rol === '5'){
+                    setModels(data);
+                }else{
+                    setModels(data.filter(objeto => objeto.solicitante === (first_name + ' ' + last_name) ));
+                }
             })
     }
 
@@ -116,9 +130,19 @@ export default function PendienteSolicitud() {
     }
 
     useEffect( () => {
-        getModels();
+        setRol(window.localStorage.getItem('rol'));
 
-    }, [])
+        if(rol === 0 ){
+            setShow(!show)
+        }else{
+            { rol !== '2' && rol !== '5' ?
+                router.push('/login')
+                :
+                getModels()
+            }
+        }
+
+    }, [show])
 
     return (
         <div>

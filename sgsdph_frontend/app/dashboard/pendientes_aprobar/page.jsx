@@ -30,6 +30,10 @@ export default function PendientesAprobar() {
     const [openAutoriza, setOpenAutoriza] = React.useState(false);
     const [id, setId] = React.useState('');
     const router = useRouter();
+    const [rol, setRol] = React.useState(0);
+    const [show, setShow] = React.useState(false);
+
+
 
     const getModels = async () => {
 
@@ -115,9 +119,19 @@ export default function PendientesAprobar() {
     }
 
     useEffect( () => {
-        getModels();
+        setRol(window.localStorage.getItem('rol'));
 
-    }, [])
+        if(rol === 0 ){
+            setShow(!show)
+        }else{
+            { rol !== '3' && rol !== '5' ?
+                router.push('/login')
+                :
+                getModels()
+            }
+        }
+
+    }, [show])
 
     return (
         <div>

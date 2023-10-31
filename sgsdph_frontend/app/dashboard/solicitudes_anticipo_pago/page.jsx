@@ -18,6 +18,8 @@ export default function SolicitudesAnticipoPago() {
     const [models, setModels] = React.useState([]);
     const [globalFilter, setGlobalFilter] = useState('');
     const router = useRouter();
+    const [rol, setRol] = React.useState(0);
+    const [show, setShow] = React.useState(false);
 
 
     const handleViewModel = (id) => {
@@ -48,9 +50,19 @@ export default function SolicitudesAnticipoPago() {
     }
 
     useEffect( () => {
-        getModels();
+        setRol(window.localStorage.getItem('rol'));
 
-    }, [])
+        if(rol === 0 ){
+            setShow(!show)
+        }else{
+            { rol !== '4' && rol !== '5' ?
+                router.push('/login')
+                :
+                getModels()
+            }
+        }
+
+    }, [show])
 
     return (
         <div>

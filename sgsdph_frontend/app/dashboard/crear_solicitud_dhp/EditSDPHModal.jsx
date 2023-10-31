@@ -251,7 +251,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
             >
 
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    Agregar solicitud de dieta
+                    Editar solicitud de dieta, pasaje y hospedaje
                 </DialogTitle>
 
                 <IconButton
@@ -465,56 +465,49 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                 <TextField
                                     required
                                     type={'date'}
-                                    label="Fecha de Inicio"
-                                    sx={{ m: 2, width: '300px' }}
-                                    helperText="Fecha Inicio Dieta"
+                                    sx={{ mx:2, mt: 2, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_inicio_dieta}
+                                    helperText="Fecha Inicio Dieta"
                                     {...register("fecha_inicio_dieta")}
                                 />
                                 <TextField
                                     required
                                     type={'date'}
-                                    label="Fecha Final"
                                     helperText="Fecha Final Dieta"
-                                    sx={{ mx: 2, my: 1, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_final_dieta}
+                                    sx={{ mx: 2,mt: 1, width: '300px' }}
                                     {...register("fecha_final_dieta")}
                                 />
-
                                 <TextField
                                     required
                                     type={'date'}
-                                    label="Fecha de Inicio"
                                     helperText="Fecha Inicio Pasaje"
-                                    sx={{ mx: 2, my: 1, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_inicio_pasaj}
+                                    sx={{ mx: 2,mt: 1, width: '300px' }}
                                     {...register("fecha_inicio_pasaj")}
                                 />
                                 <TextField
                                     required
                                     type={'date'}
-                                    label="Fecha Final"
                                     helperText="Fecha Final Pasaje"
-                                    sx={{ mx: 2, my: 1, width: '300px' }}
+                                    sx={{ mx: 2, mt: 1, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_final_pasaj}
                                     {...register("fecha_final_pasaj")}
                                 />
                                 <TextField
                                     required
                                     type={'date'}
-                                    label="Fecha de Inicio"
                                     helperText="Fecha Inicio Hospedaje"
-                                    sx={{ mx: 2, my: 1, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_inicio_hosp}
+                                    sx={{ mx: 2, mt: 1,width: '300px' }}
                                     {...register("fecha_inicio_hosp")}
                                 />
                                 <TextField
                                     required
                                     type={'date'}
-                                    label="Fecha Final"
                                     helperText="Fecha Final Hospedaje"
-                                    sx={{ mx: 2, my: 1, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_final_hosp}
+                                    sx={{ mx: 2,mt: 1, width: '300px' }}
                                     {...register("fecha_final_hosp")}
                                 />
 
