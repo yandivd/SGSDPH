@@ -19,7 +19,7 @@ import {useForm} from "react-hook-form";
 import {fetchSinToken} from "../../helper/fetch";
 
 const AddTrabajadorModal = ({handleAddTrabajadorOpen,openAddTrabajador }) => {
-    const { register, control, handleSubmit, errors } = useForm();
+    const { register, control, handleSubmit, formState: { errors } } = useForm();
     const [rol, setRol] = React.useState([]);
     const [unidadOrganizativa, setUnidadOrganizativa] = React.useState([]);
     const [errorMessage, setErrorMessage] = useState('')
@@ -100,53 +100,70 @@ const AddTrabajadorModal = ({handleAddTrabajadorOpen,openAddTrabajador }) => {
                             <TextField
                                 label="Username"
                                 type='text'
-                                required
                                 sx={{ m: 2, width: '200px' }}
-                                {...register("username")}
+                                {...register("username", {
+                                    required: 'Campo requerido'
+                                })}
+                                error={errors.username}
+                                helperText={errors.username && errors.username.message}
                             />
                             <TextField
                                 label="Nombre"
                                 type='text'
-                                required
                                 sx={{ m: 2, width: '200px' }}
-                                {...register("first_name")}
+                                {...register("first_name", {
+                                    required: 'Campo requerido'
+                                })}
+                                error={errors.first_name}
+                                helperText={errors.first_name && errors.first_name.message}
                             />
                             <TextField
                                 label="Apellidos"
                                 type='text'
-                                required
                                 sx={{ m: 2, width: '400px' }}
-                                {...register("last_name")}
+                                {...register("last_name", {
+                                    required: 'Campo requerido'
+                                })}
+                                error={errors.last_name}
+                                helperText={errors.last_name && errors.last_name.message}
                             />
 
                         </div>
                         <div className={'d-flex align-items-center justify-content-between'}>
                             <TextField
                                 label="Password"
-                                required
                                 type="password"
                                 sx={{ m: 2, width: '200px' }}
-                                {...register("password")}
+                                {...register('password',
+                                    {required: 'Campo requerido'})}
+
+                                error={errors.password}
+                                helperText={errors.password && errors.password.message}
                             />
                             <TextField
                                 label="CI"
-                                required
                                 type="number"
                                 sx={{ m: 2, width: '200px' }}
                                 {...register('ci', {
-                                    minLength: { value: 11, message: 'Mínimo 11 caracteres' },
+                                        pattern: {
+                                            value: /^[0-9]{11}$/,
+                                            message: 'Debe contener 11 dígitos numéricos',
+                                        },
                                     required: 'Campo requerido'
                                 })}
-                               /* error={true} // Verifica si errors y errors.ci están definidos
-                                helperText={'njn'} // Accede a errors.ci si está definido*/
+                                error={errors.ci}
+                                helperText={errors.ci && errors.ci.message}
                             />
 
                             <TextField
                                 label="Email"
-                                required
                                 type="email"
                                 sx={{ m: 2, width: '400px' }}
-                                {...register("email")}
+                                {...register('email',
+                                    {required: 'Campo requerido'})}
+
+                                error={errors.email}
+                                helperText={errors.email && errors.email.message}
                             />
 
                         </div>
@@ -162,27 +179,36 @@ const AddTrabajadorModal = ({handleAddTrabajadorOpen,openAddTrabajador }) => {
 
                             <TextField
                                 label="Cargo"
-                                required
                                 type='text'
                                 sx={{ m: 2, width: '200px' }}
-                                {...register("cargo")}
+                                {...register('cargo', {
+                                    required: 'Campo requerido'
+                                })}
+                                error={errors.cargo}
+                                helperText={errors.cargo && errors.cargo.message}
                             />
                              <TextField
                                 label="Dependencia"
-                                required
                                 type='text'
                                 sx={{ m: 2, width: '400px' }}
-                                {...register("dependencia")}
+                                {...register('dependencia', {
+                                    required: 'Campo requerido'
+                                })}
+                                error={errors.dependencia}
+                                helperText={errors.dependencia && errors.dependencia.message}
                             />
 
                         </div>
                         <div className={'d-flex align-items-center justify-content-between'}>
                             <TextField
                                 label="Telefono"
-                                required
                                 type='number'
                                 sx={{ m: 2, width: '188px' }}
-                                {...register("telf")}
+                                {...register('telf', {
+                                    required: 'Campo requerido'
+                                })}
+                                error={errors.telf}
+                                helperText={errors.telf && errors.telf.message}
                             />
 
                             <FieldSelect name_label={'Unidad Organizativa'}

@@ -128,8 +128,8 @@ export default function SignIn() {
                             {...register("username", {
                                 required: 'Campo requerido'
                             })}
-                           /* error={errors}
-                            helperText={errors.username && errors.username.message}*/
+                            error={errors.username}
+                            helperText={errors.username && errors.username.message}
                         />
                         <TextField
                             margin="normal"
@@ -142,8 +142,8 @@ export default function SignIn() {
                             {...register('password',
                                 {required: 'Campo requerido'})}
 
-                            /*error={errors.password}
-                            helperText={errors.password && errors.password.message}*/
+                            error={errors.password}
+                            helperText={errors.password && errors.password.message}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
