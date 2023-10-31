@@ -136,8 +136,6 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
     };
 
     const onSubmit = async (data) => {
-
-        console.log(data)
         setErrorMessage('')
 
         if(data.fecha_inicio_dieta > data.fecha_final_dieta ||
