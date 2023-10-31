@@ -26,13 +26,10 @@ const Page = ({params}) => {
             process.env.NEXT_PUBLIC_API_HOST + endpoint
         )
             .then(response => {
-                console.log('response', response)
                 setModel(response.data);
                 setShow(true)
             })
     }
-
-    console.log(model)
 
     useEffect( () => {
         const userAuthenticated = window.localStorage.getItem('token');
@@ -76,6 +73,8 @@ const Page = ({params}) => {
             <Loading infoText='Verificando permisos' />
         )
     }
+
+    console.log(model)
 
     return (
 

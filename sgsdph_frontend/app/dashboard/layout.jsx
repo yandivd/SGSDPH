@@ -191,8 +191,6 @@ export default function PersistentDrawerLeft({children}) {
         }
     }
 
-
-    console.log(router );
     return (
         <div>
             <Box sx={{ display: 'flex' }} >
