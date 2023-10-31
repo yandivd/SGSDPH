@@ -136,106 +136,114 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
     };
 
     const onSubmit = async (data) => {
+
+        console.log(data)
         setErrorMessage('')
 
-        const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
-
-        var aperitivo = [];
-
-        for (var propiedad in data) {
-            if (data.hasOwnProperty(propiedad)) {
-                if(propiedad === "provincia" || propiedad === "prov_destino"){
-                    if( data[propiedad] === 1 ){
-                        data[propiedad] = 'Pinar del Río';
-                    }
-                    if( data[propiedad] === 2 ){
-                        data[propiedad] = 'Artemisa';
-                    }
-                    if( data[propiedad] === 3 ){
-                        data[propiedad] = 'La Habana';
-                    }
-                    if( data[propiedad] === 4 ){
-                        data[propiedad] = 'Mayabeque';
-                    }
-                    if( data[propiedad] === 5 ){
-                        data[propiedad] = 'Matanzas';
-                    }
-                    if( data[propiedad] === 6 ){
-                        data[propiedad] = 'Villa Clara';
-                    }
-                    if( data[propiedad] === 7 ){
-                        data[propiedad] = 'Cienfuegos';
-                    }
-                    if( data[propiedad] === 8 ){
-                        data[propiedad] = 'Sancti Spíritus';
-                    }
-                    if( data[propiedad] === 9 ){
-                        data[propiedad] = 'Ciego de Ávila';
-                    }
-                    if( data[propiedad] === 10 ){
-                        data[propiedad] = 'Camagüey';
-                    }
-                    if( data[propiedad] === 11 ){
-                        data[propiedad] = 'Las Tunas';
-                    }
-                    if( data[propiedad] === 12 ){
-                        data[propiedad] = 'Holguín';
-                    }
-                    if( data[propiedad] === 13 ){
-                        data[propiedad] = 'Granma';
-                    }
-                    if( data[propiedad] === 14 ){
-                        data[propiedad] = 'Santiago de Cuba';
-                    }
-                    if( data[propiedad] === 15 ){
-                        data[propiedad] = 'SGuantánamo';
-                    }
-                    if( data[propiedad] === 16 ){
-                        data[propiedad] = 'Isla de la Juventud';
-                    }
-
-                }
-            }
-
-            if(propiedad.includes("checkbox")){
-                if (data[propiedad] !== ''){
-                    aperitivo.push(data[propiedad])
-                }
-
-                delete data[propiedad];
-            }
-        }
-
-        data.tipo_sol = 2; // Agregar el campo "tipo de solicitud"
-        data.estado = 'StandBye';      // Agregar el campo "estado"
-        data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
-        data.numero = solicitudes.length;      // Agregar el campo "numero de solicitud"
-        data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
-
-        if( aperitivo.length === 0){
-            setErrorMessage('Tiene que marcar al menos un tipo de gasto en comida ')
-
+        if(data.fecha_inicio_dieta > data.fecha_final_dieta ||
+            data.fecha_inicio_hosp > data.fecha_final_hosp ||
+            data.fecha_inicio_pasaj > data.fecha_final_pasaj)
+        {
+            setErrorMessage('Error en las fechas')
         }else{
-            try {
-                const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
-                const body = await resp.json();
+            const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
 
+            var aperitivo = [];
 
-                if (resp.status === 201) {
-                    Swal.fire('Exito', "Se ha creado correctamente", 'success');
-                    refreshFunction();
-                }else{
-                    Swal.fire('Error', "Error del servidor", 'error');
+            for (var propiedad in data) {
+                if (data.hasOwnProperty(propiedad)) {
+                    if(propiedad === "provincia" || propiedad === "prov_destino"){
+                        if( data[propiedad] === 1 ){
+                            data[propiedad] = 'Pinar del Río';
+                        }
+                        if( data[propiedad] === 2 ){
+                            data[propiedad] = 'Artemisa';
+                        }
+                        if( data[propiedad] === 3 ){
+                            data[propiedad] = 'La Habana';
+                        }
+                        if( data[propiedad] === 4 ){
+                            data[propiedad] = 'Mayabeque';
+                        }
+                        if( data[propiedad] === 5 ){
+                            data[propiedad] = 'Matanzas';
+                        }
+                        if( data[propiedad] === 6 ){
+                            data[propiedad] = 'Villa Clara';
+                        }
+                        if( data[propiedad] === 7 ){
+                            data[propiedad] = 'Cienfuegos';
+                        }
+                        if( data[propiedad] === 8 ){
+                            data[propiedad] = 'Sancti Spíritus';
+                        }
+                        if( data[propiedad] === 9 ){
+                            data[propiedad] = 'Ciego de Ávila';
+                        }
+                        if( data[propiedad] === 10 ){
+                            data[propiedad] = 'Camagüey';
+                        }
+                        if( data[propiedad] === 11 ){
+                            data[propiedad] = 'Las Tunas';
+                        }
+                        if( data[propiedad] === 12 ){
+                            data[propiedad] = 'Holguín';
+                        }
+                        if( data[propiedad] === 13 ){
+                            data[propiedad] = 'Granma';
+                        }
+                        if( data[propiedad] === 14 ){
+                            data[propiedad] = 'Santiago de Cuba';
+                        }
+                        if( data[propiedad] === 15 ){
+                            data[propiedad] = 'SGuantánamo';
+                        }
+                        if( data[propiedad] === 16 ){
+                            data[propiedad] = 'Isla de la Juventud';
+                        }
 
+                    }
                 }
 
-            } catch (error) {
-                console.log(error)
+                if(propiedad.includes("checkbox")){
+                    if (data[propiedad] !== ''){
+                        aperitivo.push(data[propiedad])
+                    }
+
+                    delete data[propiedad];
+                }
             }
 
-            handleClose();
-        }
+            data.tipo_sol = 2; // Agregar el campo "tipo de solicitud"
+            data.estado = 'StandBye';      // Agregar el campo "estado"
+            data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
+            data.numero = solicitudes.length;      // Agregar el campo "numero de solicitud"
+            data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
+            if( aperitivo.length === 0){
+                setErrorMessage('Tiene que marcar al menos un tipo de gasto en comida ')
+
+            }else{
+                try {
+                    const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
+                    const body = await resp.json();
+
+
+                    if (resp.status === 201) {
+                        Swal.fire('Exito', "Se ha creado correctamente", 'success');
+                        refreshFunction();
+                    }else{
+                        Swal.fire('Error', "Error del servidor", 'error');
+
+                    }
+
+                } catch (error) {
+                    console.log(error)
+                }
+
+                handleClose();
+            }
+        }
     }
 
     return (
