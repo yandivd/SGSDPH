@@ -29,12 +29,12 @@ import Swal from "sweetalert2"
 
 
 const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
-    const [solicita, setSolicita] = React.useState('');
-    const [autoriza, setAutoriza] = React.useState('');
-    const [ccosto, setCcosto] = React.useState('');
-    const [cargoPresupuesto, setCargoPresupuesto] = React.useState('');
-    const [trabajadores, setTrabajadores] = React.useState('');
-    const [aperitivo, setAperitivo] = React.useState('');
+    const [solicita, setSolicita] = React.useState([]);
+    const [autoriza, setAutoriza] = React.useState([]);
+    const [ccosto, setCcosto] = React.useState([]);
+    const [cargoPresupuesto, setCargoPresupuesto] = React.useState([]);
+    const [trabajadores, setTrabajadores] = React.useState([]);
+    const [aperitivo, setAperitivo] = React.useState([]);
     const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
@@ -43,9 +43,11 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
-        getDataForm()
+        if(isOpen){
+            getDataForm();
+        }
 
-    }, [solicitudes, control])
+    }, [control, isOpen])
 
     const getDataForm = async () => {
         try {

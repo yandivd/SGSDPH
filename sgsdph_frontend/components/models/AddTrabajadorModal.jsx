@@ -61,9 +61,11 @@ const AddTrabajadorModal = ({handleAddTrabajadorOpen,openAddTrabajador }) => {
         }
 
     useEffect( () => {
-        getDataForm()
+        if(openAddTrabajador){
+            getDataForm();
+        }
 
-    }, [openAddTrabajador])
+    }, [openAddTrabajador, openAddTrabajador])
 
     return (
         <div>

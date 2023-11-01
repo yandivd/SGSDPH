@@ -22,7 +22,7 @@ import EditSDModal from "./EditSDModal";
 import {InputText} from "primereact/inputtext";
 
 
-const DataSolicitudesTable = ({solicitudes, refreshFunction}) => {
+const DataSolicitudesTable = ({solicitudes, refreshFunction, loading}) => {
 
     const [products, setProducts] = React.useState(solicitudes);
     const [productToEdit, setProductToEdit] = React.useState([]);
@@ -87,12 +87,9 @@ const DataSolicitudesTable = ({solicitudes, refreshFunction}) => {
 
     useEffect( () => {
         const getData = () => {
-          setProducts(solicitudes)
+          setProducts(solicitudes);
         }
-
         getData()
-
-
     }, [solicitudes])
 
     return (
@@ -111,6 +108,7 @@ const DataSolicitudesTable = ({solicitudes, refreshFunction}) => {
                            rowsPerPageOptions={[5, 10, 25, 50]}
                            tableStyle={{ minWidth: '50rem' }}
                            globalFilter={globalFilter}
+                           loading={loading}
                 >
                     <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(products) => (
                         <div>{products.trabajador.nombre} {products.trabajador.apellidos}</div>

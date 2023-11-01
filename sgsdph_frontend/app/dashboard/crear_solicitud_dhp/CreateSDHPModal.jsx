@@ -36,9 +36,12 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
-        getDataForm()
+        if(isOpen){
+            getDataForm();
+        }
 
-    }, [solicitudes, length])
+
+    }, [length, isOpen])
 
     const getDataForm = async () => {
         if(solicitudes.length > 0 && length !== null){

@@ -34,6 +34,7 @@ export default function CrearSolicitudDieta() {
     const [rol, setRol] = React.useState(0);
     const [show, setShow] = React.useState(false);
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
 
 
     const handleRefreshSolicitudes = () => {
@@ -66,6 +67,16 @@ export default function CrearSolicitudDieta() {
                     gastos_comida += ','
                 }
             }
+        }
+        try {
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
+            )
+                .then(response => {
+                    setModelos(response.data);
+                })
+        } catch (error) {
+            console.log(error)
         }
 
         const dataModel = {
@@ -118,13 +129,7 @@ export default function CrearSolicitudDieta() {
                 .then(response => {
                     setSolicitudes(response.data);
                     setLength(solicitudes.length)
-                })
-
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
-            )
-                .then(response => {
-                    setModelos(response.data);
+                    setLoading(false);
                 })
         } catch (error) {
             console.log(error)
@@ -140,7 +145,7 @@ export default function CrearSolicitudDieta() {
             { rol !== '1' && rol !== '5' ?
                 router.push('/login')
                 :
-                getData()
+                getData();
             }
         }
 
@@ -164,6 +169,7 @@ export default function CrearSolicitudDieta() {
             <DataSolicitudesTable
                 solicitudes={solicitudes}
                 refreshFunction={handleRefreshSolicitudes}
+                loading={loading}
             />
 
             <Button variant="contained"  color='success' onClick={handleClickOpenGenerateModal} >Generar modelo</Button>

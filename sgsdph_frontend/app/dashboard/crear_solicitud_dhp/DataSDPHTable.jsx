@@ -20,7 +20,7 @@ import 'primereact/resources/primereact.min.css'
 import EditSDPHModal from "./EditSDPHModal";
 import {InputText} from "primereact/inputtext";
 
-const DataSdphTable = ({solicitudes, refreshFunction}) => {
+const DataSdphTable = ({solicitudes, refreshFunction, loading}) => {
     const [products, setProducts] = React.useState(solicitudes);
     const [productToEdit, setProductToEdit] = React.useState([]);
     const [globalFilter, setGlobalFilter] = useState('')
@@ -103,6 +103,7 @@ const DataSdphTable = ({solicitudes, refreshFunction}) => {
                        rowsPerPageOptions={[5, 10, 25, 50]}
                        tableStyle={{ minWidth: '50rem' }}
                        globalFilter={globalFilter}
+                       loading={loading}
             >
                 <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(products) => (
                     <div>{products.trabajador.nombre} {products.trabajador.apellidos}</div>
