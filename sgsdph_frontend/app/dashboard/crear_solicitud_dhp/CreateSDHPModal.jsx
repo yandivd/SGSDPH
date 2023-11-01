@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
@@ -33,6 +33,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
     const { register, control, handleSubmit, errors } = useForm();
+    const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
         getDataForm()
@@ -44,7 +45,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
 
             const first_solicitud =  solicitudes[0]
             setSolicita([{
-                'username': first_solicitud.solicitante.username,
+                'first_name': first_solicitud.solicitante.first_name,
+                'last_name': first_solicitud.solicitante.last_name,
                 'id': first_solicitud.solicitante.id
             }])
             setCcosto([{
@@ -56,7 +58,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                 'id': first_solicitud.cargo_presupuesto.id
             }])
             setAutoriza([{
-                'username': first_solicitud.autoriza.username,
+                'first_name': first_solicitud.autoriza.first_name,
+                'last_name': first_solicitud.autoriza.last_name,
                 'id': first_solicitud.autoriza.id
             }])
             await axios.get(
@@ -133,98 +136,112 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
     };
 
     const onSubmit = async (data) => {
-        const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
+        setErrorMessage('')
 
-        var aperitivo = [];
+        if(data.fecha_inicio_dieta > data.fecha_final_dieta ||
+            data.fecha_inicio_hosp > data.fecha_final_hosp ||
+            data.fecha_inicio_pasaj > data.fecha_final_pasaj)
+        {
+            setErrorMessage('Error en las fechas')
+        }else{
+            const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
 
-        for (var propiedad in data) {
-            if (data.hasOwnProperty(propiedad)) {
-                if(propiedad === "provincia" || propiedad === "prov_destino"){
-                    if( data[propiedad] === 1 ){
-                        data[propiedad] = 'Pinar del Río';
+            var aperitivo = [];
+
+            for (var propiedad in data) {
+                if (data.hasOwnProperty(propiedad)) {
+                    if(propiedad === "provincia" || propiedad === "prov_destino"){
+                        if( data[propiedad] === 1 ){
+                            data[propiedad] = 'Pinar del Río';
+                        }
+                        if( data[propiedad] === 2 ){
+                            data[propiedad] = 'Artemisa';
+                        }
+                        if( data[propiedad] === 3 ){
+                            data[propiedad] = 'La Habana';
+                        }
+                        if( data[propiedad] === 4 ){
+                            data[propiedad] = 'Mayabeque';
+                        }
+                        if( data[propiedad] === 5 ){
+                            data[propiedad] = 'Matanzas';
+                        }
+                        if( data[propiedad] === 6 ){
+                            data[propiedad] = 'Villa Clara';
+                        }
+                        if( data[propiedad] === 7 ){
+                            data[propiedad] = 'Cienfuegos';
+                        }
+                        if( data[propiedad] === 8 ){
+                            data[propiedad] = 'Sancti Spíritus';
+                        }
+                        if( data[propiedad] === 9 ){
+                            data[propiedad] = 'Ciego de Ávila';
+                        }
+                        if( data[propiedad] === 10 ){
+                            data[propiedad] = 'Camagüey';
+                        }
+                        if( data[propiedad] === 11 ){
+                            data[propiedad] = 'Las Tunas';
+                        }
+                        if( data[propiedad] === 12 ){
+                            data[propiedad] = 'Holguín';
+                        }
+                        if( data[propiedad] === 13 ){
+                            data[propiedad] = 'Granma';
+                        }
+                        if( data[propiedad] === 14 ){
+                            data[propiedad] = 'Santiago de Cuba';
+                        }
+                        if( data[propiedad] === 15 ){
+                            data[propiedad] = 'SGuantánamo';
+                        }
+                        if( data[propiedad] === 16 ){
+                            data[propiedad] = 'Isla de la Juventud';
+                        }
+
                     }
-                    if( data[propiedad] === 2 ){
-                        data[propiedad] = 'Artemisa';
-                    }
-                    if( data[propiedad] === 3 ){
-                        data[propiedad] = 'La Habana';
-                    }
-                    if( data[propiedad] === 4 ){
-                        data[propiedad] = 'Mayabeque';
-                    }
-                    if( data[propiedad] === 5 ){
-                        data[propiedad] = 'Matanzas';
-                    }
-                    if( data[propiedad] === 6 ){
-                        data[propiedad] = 'Villa Clara';
-                    }
-                    if( data[propiedad] === 7 ){
-                        data[propiedad] = 'Cienfuegos';
-                    }
-                    if( data[propiedad] === 8 ){
-                        data[propiedad] = 'Sancti Spíritus';
-                    }
-                    if( data[propiedad] === 9 ){
-                        data[propiedad] = 'Ciego de Ávila';
-                    }
-                    if( data[propiedad] === 10 ){
-                        data[propiedad] = 'Camagüey';
-                    }
-                    if( data[propiedad] === 11 ){
-                        data[propiedad] = 'Las Tunas';
-                    }
-                    if( data[propiedad] === 12 ){
-                        data[propiedad] = 'Holguín';
-                    }
-                    if( data[propiedad] === 13 ){
-                        data[propiedad] = 'Granma';
-                    }
-                    if( data[propiedad] === 14 ){
-                        data[propiedad] = 'Santiago de Cuba';
-                    }
-                    if( data[propiedad] === 15 ){
-                        data[propiedad] = 'SGuantánamo';
-                    }
-                    if( data[propiedad] === 16 ){
-                        data[propiedad] = 'Isla de la Juventud';
+                }
+
+                if(propiedad.includes("checkbox")){
+                    if (data[propiedad] !== ''){
+                        aperitivo.push(data[propiedad])
                     }
 
+                    delete data[propiedad];
                 }
             }
 
-            if(propiedad.includes("checkbox")){
-                if (data[propiedad] !== ''){
-                    aperitivo.push(data[propiedad])
-                }
+            data.tipo_sol = 2; // Agregar el campo "tipo de solicitud"
+            data.estado = 'StandBye';      // Agregar el campo "estado"
+            data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
+            data.numero = solicitudes.length;      // Agregar el campo "numero de solicitud"
+            data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
-                delete data[propiedad];
-            }
-        }
+            if( aperitivo.length === 0){
+                setErrorMessage('Tiene que marcar al menos un tipo de gasto en comida ')
 
-        data.tipo_sol = 2; // Agregar el campo "tipo de solicitud"
-        data.estado = 'StandBye';      // Agregar el campo "estado"
-        data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
-        data.numero = solicitudes.length;      // Agregar el campo "numero de solicitud"
-        data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
-
-        try {
-            console.log(data)
-            const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
-            const body = await resp.json();
-
-            if (resp.status === 201) {
-                Swal.fire('Exito', "Se ha creado correctamente", 'success');
-                refreshFunction();
             }else{
-                Swal.fire('Error', "Error del servidor", 'error');
+                try {
+                    const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
+                    const body = await resp.json();
 
+
+                    if (resp.status === 201) {
+                        Swal.fire('Exito', "Se ha creado correctamente", 'success');
+                        refreshFunction();
+                    }else{
+                        Swal.fire('Error', "Error del servidor", 'error');
+
+                    }
+
+                } catch (error) {
+                    console.log(error)
+                }
+
+                handleClose();
             }
-
-        } catch (error) {
-            console.log(error)
         }
-
-        handleClose();
     }
 
     return (
@@ -240,7 +257,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                 >
 
                     <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                        Agregar solicitud de dieta
+                        Agregar solicitud de dieta, pasaje y hospedaje
                     </DialogTitle>
 
                     <IconButton
@@ -263,39 +280,54 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <FieldSelect name_label={'Solicita'}
                                                  data={solicita}
                                                  name={'solicitante'}
-                                                 value_show={'username'}
+                                                 value_show1={'first_name'}
+                                                 value_show2={'last_name'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
                                     <FieldSelect name_label={'Trabajador'}
                                                  name={'trabajador'}
                                                  data={trabajadores}
-                                                 value_show={'nombre'}
+                                                 value_show1={'nombre'}
+                                                 value_show2={'apellidos'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
                                     <FieldSelect name_label={'Centro Contable'}
                                                  data={ccosto}
                                                  name={'c_contable'}
-                                                 value_show={'name'}
+                                                 value_show1={'name'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
                                     <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
                                                  data={trabajadores}
                                                  name={'parleg'}
-                                                 value_show={'nombre'}
+                                                 value_show1={'nombre'}
+                                                 value_show2={'apellidos'}
                                                  control={control}
+                                                 isRequired={false}
+
                                     />
                                     <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                                  data={cargoPresupuesto}
                                                  name={'cargo_presupuesto'}
-                                                 value_show={'account'}
+                                                 value_show1={'account'}
                                                  control={control}
+                                                 isRequired={true}
+
                                     />
 
                                     <FieldSelect name_label={'Autoriza'}
                                                  data={autoriza}
                                                  name={'autoriza'}
-                                                 value_show={'username'}
+                                                 value_show1={'first_name'}
+                                                 value_show2={'last_name'}
                                                  control={control}
+                                                 isRequired={true}
                                     />
                                 </div>
 
@@ -406,21 +438,28 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <Controller
                                         name='regreso'
                                         control={control}
-                                        defaultValue=""
+                                        defaultValue=''
                                         render={({ field }) => (
                                             <TextField
                                                 select
-                                                label="Regreso"
                                                 required
-                                                name='regreso'
+                                                label="Regreso"
+                                                name='origen'
                                                 {...field}
                                                 sx={{ m: 2, width: '300px' }}
                                             >
-                                                {municipios.map((provincia, index) => (
-                                                    <MenuItem key={index} value={provincia[0]}>
-                                                        {provincia[0]}
-                                                    </MenuItem>
-                                                ))}
+                                                {municipiosOrigen.length > 0 ?
+                                                    municipiosOrigen.slice(1).map((municipio, index) => (
+                                                        <MenuItem key={index} value={municipio}>
+                                                            {municipio}
+                                                        </MenuItem>
+                                                    ))
+                                                    : municipiosOrigen.map((municipio, index) => (
+                                                        <MenuItem key={index} value={municipio}>
+                                                            {municipio}
+                                                        </MenuItem>
+                                                    ))
+                                                }
                                             </TextField>
                                         )}
                                     />
@@ -432,50 +471,44 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     <TextField
                                         required
                                         type={'date'}
-                                        label="Fecha de Inicio"
-                                        sx={{ m: 2, width: '300px' }}
+                                        sx={{ mx:2, mt: 2, width: '300px' }}
                                         helperText="Fecha Inicio Dieta"
                                         {...register("fecha_inicio_dieta")}
                                     />
                                     <TextField
                                         required
                                         type={'date'}
-                                        label="Fecha Final"
                                         helperText="Fecha Final Dieta"
-                                        sx={{ mx: 2, my: 1, width: '300px' }}
+                                        sx={{ mx: 2,mt: 1, width: '300px' }}
                                         {...register("fecha_final_dieta")}
                                     />
 
                                      <TextField
                                         required
                                         type={'date'}
-                                        label="Fecha de Inicio"
                                         helperText="Fecha Inicio Pasaje"
-                                        sx={{ mx: 2, my: 1, width: '300px' }}
+                                        sx={{ mx: 2,mt: 1, width: '300px' }}
                                         {...register("fecha_inicio_pasaj")}
                                     />
                                     <TextField
                                         required
                                         type={'date'}
-                                        label="Fecha Final"
                                         helperText="Fecha Final Pasaje"
-                                        sx={{ mx: 2, my: 1, width: '300px' }}
+                                        sx={{ mx: 2, mt: 1, width: '300px' }}
                                         {...register("fecha_final_pasaj")}
                                     />
                                     <TextField
                                         required
                                         type={'date'}
-                                        label="Fecha de Inicio"
                                         helperText="Fecha Inicio Hospedaje"
-                                        sx={{ mx: 2, my: 1, width: '300px' }}
+                                        sx={{ mx: 2, mt: 1,width: '300px' }}
                                         {...register("fecha_inicio_hosp")}
                                     />
                                     <TextField
                                         required
                                         type={'date'}
-                                        label="Fecha Final"
                                         helperText="Fecha Final Hospedaje"
-                                        sx={{ mx: 2, my: 1, width: '300px' }}
+                                        sx={{ mx: 2,mt: 1, width: '300px' }}
                                         {...register("fecha_final_hosp")}
                                     />
 
@@ -489,6 +522,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                     id="outlined-required"
                                     label="Labor a Realizar"
                                     defaultValue=""
+                                    type='text'
                                     sx={{ m: 2, width: '92%' }}
                                     {...register("labor")}
                                 />
@@ -496,11 +530,13 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                             <div className={'mt-3'}>
                                 <TextField
                                     id="outlined-required"
+                                    type='text'
                                     label="Observaciones"
                                     sx={{ m: 2, width: '92%' }}
                                     {...register("observaciones")}
                                 />
                             </div>
+                            {errorMessage && <div className='error-message text-danger ms-3'>{errorMessage}</div>}
 
                         </DialogContent>
 

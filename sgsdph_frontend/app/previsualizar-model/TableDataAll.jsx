@@ -3,9 +3,6 @@ import React from 'react';
 const TableDataAll = ({model}) => {
     const solicitudes = model.solicitudes;
 
-    console.log('solicitudes', solicitudes)
-    console.log('model', model)
-
     return (
         <div>
             <table className={'tableLarge'}>

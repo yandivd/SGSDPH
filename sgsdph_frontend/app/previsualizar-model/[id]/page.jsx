@@ -55,7 +55,9 @@ const Page = ({params}) => {
     }, [dispatch,router])
 
     useEffect( () => {
-        if(user !== null){
+        const userAuthenticated = window.localStorage.getItem('token');
+
+        if (userAuthenticated !== null) {
             getData();
 
             if( model.length !== 0 && show){
@@ -63,6 +65,7 @@ const Page = ({params}) => {
                 setShow(false)
             }
         }
+
     }, [show])
 
     if (isActive === null ) {
@@ -70,6 +73,8 @@ const Page = ({params}) => {
             <Loading infoText='Verificando permisos' />
         )
     }
+
+    console.log(model)
 
     return (
 
@@ -79,7 +84,7 @@ const Page = ({params}) => {
                     src={ '/../logo-model.png'}
                     alt={ 'Logotipo' }
                     width={ 180 }
-                    height={ 70 }
+                    height={ 65 }
                     className={'bg-sucess'}
                 />
                 <h6 style={{ display: 'flex', justifyContent: 'center' }}>SOLICITUD DE DIETAS</h6>

@@ -23,7 +23,7 @@ const CardDescription = () => {
 
                 setCanceladas( (data.filter(objeto => objeto.estado === "Cancelado") ));
                 setPendientes(data.filter(objeto => objeto.estado === "PendienteSolicitar"  ));
-                setArchiadas(data.filter(objeto => objeto.estado === "PendienteAnticipo" || objeto.estado === "Cancelado"  ));
+                setArchiadas(data.filter(objeto => objeto.estado === "PendienteAnticipo" || objeto.estado === "Archivada"  ));
                 setAutorizadas(data.filter(objeto => objeto.estado === "PendienteAutorizo"  ));
             })
     }

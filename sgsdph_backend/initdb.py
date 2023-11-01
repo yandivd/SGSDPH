@@ -19,6 +19,9 @@ rol.save()
 rol = Rol(name='Economia')
 rol.save()
 
+rol = Rol(name='Administrador')
+rol.save()
+
 ap = Aperitivo(nombre='Desayuno')
 ap.save()
 

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
@@ -12,7 +12,7 @@ import {
     aperitivos_endpoint,
     autoriza_endpoint,
     cargo_presupuesto_endpoint,
-    ccosto_endpoint,
+    ccosto_endpoint, personas_endpoint,
     solicita_endpoint, solicitudes_endpoint, trabajadores_endpoint,
 } from "../../../constants/apiRoutes";
 import axios from "axios";
@@ -39,7 +39,8 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, setValue } = useForm();
+    const { register, control, handleSubmit, formState: { errors } } = useForm();
+    const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
         getDataForm()
@@ -73,7 +74,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                     setCargoPresupuesto((response.data));
                 })
             await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
+                process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
             )
                 .then(response => {
                     setTrabajadores((response.data));
@@ -105,98 +106,108 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
     };
 
     const onSubmit = async (data) => {
-        const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
+        setErrorMessage('')
 
-        var aperitivo = [];
+        if(data.fecha_inicio_dieta > data.fecha_final_dieta ){
+            setErrorMessage('Error en las fechas')
+        }else{
+            const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
 
-        for (var propiedad in data) {
-            if (data.hasOwnProperty(propiedad)) {
-                if(propiedad === "provincia" || propiedad === "prov_destino"){
-                    if( data[propiedad] === 1 ){
-                        data[propiedad] = 'Pinar del Río';
+            var aperitivo = [];
+
+            for (var propiedad in data) {
+                if (data.hasOwnProperty(propiedad)) {
+                    if(propiedad === "provincia" || propiedad === "prov_destino"){
+                        if( data[propiedad] === 1 ){
+                            data[propiedad] = 'Pinar del Río';
+                        }
+                        if( data[propiedad] === 2 ){
+                            data[propiedad] = 'Artemisa';
+                        }
+                        if( data[propiedad] === 3 ){
+                            data[propiedad] = 'La Habana';
+                        }
+                        if( data[propiedad] === 4 ){
+                            data[propiedad] = 'Mayabeque';
+                        }
+                        if( data[propiedad] === 5 ){
+                            data[propiedad] = 'Matanzas';
+                        }
+                        if( data[propiedad] === 6 ){
+                            data[propiedad] = 'Villa Clara';
+                        }
+                        if( data[propiedad] === 7 ){
+                            data[propiedad] = 'Cienfuegos';
+                        }
+                        if( data[propiedad] === 8 ){
+                            data[propiedad] = 'Sancti Spíritus';
+                        }
+                        if( data[propiedad] === 9 ){
+                            data[propiedad] = 'Ciego de Ávila';
+                        }
+                        if( data[propiedad] === 10 ){
+                            data[propiedad] = 'Camagüey';
+                        }
+                        if( data[propiedad] === 11 ){
+                            data[propiedad] = 'Las Tunas';
+                        }
+                        if( data[propiedad] === 12 ){
+                            data[propiedad] = 'Holguín';
+                        }
+                        if( data[propiedad] === 13 ){
+                            data[propiedad] = 'Granma';
+                        }
+                        if( data[propiedad] === 14 ){
+                            data[propiedad] = 'Santiago de Cuba';
+                        }
+                        if( data[propiedad] === 15 ){
+                            data[propiedad] = 'SGuantánamo';
+                        }
+                        if( data[propiedad] === 16 ){
+                            data[propiedad] = 'Isla de la Juventud';
+                        }
+
                     }
-                    if( data[propiedad] === 2 ){
-                        data[propiedad] = 'Artemisa';
-                    }
-                    if( data[propiedad] === 3 ){
-                        data[propiedad] = 'La Habana';
-                    }
-                    if( data[propiedad] === 4 ){
-                        data[propiedad] = 'Mayabeque';
-                    }
-                    if( data[propiedad] === 5 ){
-                        data[propiedad] = 'Matanzas';
-                    }
-                    if( data[propiedad] === 6 ){
-                        data[propiedad] = 'Villa Clara';
-                    }
-                    if( data[propiedad] === 7 ){
-                        data[propiedad] = 'Cienfuegos';
-                    }
-                    if( data[propiedad] === 8 ){
-                        data[propiedad] = 'Sancti Spíritus';
-                    }
-                    if( data[propiedad] === 9 ){
-                        data[propiedad] = 'Ciego de Ávila';
-                    }
-                    if( data[propiedad] === 10 ){
-                        data[propiedad] = 'Camagüey';
-                    }
-                    if( data[propiedad] === 11 ){
-                        data[propiedad] = 'Las Tunas';
-                    }
-                    if( data[propiedad] === 12 ){
-                        data[propiedad] = 'Holguín';
-                    }
-                    if( data[propiedad] === 13 ){
-                        data[propiedad] = 'Granma';
-                    }
-                    if( data[propiedad] === 14 ){
-                        data[propiedad] = 'Santiago de Cuba';
-                    }
-                    if( data[propiedad] === 15 ){
-                        data[propiedad] = 'SGuantánamo';
-                    }
-                    if( data[propiedad] === 16 ){
-                        data[propiedad] = 'Isla de la Juventud';
+                }
+
+                if(propiedad.includes("checkbox")){
+                    if (data[propiedad] !== ''){
+                        aperitivo.push(data[propiedad])
                     }
 
+                    delete data[propiedad];
                 }
             }
 
-            if(propiedad.includes("checkbox")){
-                if (data[propiedad] !== ''){
-                    aperitivo.push(data[propiedad])
-                }
+            data.tipo_sol = 1; // Agregar el campo "tipo de solicitud"
+            data.estado = 'StandBye';      // Agregar el campo "estado"
+            data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
+            data.numero = solicitudes.numero;      // Agregar el campo "numero de solicitud"
+            data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
-                delete data[propiedad];
-            }
-        }
+            if( aperitivo.length === 0){
+                setErrorMessage('Tiene que marcar al menos un tipo de gasto en comida ')
 
-        data.tipo_sol = 1; // Agregar el campo "tipo de solicitud"
-        data.estado = 'StandBye';      // Agregar el campo "estado"
-        data.aperitivo = aperitivo;      // Agregar el campo "aperitivo"
-        data.numero = solicitudes.numero;      // Agregar el campo "numero de solicitud"
-        data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
-
-        const endpoint = solicitudes_endpoint + solicitudes.id +'/'
-
-        try {
-            const resp = await fetchSinToken(endpoint, data, "PUT");
-            const body = await resp.json();
-
-            if (resp.status === 200) {
-                Swal.fire('Exito', "Se ha editado correctamente", 'success');
-                refreshFunction();
             }else{
-                Swal.fire('Error', "Error del servidor", 'error');
+                const endpoint = solicitudes_endpoint + solicitudes.id +'/'
+
+                try {
+                    const resp = await fetchSinToken(endpoint, data, "PUT");
+
+                    if (resp.status === 200) {
+                        Swal.fire('Exito', "Se ha editado correctamente", 'success');
+                        refreshFunction();
+                    }else{
+                        Swal.fire('Error', "Error del servidor", 'error');
+                    }
+
+                } catch (error) {
+                    console.log(error)
+                }
+
+                handleClose();
             }
-
-        } catch (error) {
-            console.log(error)
         }
-
-        handleClose();
     }
 
     return (
@@ -235,20 +246,25 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                 <FieldSelect name_label={'Solicita'}
                                              data={solicita}
                                              name={'solicitante'}
-                                             value_show={'username'}
+                                             value_show1={'first_name'}
+                                             value_show2={'last_name'}
                                              control={control}
+                                             isRequired={true}
                                 />
                                 <FieldSelect name_label={'Trabajador'}
                                              name={'trabajador'}
                                              data={trabajadores}
-                                             value_show={'nombre'}
+                                             value_show1={'nombre'}
+                                             value_show2={'apellidos'}
                                              control={control}
+                                             isRequired={true}
                                 />
                                 <FieldSelect name_label={'Centro Contable'}
                                              data={ccosto}
                                              name={'c_contable'}
-                                             value_show={'name'}
+                                             value_show1={'name'}
                                              control={control}
+                                             isRequired={true}
                                 />
                                 <FormLabel sx={{ mx: 2}} component="legend">Gasto en comida</FormLabel>
 
@@ -365,21 +381,28 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                 <Controller
                                     name='regreso'
                                     control={control}
-                                    defaultValue=""
+                                    defaultValue=''
                                     render={({ field }) => (
                                         <TextField
                                             select
-                                            label="Regreso"
                                             required
-                                            name='regreso'
+                                            label="Regreso"
+                                            name='origen'
                                             {...field}
                                             sx={{ m: 2, width: '300px' }}
                                         >
-                                            {municipios.map((provincia, index) => (
-                                                <MenuItem key={index} value={provincia[0]}>
-                                                    {provincia[0]}
-                                                </MenuItem>
-                                            ))}
+                                            {municipiosOrigen.length > 0 ?
+                                                municipiosOrigen.slice(1).map((municipio, index) => (
+                                                    <MenuItem key={index} value={municipio}>
+                                                        {municipio}
+                                                    </MenuItem>
+                                                ))
+                                                : municipiosOrigen.map((municipio, index) => (
+                                                    <MenuItem key={index} value={municipio}>
+                                                        {municipio}
+                                                    </MenuItem>
+                                                ))
+                                            }
                                         </TextField>
                                     )}
                                 />
@@ -389,41 +412,48 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                 <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
                                              data={trabajadores}
                                              name={'parleg'}
-                                             value_show={'nombre'}
+                                             value_show1={'nombre'}
+                                             value_show2={'apellidos'}
                                              control={control}
-
+                                             isRequired={false}
                                 />
                                 <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                              data={cargoPresupuesto}
                                              name={'cargo_presupuesto'}
-                                             value_show={'account'}
+                                             value_show1={'account'}
                                              control={control}
+                                             isRequired={true}
                                 />
 
                                 <FieldSelect name_label={'Autoriza'}
                                              data={autoriza}
                                              name={'autoriza'}
-                                             value_show={'username'}
+                                             value_show1={'first_name'}
+                                             value_show2={'last_name'}
                                              control={control}
+                                             isRequired={true}
                                 />
+
                                 <TextField
-                                    required
                                     type={'date'}
-                                    label="Fecha de Inicio"
+                                    required
                                     sx={{ m: 2, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_inicio_dieta}
-                                    {...register("fecha_inicio_dieta")}
+                                    {...register('fecha_inicio_dieta',
+                                        {required: 'Campo requerido'})}
+                                    helperText="Fecha Inicio Dieta"
+
                                 />
                                 <TextField
-                                    required
                                     type={'date'}
-                                    label="Fecha Final"
+                                    required
+                                    sx={{ mx: 2, width: '300px' }}
                                     defaultValue= {solicitudes.fecha_final_dieta}
-                                    sx={{ m: 2, width: '300px' }}
-                                    {...register("fecha_final_dieta")}
+                                    {...register('fecha_final_dieta',
+                                        {required: 'Campo requerido'})}
+                                    helperText="Fecha Final Dieta"
 
                                 />
-
 
                             </div>
 
@@ -435,6 +465,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                             <TextField
                                 id="labor"
                                 label="Labor a Realizar"
+                                type='text'
                                 defaultValue= {solicitudes.labor}
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
@@ -444,11 +475,14 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                             <TextField
                                 id='observaciones'
                                 label='Observaciones'
+                                type='text'
                                 defaultValue= {solicitudes.observaciones}
                                 sx={{ m: 2, width: '92%' }}
                                 {...register('observaciones' )}
                             />
                         </div>
+                        {errorMessage && <div className='error-message text-danger ms-3'>{errorMessage}</div>}
+
 
                     </DialogContent>
 

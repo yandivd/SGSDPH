@@ -42,7 +42,7 @@ export default function SignIn() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const { register, handleSubmit, errors } = useForm();
+    const { register, handleSubmit, formState: { errors }  } = useForm();
     const {isActive} = useSelector((state) => state.auth);
 
     const onSubmit = async (data) => {
@@ -54,11 +54,10 @@ export default function SignIn() {
             const resp = await fetchSinToken('/login/', data, "POST");
             const body = await resp.json();
 
-            console.log(body)
-
             if (resp.status === 201) {
                 const rol = body.user.rol;
                 const unidad_organizativa = body.user.unidad_organizativa;
+                const first_name = body.user.first_name;
                 const username = body.user.username;
                 const token = body.token;
                 const last_name = body.user.last_name;
@@ -69,12 +68,13 @@ export default function SignIn() {
                     rol: rol
                 } ) );
 
-                window.localStorage.setItem('rol', rol)
+                window.localStorage.setItem('username', username)
                 window.localStorage.setItem('token', token)
                 window.localStorage.setItem('unidad_organizativa', unidad_organizativa)
-                window.localStorage.setItem('username', username)
+                window.localStorage.setItem('first_name', first_name)
                 window.localStorage.setItem('last_name', last_name)
                 window.localStorage.setItem('id', id)
+                window.localStorage.setItem('rol', rol)
 
                 router.push('/dashboard')
             }else{
@@ -118,7 +118,7 @@ export default function SignIn() {
                         <TextField
                             margin="normal"
                             fullWidth
-                            id="user"
+                            id="username"
                             label="Usuario"
                             name="username"
                             type="text"
@@ -127,8 +127,8 @@ export default function SignIn() {
                             {...register("username", {
                                 required: 'Campo requerido'
                             })}
-                            //error={errors}
-                            //helperText={errors.username.message}
+                            error={errors.username}
+                            helperText={errors.username && errors.username.message}
                         />
                         <TextField
                             margin="normal"
@@ -139,12 +139,10 @@ export default function SignIn() {
                             id="password"
                             disabled={loading}
                             {...register('password',
-                                { minLength: { value: 4, message: 'Minimo 6 caracteres'},
-                                        required: 'Campo requerido'
-                            })}
+                                {required: 'Campo requerido'})}
 
-                            //error={errors.password}
-                            //helperText={errors}
+                            error={errors.password}
+                            helperText={errors.password && errors.password.message}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}

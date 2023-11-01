@@ -5,6 +5,8 @@
 }
 .link-sidebar:hover{
     color: dodgerblue;
+}.link-sidebar:active{
+    color: dodgerblue;
 }
 
 .logoutStyle{
@@ -51,3 +53,8 @@
     size: landscape;
     margin: 0.5cm;
 }
+
+.active {
+    color: dodgerblue;
+}
+

@@ -70,6 +70,7 @@ const DataSdphTable = ({solicitudes, refreshFunction}) => {
             }
             setProducts(_products);
             handleOpenDelete();
+            refreshFunction();
             await Swal.fire('Exito', "Se ha eliminado correctamente", 'success');
 
         } catch (error) {

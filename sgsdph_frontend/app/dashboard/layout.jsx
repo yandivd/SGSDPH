@@ -17,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from "next/link";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
@@ -30,22 +30,15 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {activeUser, inactiveUser} from "../../redux/features/auth/authSlice";
 import Loading from "../../components/Loading";
-import {fetchConToken, fetchSinToken} from "../../helper/fetch";
-import {modelo_detail_endpoint, trabajadores_endpoint, veryfy_token} from "../../constants/apiRoutes";
+import {fetchConToken} from "../../helper/fetch";
+import {trabajadores_endpoint, veryfy_token} from "../../constants/apiRoutes";
 import {LogoutService} from "../../helper/LogoutService";
 import Image from "next/image";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import CloseIcon from "@mui/icons-material/Close";
-import DialogContent from "@mui/material/DialogContent";
-import Button from "@mui/material/Button";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import {DialogActions} from "@mui/material";
-import TextField from "@mui/material/TextField";
 import {useForm} from "react-hook-form";
-import Swal from "sweetalert2";
+import FirmModal from "../../components/models/FirmModal";
+import AddTrabajadorModal from "../../components/models/AddTrabajadorModal";
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 const drawerWidth = 260;
 
@@ -113,18 +106,30 @@ function Copyright(props) {
 
 
 export default function PersistentDrawerLeft({children}) {
-    const {user, isActive, rol} = useSelector((state) => state.auth);
+    const {user, isActive} = useSelector((state) => state.auth);
     const router = useRouter();
+    const pathname = usePathname()
     const dispatch = useDispatch();
     const { register, control, handleSubmit, errors } = useForm();
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [openFirm, setOpenFirm] = React.useState(false);
+    const [openAddTrabajador, setOpenAddTrabajador] = React.useState(false);
+    const [username, setUsername] = React.useState('');
+    const [rol, setRol] = React.useState(0);
+    /*1 = Crea
+    2 = Solicitante
+    3 = Autorizador
+    4 = Economia
+    5 = Administrador*/
 
     const handleFirmOpen = () => {
         setOpenFirm(!openFirm);
     };
 
+    const handleAddTrabajadorOpen = () => {
+        setOpenAddTrabajador(!openAddTrabajador);
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -136,6 +141,7 @@ export default function PersistentDrawerLeft({children}) {
 
     useEffect( () => {
         const userAuthenticated = window.localStorage.getItem('token');
+        setRol(window.localStorage.getItem('rol'));
 
         if (userAuthenticated === null) {
             return router.push('/login');
@@ -152,6 +158,8 @@ export default function PersistentDrawerLeft({children}) {
                     dispatch(activeUser( {
                         user: user ,
                     } ) );
+                    setUsername(window.localStorage.getItem('username') );
+
                 }
             })
         }
@@ -184,41 +192,6 @@ export default function PersistentDrawerLeft({children}) {
         }
     }
 
-    const handleSubmitFirm = async(data) => {
-
-        console.log('data', data)
-        const id = window.localStorage.getItem('id');
-        const method = "PATCH";
-        const url = process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint + id + '/';
-
-/*        const formData= {
-            "firma": data.firma[0]
-        }*/
-
-        const dataToSend = new FormData()
-        dataToSend.append( 'firma', data.firma[0])
-
-        try {
-            const resp = await fetch( url, {
-                method,
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                body: dataToSend
-            });
-
-            if (resp.status === 200) {
-                Swal.fire('Exito', "Operación finaliza con éxito", 'success');
-            }else{
-                Swal.fire('Error', "Error del servidor", 'error');
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
-
     return (
         <div>
             <Box sx={{ display: 'flex' }} >
@@ -238,13 +211,16 @@ export default function PersistentDrawerLeft({children}) {
                             <Typography variant='h6' noWrap component='div'>
                                 Sistema de solcitud de dietas, hospedaje y pasaje
                             </Typography>
-                            <div onClick={handleLogout} className={'logoutStyle'} >
-                                <ListItemText>
-                                    Cerrar Sesión
-                                </ListItemText>
-                                <ListItemIcon className={'ms-2 text-white'}>
-                                    <LogoutIcon />
-                                </ListItemIcon>
+
+                            <div className={'d-flex align-items-center justify-content-between'}>
+                                <Typography variant='h6' noWrap component='div'>
+                                    {username}
+                                </Typography>
+                                <div onClick={handleLogout} className={'logoutStyle ms-3'}>
+                                    <ListItemIcon className={'text-white'}>
+                                        <LogoutIcon />
+                                    </ListItemIcon>
+                                </div>
                             </div>
                         </div>
                     </Toolbar>
@@ -282,7 +258,9 @@ export default function PersistentDrawerLeft({children}) {
                     <Divider className='bg-dark'/>
                     <List>
                         <ListItem disablePadding>
-                            <Link href={'/dashboard/'} className='link-sidebar'>
+                            <Link href={'/dashboard/'}
+                                  className={`link-sidebar ${pathname === '/dashboard' ? 'active' : ''}`}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <DashboardIcon />
@@ -299,56 +277,97 @@ export default function PersistentDrawerLeft({children}) {
                                 <ListItemText>Firma</ListItemText>
                             </ListItemButton>
                         </ListItem>
-                        <ListItem disablePadding >
-                            <Link  href={'http://localhost:8000/admin'} className='link-sidebar'>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <SupervisorAccountIcon />
-                                    </ListItemIcon>
-                                    <ListItemText>Admin</ListItemText>
-                                </ListItemButton>
-                            </Link>
-                        </ListItem>
+                        { (rol === '5' ) &&
+                            (
+                                <div>
+                                    <ListItem disablePadding>
+                                        <Link  href={'http://localhost:8000/admin'} className='link-sidebar'>
+                                            <ListItemButton>
+                                                <ListItemIcon>
+                                                    <SupervisorAccountIcon />
+                                                </ListItemIcon>
+                                                <ListItemText>Admin</ListItemText>
+                                            </ListItemButton>
+                                        </Link>
+                                    </ListItem>
+                                    <ListItem disablePadding>
+                                        <ListItemButton onClick={handleAddTrabajadorOpen}>
+                                            <ListItemIcon>
+                                                <PersonAddAlt1Icon />
+                                            </ListItemIcon>
+                                            <ListItemText>Agregar Trabajador</ListItemText>
+                                        </ListItemButton>
+                                    </ListItem>
+                                </div>
+                            )
+                        }
                     </List>
-                    <Divider className='bg-dark'/>
                     <List>
-                        <ListItem disablePadding className={'ps-3 text-underline'}>
-                            <ListItemText>Solicitudes </ListItemText>
-                        </ListItem>
+                        { (rol !== '1' ) &&
+                            (
+                                <div>
+                                    <Divider className='bg-dark'/>
 
-                        <ListItem disablePadding disableGutters>
-                            <Link href={'/dashboard/pendientes_solicitar'} className='link-sidebar'>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <LibraryBooksIcon />
-                                    </ListItemIcon>
-                                    <ListItemText>Pendientes a Solicitar</ListItemText>
-                                </ListItemButton>
-                            </Link>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <Link href={'/dashboard/pendientes_aprobar'} className='link-sidebar'>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <HowToRegIcon />
-                                    </ListItemIcon>
-                                    <ListItemText>Pendientes a Autorizar</ListItemText>
-                                </ListItemButton>
-                            </Link>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <Link href={'/dashboard/solicitudes_anticipo_pago'}  className='link-sidebar'>
-                                <ListItemButton>
-                                    <ListItemIcon >
-                                        <PaidIcon/>
-                                    </ListItemIcon>
-                                    <ListItemText>Pendientes a Anticipo</ListItemText>
-                                </ListItemButton>
-                            </Link>
-                        </ListItem>
+                                    <ListItem disablePadding className={'ps-3 text-underline'}>
+                                        <ListItemText>Solicitudes</ListItemText>
+                                    </ListItem>
+                                </div>
+                            )
+                        }
+                        { (rol === '2' || rol === '5'  ) &&
+                            (
+                                <ListItem disablePadding disableGutters>
+                                    <Link href={'/dashboard/pendientes_solicitar'}
+                                          className={`link-sidebar ${pathname === '/dashboard/pendientes_solicitar' ? 'active' : ''}`}
+                                    >
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <LibraryBooksIcon />
+                                            </ListItemIcon>
+                                            <ListItemText>Pendientes a Solicitar</ListItemText>
+                                        </ListItemButton>
+                                    </Link>
+                                </ListItem>
+                            )
+                        }
+                         { (rol === '3' || rol === '5'  ) &&
+                            (
+                                <ListItem disablePadding>
+                                    <Link href={'/dashboard/pendientes_aprobar'}
+                                          className={`link-sidebar ${pathname === '/dashboard/pendientes_aprobar' ? 'active' : ''}`}
+                                    >
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <HowToRegIcon />
+                                            </ListItemIcon>
+                                            <ListItemText>Pendientes a Autorizar</ListItemText>
+                                        </ListItemButton>
+                                    </Link>
+                                </ListItem>
+                            )
+                        }
+                        { (rol === '4' || rol === '5'  ) &&
+                            (
+                                <ListItem disablePadding>
+                                    <Link href={'/dashboard/solicitudes_anticipo_pago'}
+                                          className={`link-sidebar ${pathname === '/dashboard/solicitudes_anticipo_pago' ? 'active' : ''}`}
+                                    >
+                                        <ListItemButton>
+                                            <ListItemIcon >
+                                                <PaidIcon/>
+                                            </ListItemIcon>
+                                            <ListItemText>Pendientes a Anticipo</ListItemText>
+                                        </ListItemButton>
+                                    </Link>
+                                </ListItem>
+
+                            )
+                        }
                         <Divider className='bg-dark'/>
                         <ListItem disablePadding>
-                            <Link href={'/dashboard/solicitudes_archivadas'} className='link-sidebar'>
+                            <Link href={'/dashboard/solicitudes_archivadas'}
+                                  className={`link-sidebar ${pathname === '/dashboard/solicitudes_archivadas' ? 'active' : ''}`}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <ArchiveIcon />
@@ -358,7 +377,9 @@ export default function PersistentDrawerLeft({children}) {
                             </Link>
                         </ListItem>
                         <ListItem disablePadding>
-                            <Link href={'/dashboard/solicitudes_canceladas'}  className='link-sidebar'>
+                            <Link href={'/dashboard/solicitudes_canceladas'}
+                                  className={`link-sidebar ${pathname === '/dashboard/solicitudes_canceladas' ? 'active' : ''}`}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <CancelIcon />
@@ -389,52 +410,15 @@ export default function PersistentDrawerLeft({children}) {
 
             </Box>
 
-            <div>
-                <Dialog
-                    onClose={handleFirmOpen}
-                    aria-labelledby="customized-dialog-title"
-                    open={openFirm}
-                    className={'p-5'}
-                >
+            <FirmModal handleFirmOpen={handleFirmOpen}
+                       openFirm={openFirm}
+            />
 
-                    <IconButton
-                        aria-label="close"
-                        onClick={handleFirmOpen}
-                        sx={{
-                            position: 'absolute',
-                            right: 8,
-                            top: 8,
-                            color: (theme) => theme.palette.grey[500],
-                        }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-
-                    <form onSubmit={handleSubmit(handleSubmitFirm)}>
-                        <DialogContent className='text-center'>
-                            <h4 className='mt-4'>Introduzca su firma digital</h4>
-                            <TextField
-                                required
-                                type={'file'}
-                                helperText="Firma"
-                                sx={{ mx: 2, mt: 3, width: '300px' }}
-                                {...register("firma")}
-                            />
-
-                            <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
-                                <Button autoFocus onClick={handleFirmOpen} variant="contained" color='error'>
-                                    Cancelar
-                                </Button> <br/>
-                                <Button variant="contained" type="submit">
-                                    Aceptar
-                                </Button>
-                            </DialogActions>
-                        </DialogContent>
-                    </form>
-                </Dialog>
+            <AddTrabajadorModal handleAddTrabajadorOpen={handleAddTrabajadorOpen}
+                                openAddTrabajador={openAddTrabajador}
+            />
 
             </div>
-        </div>
 
     );
 }

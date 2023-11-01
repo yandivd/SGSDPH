@@ -2,7 +2,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import CardDescription from "../../components/CardDescription";
-import CreateSolicitudModal from "../../components/CreateSolicitudModal";
+import CreateSolicitudModal from "../../components/models/CreateSolicitudModal";
 import {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
@@ -12,23 +12,32 @@ import {Column} from "primereact/column";
 import 'primereact/resources/themes/lara-light-indigo/theme.css'
 import 'primereact/resources/primereact.min.css'
 import {InputText} from "primereact/inputtext";
+import ListItem from "@mui/material/ListItem";
+import Link from "next/link";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import ListItemText from "@mui/material/ListItemText";
 
 export default function BasicCard() {
     const [open, setOpen] = useState(false);
     const [everySolicitudes, setEverySolicitudes] = useState([]);
-    const [globalFilter, setGlobalFilter] = useState('')
+    const [globalFilter, setGlobalFilter] = useState('');
+    const [rol, setRol] = React.useState(0);
+
 
     const handleClickOpen = () => {
         setOpen(!open);
     };
 
     const getData = async () => {
+        setRol(window.localStorage.getItem('rol'));
+
         try {
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + every_solicituds_endpoint
             )
                 .then(response => {
-                    console.log(response.data)
                     setEverySolicitudes(response.data);
                 })
 
@@ -57,9 +66,14 @@ export default function BasicCard() {
                         sx={{ mb:3 }}
                     />
                 </div>
-                <div>
-                    <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>
-                </div>
+                { (rol === '1' || rol === '5'  ) &&
+                    (
+                        <div>
+                            <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>
+                        </div>
+                    )
+                }
+
             </div>
 
             <CreateSolicitudModal isOpen={open} handleClose={handleClickOpen} setOpen={setOpen} />

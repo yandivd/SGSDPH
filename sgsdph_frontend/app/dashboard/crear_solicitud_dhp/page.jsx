@@ -18,6 +18,7 @@ import DialogContent from "@mui/material/DialogContent";
 import {DialogActions} from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {InputText} from "primereact/inputtext";
+import {useRouter} from "next/navigation";
 
 export default function CrearSolicitudDHP() {
     const [open, setOpen] = useState(false);
@@ -26,7 +27,9 @@ export default function CrearSolicitudDHP() {
     const [modelos, setModelos] = React.useState([]);
     const [refreshSolicitudes, setRefreshSolicitudes] = React.useState(false)
     const [length, setLength] = React.useState(null)
-    const [globalFilter, setGlobalFilter] = useState('')
+    const [rol, setRol] = React.useState(0);
+    const [show, setShow] = React.useState(false);
+    const router = useRouter();
 
     const handleRefreshSolicitudes = () => {
         setRefreshSolicitudes(!refreshSolicitudes)
@@ -38,16 +41,27 @@ export default function CrearSolicitudDHP() {
         setOpen(!open);
     };
 
-
     const handleCreateModel = async () => {
         const firstSolicitud = solicitudes[0]
         const solicitudes_id = solicitudes.map(objeto => objeto.id);
-        const name = window.localStorage.getItem('username');
+        const name = window.localStorage.getItem('first_name');
         const last_name = window.localStorage.getItem('last_name');
 
         var fechaActual = new Date();
 
         var year = fechaActual.getFullYear();
+
+        var gastos_comida = '';
+
+        if(firstSolicitud.aperitivo.length > 0){
+            gastos_comida = ' Gastos en';
+            for (var it in firstSolicitud.aperitivo) {
+                gastos_comida += ' ' + (firstSolicitud.aperitivo[it].nombre);
+                if(it < (firstSolicitud.aperitivo.length - 1) ){
+                    gastos_comida += ','
+                }
+            }
+        }
 
         const dataModel = {
             "tipo_model":2,
@@ -57,10 +71,10 @@ export default function CrearSolicitudDHP() {
             "c_contable": firstSolicitud.c_contable.name,
             "consec": ( modelos.length + 1 )+ '/' + year,
             "solicitudes": solicitudes_id,
-            "parleg": firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos,
+            "parleg": (firstSolicitud.parleg === null ? ''  :  firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos),
             "autoriza": firstSolicitud.autoriza.first_name + ' ' + firstSolicitud.autoriza.last_name ,
             "cargo_presupuesto": firstSolicitud.cargo_presupuesto.account,
-            "observaciones": firstSolicitud.observaciones,
+            "observaciones": firstSolicitud.observaciones + gastos_comida,
             "estado":"PendienteSolicitar",
             "telf_solicitante": firstSolicitud.solicitante.telf,
             "cargo_autoriza":firstSolicitud.autoriza.cargo,
@@ -74,8 +88,6 @@ export default function CrearSolicitudDHP() {
         try {
             const resp = await fetchSinToken(modelo_endpoint, dataModel, "POST");
             const body = await resp.json();
-
-            console.log('body', body)
 
             if (resp.status === 201) {
                 Swal.fire('Exito', "Se ha creado correctamente", 'success');
@@ -92,33 +104,43 @@ export default function CrearSolicitudDHP() {
 
     }
 
+    const getData = async () => {
+        const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
+
+        try {
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + solicitudesDPH_endpoint + 'no/' + unidad_organizativa + '/'
+            )
+                .then(response => {
+                    setSolicitudes(response.data);
+                    setLength(solicitudes.length)
+                })
+
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
+            )
+                .then(response => {
+                    setModelos(response.data);
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect( () => {
-        const getData = async () => {
-            const unidad_organizativa = window.localStorage.getItem('unidad_organizativa');
+        setRol(window.localStorage.getItem('rol'));
 
-            try {
-                await axios.get(
-                    process.env.NEXT_PUBLIC_API_HOST + solicitudesDPH_endpoint + 'no/' + unidad_organizativa + '/'
-                )
-                    .then(response => {
-                        console.log(response.data)
-                        setSolicitudes(response.data);
-                        setLength(solicitudes.length)
-                    })
-
-                await axios.get(
-                    process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
-                )
-                    .then(response => {
-                        setModelos(response.data);
-                    })
-            } catch (error) {
-                console.log(error)
+        if(rol === 0 ){
+            setShow(!show)
+        }else{
+            { rol !== '1' && rol !== '5' ?
+                router.push('/login')
+                :
+                getData()
             }
         }
-        getData()
 
-    }, [refreshSolicitudes])
+    }, [show, refreshSolicitudes])
 
     return (
         <div>

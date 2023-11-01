@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import {MenuItem} from "@mui/material";
 import { Controller } from 'react-hook-form';
 
-const FieldSelect = ({name_label, data, name, value_show, control}) => {
+const FieldSelect = ({name_label, data, name, value_show1,value_show2, control, isRequired, width='300px'}) => {
 
     return (
         <div>
@@ -14,16 +14,22 @@ const FieldSelect = ({name_label, data, name, value_show, control}) => {
                 render={({ field }) => (
                     <TextField
                         select
-                        required
+                        required={isRequired}
                         label={name_label}
                         {...field}
-                        sx={{ m: 2, width: '300px' }}
+                        sx={{ m: 2, width: width }}
                     >
                         {data.map((option) => (
                             <MenuItem key={option.id}
-                                      value={typeof option[value_show] === 'undefined' ? '' : option.id}
+                                      value={typeof option[value_show1] === 'undefined' ? '' : option.id}
                             >
-                                {typeof option[value_show] === 'undefined' ? '' : option[value_show]}
+                                {typeof option[value_show1] === 'undefined' ?
+                                    ''
+                                    :
+                                    option[value_show1] + (typeof option[value_show2] === 'undefined' ? ''
+                                            :
+                                         ' ' + option[value_show2])
+                                }
                             </MenuItem>
                         ))}
                     </TextField>
