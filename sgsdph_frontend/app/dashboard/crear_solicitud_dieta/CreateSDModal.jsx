@@ -39,7 +39,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, errors } = useForm();
+    const { register, control, handleSubmit, formState: { errors }  } = useForm();
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
@@ -468,18 +468,21 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                              isRequired={true}
                                 />
                                 <TextField
-                                    required
                                     type={'date'}
-                                    label="Fecha de Inicio"
+                                    required
                                     sx={{ m: 2, width: '300px' }}
-                                    {...register("fecha_inicio_dieta")}
+                                    {...register('fecha_inicio_dieta',
+                                        {required: 'Campo requerido'})}
+                                    helperText="Fecha Inicio Dieta"
+
                                 />
                                 <TextField
-                                    required
                                     type={'date'}
-                                    label="Fecha Final"
-                                    sx={{ m: 2, width: '300px' }}
-                                    {...register("fecha_final_dieta")}
+                                    required
+                                    sx={{ mx: 2, width: '300px' }}
+                                    {...register('fecha_final_dieta',
+                                        {required: 'Campo requerido'})}
+                                    helperText="Fecha Final Dieta"
 
                                 />
 

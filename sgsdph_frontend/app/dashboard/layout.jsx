@@ -17,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from "next/link";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
@@ -35,14 +35,7 @@ import {trabajadores_endpoint, veryfy_token} from "../../constants/apiRoutes";
 import {LogoutService} from "../../helper/LogoutService";
 import Image from "next/image";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
-import Dialog from "@mui/material/Dialog";
-import CloseIcon from "@mui/icons-material/Close";
-import DialogContent from "@mui/material/DialogContent";
-import Button from "@mui/material/Button";
-import {DialogActions} from "@mui/material";
-import TextField from "@mui/material/TextField";
 import {useForm} from "react-hook-form";
-import Swal from "sweetalert2";
 import FirmModal from "../../components/models/FirmModal";
 import AddTrabajadorModal from "../../components/models/AddTrabajadorModal";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
@@ -113,8 +106,9 @@ function Copyright(props) {
 
 
 export default function PersistentDrawerLeft({children}) {
-    const {user, isActive, rol} = useSelector((state) => state.auth);
+    const {user, isActive} = useSelector((state) => state.auth);
     const router = useRouter();
+    const pathname = usePathname()
     const dispatch = useDispatch();
     const { register, control, handleSubmit, errors } = useForm();
     const theme = useTheme();
@@ -122,6 +116,12 @@ export default function PersistentDrawerLeft({children}) {
     const [openFirm, setOpenFirm] = React.useState(false);
     const [openAddTrabajador, setOpenAddTrabajador] = React.useState(false);
     const [username, setUsername] = React.useState('');
+    const [rol, setRol] = React.useState(0);
+    /*1 = Crea
+    2 = Solicitante
+    3 = Autorizador
+    4 = Economia
+    5 = Administrador*/
 
     const handleFirmOpen = () => {
         setOpenFirm(!openFirm);
@@ -141,6 +141,7 @@ export default function PersistentDrawerLeft({children}) {
 
     useEffect( () => {
         const userAuthenticated = window.localStorage.getItem('token');
+        setRol(window.localStorage.getItem('rol'));
 
         if (userAuthenticated === null) {
             return router.push('/login');
@@ -257,7 +258,9 @@ export default function PersistentDrawerLeft({children}) {
                     <Divider className='bg-dark'/>
                     <List>
                         <ListItem disablePadding>
-                            <Link href={'/dashboard/'} className='link-sidebar'>
+                            <Link href={'/dashboard/'}
+                                  className={`link-sidebar ${pathname === '/dashboard' ? 'active' : ''}`}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <DashboardIcon />
@@ -274,64 +277,97 @@ export default function PersistentDrawerLeft({children}) {
                                 <ListItemText>Firma</ListItemText>
                             </ListItemButton>
                         </ListItem>
-                        <ListItem disablePadding >
-                            <Link  href={'http://localhost:8000/admin'} className='link-sidebar'>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <SupervisorAccountIcon />
-                                    </ListItemIcon>
-                                    <ListItemText>Admin</ListItemText>
-                                </ListItemButton>
-                            </Link>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton onClick={handleAddTrabajadorOpen}>
-                                <ListItemIcon>
-                                    <PersonAddAlt1Icon />
-                                </ListItemIcon>
-                                <ListItemText>Agregar Trabajador</ListItemText>
-                            </ListItemButton>
-                        </ListItem>
+                        { (rol === '5' ) &&
+                            (
+                                <div>
+                                    <ListItem disablePadding>
+                                        <Link  href={'http://localhost:8000/admin'} className='link-sidebar'>
+                                            <ListItemButton>
+                                                <ListItemIcon>
+                                                    <SupervisorAccountIcon />
+                                                </ListItemIcon>
+                                                <ListItemText>Admin</ListItemText>
+                                            </ListItemButton>
+                                        </Link>
+                                    </ListItem>
+                                    <ListItem disablePadding>
+                                        <ListItemButton onClick={handleAddTrabajadorOpen}>
+                                            <ListItemIcon>
+                                                <PersonAddAlt1Icon />
+                                            </ListItemIcon>
+                                            <ListItemText>Agregar Trabajador</ListItemText>
+                                        </ListItemButton>
+                                    </ListItem>
+                                </div>
+                            )
+                        }
                     </List>
-                    <Divider className='bg-dark'/>
                     <List>
-                        <ListItem disablePadding className={'ps-3 text-underline'}>
-                            <ListItemText>Solicitudes</ListItemText>
-                        </ListItem>
+                        { (rol !== '1' ) &&
+                            (
+                                <div>
+                                    <Divider className='bg-dark'/>
 
-                        <ListItem disablePadding disableGutters>
-                            <Link href={'/dashboard/pendientes_solicitar'} className='link-sidebar'>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <LibraryBooksIcon />
-                                    </ListItemIcon>
-                                    <ListItemText>Pendientes a Solicitar</ListItemText>
-                                </ListItemButton>
-                            </Link>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <Link href={'/dashboard/pendientes_aprobar'} className='link-sidebar'>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <HowToRegIcon />
-                                    </ListItemIcon>
-                                    <ListItemText>Pendientes a Autorizar</ListItemText>
-                                </ListItemButton>
-                            </Link>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <Link href={'/dashboard/solicitudes_anticipo_pago'}  className='link-sidebar'>
-                                <ListItemButton>
-                                    <ListItemIcon >
-                                        <PaidIcon/>
-                                    </ListItemIcon>
-                                    <ListItemText>Pendientes a Anticipo</ListItemText>
-                                </ListItemButton>
-                            </Link>
-                        </ListItem>
+                                    <ListItem disablePadding className={'ps-3 text-underline'}>
+                                        <ListItemText>Solicitudes</ListItemText>
+                                    </ListItem>
+                                </div>
+                            )
+                        }
+                        { (rol === '2' || rol === '5'  ) &&
+                            (
+                                <ListItem disablePadding disableGutters>
+                                    <Link href={'/dashboard/pendientes_solicitar'}
+                                          className={`link-sidebar ${pathname === '/dashboard/pendientes_solicitar' ? 'active' : ''}`}
+                                    >
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <LibraryBooksIcon />
+                                            </ListItemIcon>
+                                            <ListItemText>Pendientes a Solicitar</ListItemText>
+                                        </ListItemButton>
+                                    </Link>
+                                </ListItem>
+                            )
+                        }
+                         { (rol === '3' || rol === '5'  ) &&
+                            (
+                                <ListItem disablePadding>
+                                    <Link href={'/dashboard/pendientes_aprobar'}
+                                          className={`link-sidebar ${pathname === '/dashboard/pendientes_aprobar' ? 'active' : ''}`}
+                                    >
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <HowToRegIcon />
+                                            </ListItemIcon>
+                                            <ListItemText>Pendientes a Autorizar</ListItemText>
+                                        </ListItemButton>
+                                    </Link>
+                                </ListItem>
+                            )
+                        }
+                        { (rol === '4' || rol === '5'  ) &&
+                            (
+                                <ListItem disablePadding>
+                                    <Link href={'/dashboard/solicitudes_anticipo_pago'}
+                                          className={`link-sidebar ${pathname === '/dashboard/solicitudes_anticipo_pago' ? 'active' : ''}`}
+                                    >
+                                        <ListItemButton>
+                                            <ListItemIcon >
+                                                <PaidIcon/>
+                                            </ListItemIcon>
+                                            <ListItemText>Pendientes a Anticipo</ListItemText>
+                                        </ListItemButton>
+                                    </Link>
+                                </ListItem>
+
+                            )
+                        }
                         <Divider className='bg-dark'/>
                         <ListItem disablePadding>
-                            <Link href={'/dashboard/solicitudes_archivadas'} className='link-sidebar'>
+                            <Link href={'/dashboard/solicitudes_archivadas'}
+                                  className={`link-sidebar ${pathname === '/dashboard/solicitudes_archivadas' ? 'active' : ''}`}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <ArchiveIcon />
@@ -341,7 +377,9 @@ export default function PersistentDrawerLeft({children}) {
                             </Link>
                         </ListItem>
                         <ListItem disablePadding>
-                            <Link href={'/dashboard/solicitudes_canceladas'}  className='link-sidebar'>
+                            <Link href={'/dashboard/solicitudes_canceladas'}
+                                  className={`link-sidebar ${pathname === '/dashboard/solicitudes_canceladas' ? 'active' : ''}`}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <CancelIcon />
