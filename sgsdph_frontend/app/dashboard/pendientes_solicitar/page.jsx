@@ -68,7 +68,7 @@ function a11yProps(index) {
     };
 }
 
-export default function PendienteSolicitud({props}) {
+export default function PendienteSolicitud() {
     const [models, setModels] = React.useState([]);
     const [globalFilter, setGlobalFilter] = useState('')
     const [openCancel, setOpenCancel] = React.useState(false);
