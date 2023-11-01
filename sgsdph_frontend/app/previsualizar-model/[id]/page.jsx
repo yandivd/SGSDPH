@@ -84,7 +84,7 @@ const Page = ({params}) => {
                     src={ '/../logo-model.png'}
                     alt={ 'Logotipo' }
                     width={ 180 }
-                    height={ 70 }
+                    height={ 65 }
                     className={'bg-sucess'}
                 />
                 <h6 style={{ display: 'flex', justifyContent: 'center' }}>SOLICITUD DE DIETAS</h6>

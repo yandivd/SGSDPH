@@ -29,9 +29,46 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ListItemText from "@mui/material/ListItemText";
 import Loading from "../../../components/Loading";
 import {useSelector} from "react-redux";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
+function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
 
-export default function PendienteSolicitud() {
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
+
+CustomTabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
+export default function PendienteSolicitud({props}) {
     const [models, setModels] = React.useState([]);
     const [globalFilter, setGlobalFilter] = useState('')
     const [openCancel, setOpenCancel] = React.useState(false);
@@ -40,7 +77,7 @@ export default function PendienteSolicitud() {
     const router = useRouter();
     const [rol, setRol] = React.useState(0);
     const [show, setShow] = React.useState(false);
-
+    const [value, setValue] = React.useState(0);
 
     const getModels = async () => {
 
@@ -55,7 +92,7 @@ export default function PendienteSolicitud() {
                 if(rol === '5'){
                     setModels(data);
                 }else{
-                    setModels(data.filter(objeto => objeto.solicitante === (first_name + ' ' + last_name) ));
+                    setModels(data.filter(objeto => objeto.solicitante === (first_name + ' ' + last_name)));
                 }
             })
     }
@@ -100,7 +137,7 @@ export default function PendienteSolicitud() {
 
     const handleChangeState = async (state) => {
         const endpoint = modelo_detail_endpoint + id +'/'
-        const new_models = models.filter(objeto => objeto.id !== id );
+        const new_models= models.filter(objeto => objeto.id !== id );
         setModels(new_models);
 
         const data = {
@@ -129,6 +166,119 @@ export default function PendienteSolicitud() {
         }
     }
 
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    const renderTabContent = (tipo_model) => {
+        return(
+            <div>
+                <div className={'d-flex align-items-end justify-content-between mt-4'}>
+                    <InputText
+                        value={globalFilter}
+                        onChange={(e) => setGlobalFilter(e.target.value)}
+                        placeholder="Filtrar..."
+                        sx={{ mb:3 }}
+                    />
+                </div>
+
+                <br/>
+
+                <DataTable
+                    value={ models.filter((objeto) => objeto.tipo_model === tipo_model) }
+                    paginator rows={5}
+                    rowsPerPageOptions={[5, 10, 25, 50]}
+                    tableStyle={{ minWidth: '50rem' }}
+                    globalFilter={globalFilter}
+                >
+                    <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
+                    <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
+                    <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>
+                    <Column field="c_contable" header="Centro Contable" sortable style={{ width: '25%' }}></Column>
+                    <Column field="cargo_presupuesto" header="Cargo Presupuesto" sortable style={{ width: '25%' }}></Column>
+                    <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }} />
+                </DataTable>
+
+                <Dialog
+                    onClose={handleOpenCancel}
+                    aria-labelledby="customized-dialog-title"
+                    open={openCancel}
+                    className={'p-5'}
+                >
+
+                    <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                    </DialogTitle>
+
+                    <IconButton
+                        aria-label="close"
+                        onClick={handleOpenCancel}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+
+                    <DialogContent className='text-center'>
+                        <ErrorOutlineIcon sx={{ fontSize: 60 }} color="action"  />
+                        <h4 className='mt-4'>Estás seguro de cancelar este modelo?</h4>
+                    </DialogContent>
+
+                    <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
+                        <Button autoFocus onClick={handleOpenCancel} variant="contained" color='error'>
+                            Cancelar
+                        </Button> <br/>
+                        <Button onClick={() => handleChangeState('Cancelado')} variant="contained">
+                            Aceptar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    onClose={handleOpenSolicitar}
+                    aria-labelledby="customized-dialog-title"
+                    open={openSolicitar}
+                    className={'p-5'}
+                >
+
+                    <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                    </DialogTitle>
+
+                    <IconButton
+                        aria-label="close"
+                        onClick={handleOpenSolicitar}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+
+                    <DialogContent className='text-center'>
+                        <h4 className='mt-4'>Estás seguro de solicitar este modelo?</h4>
+                    </DialogContent>
+
+                    <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
+                        <Button variant="contained" >
+                            Firmar
+                        </Button> <br/>
+                        <Button variant="contained"
+                                color='success'
+                                onClick={() => handleChangeState('PendienteAutorizo')}>
+                            Solicitar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        )
+    }
+
     useEffect( () => {
         setRol(window.localStorage.getItem('rol'));
 
@@ -144,126 +294,25 @@ export default function PendienteSolicitud() {
 
     }, [show])
 
-    return (
-        <div>
-
-            <div className={'d-flex align-items-end justify-content-between mt-4'}>
-                <p className={'text-secondary ms-2'}>Listado de modelos pendientes a solicitar</p>
-
-                <InputText
-                    value={globalFilter}
-                    onChange={(e) => setGlobalFilter(e.target.value)}
-                    placeholder="Filtrar..."
-                    sx={{ mb:3 }}
-                />
-            </div>
-
-            <br/>
-
-            <DataTable value={models}
-                       paginator rows={5}
-                       rowsPerPageOptions={[5, 10, 25, 50]}
-                       tableStyle={{ minWidth: '50rem' }}
-                       globalFilter={globalFilter}
-            >
-                <Column
-                    field="tipo_model"
-                    header="Tipo de modelo"
-                    sortable
-                    style={{ width: '30%' }}
-                    body={(rowData) => {
-                        if (rowData.tipo_model === 1) {
-                            return 'Dieta';
-                        } else {
-                            return 'Dieta, Pasaje y Hospedaje';
-                        }
-                    }}
-                ></Column>
-                <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
-                <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
-                <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>
-                <Column field="c_contable" header="Centro Contable" sortable style={{ width: '25%' }}></Column>
-                <Column field="cargo_presupuesto" header="Cargo Presupuesto" sortable style={{ width: '25%' }}></Column>
-                <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }} />
-            </DataTable>
-
-            <Dialog
-                onClose={handleOpenCancel}
-                aria-labelledby="customized-dialog-title"
-                open={openCancel}
-                className={'p-5'}
-            >
-
-                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                </DialogTitle>
-
-                <IconButton
-                    aria-label="close"
-                    onClick={handleOpenCancel}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[500],
-                    }}
+        return (
+            <Box>
+            <Box sx={{ borderColor: 'divider' }}>
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="wrapped label tabs example"
                 >
-                    <CloseIcon />
-                </IconButton>
-
-                <DialogContent className='text-center'>
-                    <ErrorOutlineIcon sx={{ fontSize: 60 }} color="action"  />
-                    <h4 className='mt-4'>Estás seguro de cancelar este modelo?</h4>
-                </DialogContent>
-
-                <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
-                    <Button autoFocus onClick={handleOpenCancel} variant="contained" color='error'>
-                        Cancelar
-                    </Button> <br/>
-                    <Button onClick={() => handleChangeState('Cancelado')} variant="contained">
-                        Aceptar
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            <Dialog
-                onClose={handleOpenSolicitar}
-                aria-labelledby="customized-dialog-title"
-                open={openSolicitar}
-                className={'p-5'}
-            >
-
-                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                </DialogTitle>
-
-                <IconButton
-                    aria-label="close"
-                    onClick={handleOpenSolicitar}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[500],
-                    }}
-                >
-                    <CloseIcon />
-                </IconButton>
-
-                <DialogContent className='text-center'>
-                    <h4 className='mt-4'>Estás seguro de solicitar este modelo?</h4>
-                </DialogContent>
-
-                <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
-                    <Button variant="contained" >
-                        Firmar
-                    </Button> <br/>
-                    <Button variant="contained"
-                            color='success'
-                            onClick={() => handleChangeState('PendienteAutorizo')}>
-                        Solicitar
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
+                    <Tab label="Solicitude de Dietas" {...a11yProps(0)} />
+                    <Tab label="Solicitude de Dietas, Pasajes y hospedajes" {...a11yProps(1)} />
+                </Tabs>
+            </Box>
+            <CustomTabPanel value={value} index={0}>
+                {renderTabContent(1)}
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={1}>
+                {renderTabContent(2)}
+            </CustomTabPanel>
+        </Box>
     )
 }
         
