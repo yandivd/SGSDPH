@@ -122,7 +122,6 @@ export default function Solicitudesrchivadas() {
                             }
                         }}
                     ></Column>
-                    <Column field="estado" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
                     <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>
