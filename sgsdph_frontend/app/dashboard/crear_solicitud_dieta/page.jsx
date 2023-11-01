@@ -157,12 +157,14 @@ export default function CrearSolicitudDieta() {
                 <Button variant="contained" onClick={handleClickOpen}> + Agregar Solicitud</Button>
             </div>
 
-            <CreateSDModal isOpen={open}
-                           handleClose={handleClickOpen}
-                           solicitudes={solicitudes}
-                           refreshFunction={handleRefreshSolicitudes}
-                           length={length}
-            />
+            {open &&
+                <CreateSDModal isOpen={open}
+                               handleClose={handleClickOpen}
+                               solicitudes={solicitudes}
+                               refreshFunction={handleRefreshSolicitudes}
+                               length={length}
+                />
+            }
 
             <p className={'text-secondary my-3 ms-2'}>Listado de solicitudes de dietas</p>
 

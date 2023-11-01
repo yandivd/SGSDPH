@@ -167,11 +167,13 @@ const DataSolicitudesTable = ({solicitudes, refreshFunction, loading}) => {
                 </DialogActions>
             </Dialog>
 
-            <EditSDModal isOpen={openEdit}
-                         handleClose={handleOpenEdit}
-                         solicitudes={productToEdit}
-                         refreshFunction={refreshFunction}
-            />
+            { openEdit &&
+                <EditSDModal isOpen={openEdit}
+                             handleClose={handleOpenEdit}
+                             solicitudes={productToEdit}
+                             refreshFunction={refreshFunction}
+                />
+            }
 
         </div>
     );

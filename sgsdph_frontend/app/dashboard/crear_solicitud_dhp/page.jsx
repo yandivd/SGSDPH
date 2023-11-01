@@ -151,14 +151,18 @@ export default function CrearSolicitudDHP() {
     return (
         <div>
             <div className='d-flex justify-content-end my-2'>
-                <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>            </div>
+                <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>
+            </div>
 
-            <CreateSDHPModal isOpen={open}
-                           handleClose={handleClickOpen}
-                           solicitudes={solicitudes}
-                           refreshFunction={handleRefreshSolicitudes}
-                           length={length}
-            />
+            { open &&
+                <CreateSDHPModal isOpen={open}
+                                 handleClose={handleClickOpen}
+                                 solicitudes={solicitudes}
+                                 refreshFunction={handleRefreshSolicitudes}
+                                 length={length}
+                />
+            }
+
             <p className={'text-secondary my-3 ms-2'}>Listado de solicitudes de dietas, hospedaje y pasaje</p>
 
             <DataSDPHTable

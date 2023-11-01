@@ -414,9 +414,11 @@ export default function PersistentDrawerLeft({children}) {
                        openFirm={openFirm}
             />
 
-            <AddTrabajadorModal handleAddTrabajadorOpen={handleAddTrabajadorOpen}
-                                openAddTrabajador={openAddTrabajador}
-            />
+            { openAddTrabajador &&
+                <AddTrabajadorModal handleAddTrabajadorOpen={handleAddTrabajadorOpen}
+                                    openAddTrabajador={openAddTrabajador}
+                />
+            }
 
             </div>
 

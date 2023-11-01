@@ -160,11 +160,13 @@ const DataSdphTable = ({solicitudes, refreshFunction, loading}) => {
                 </DialogActions>
             </Dialog>
 
-            <EditSDPHModal isOpen={openEdit}
-                         handleClose={handleOpenEdit}
-                         solicitudes={productToEdit}
-                         refreshFunction={refreshFunction}
-            />
+            { openEdit &&
+                <EditSDPHModal isOpen={openEdit}
+                               handleClose={handleOpenEdit}
+                               solicitudes={productToEdit}
+                               refreshFunction={refreshFunction}
+                />
+            }
 
         </div>
     );
