@@ -35,6 +35,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
     const { register, control, handleSubmit, setValue } = useForm();
     const [errorMessage, setErrorMessage] = useState('')
+    const [disabledCheckBox, setDisabledCheckBox] = useState(false)
 
     useEffect( () => {
         if(isOpen){
@@ -79,6 +80,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                 .then(response => {
                     setAperitivo((response.data));
                 })
+            setDisabledCheckBox(!disabledCheckBox);
+
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
             )
@@ -143,6 +146,10 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
         setValue('autoriza', first_solicitud.autoriza.id);
         setValue('labor', first_solicitud.labor);
         setValue('observaciones', first_solicitud.observaciones);
+        first_solicitud.aperitivo.forEach((valor) => {
+            setValue(`checkbox_${valor.id}`, valor.id);
+        }, []);
+
 
         if ( first_solicitud.parleg !== null){
             setValue('parleg', first_solicitud.parleg.id);
@@ -489,7 +496,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                         )}
                                     />
                                     <FormLabel sx={{ mx: 2}} component="legend">Gasto en comida</FormLabel>
-                                    <CheckBoxPersonalizate data={aperitivo} control={control} />
+                                    <CheckBoxPersonalizate data={aperitivo} control={control} disabledCheckBox={disabledCheckBox}/>
                                 </div>
 
                                 <div>

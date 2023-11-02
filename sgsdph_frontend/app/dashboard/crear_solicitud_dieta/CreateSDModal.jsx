@@ -39,6 +39,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
     const { register, control, handleSubmit, formState: { errors } , setValue } = useForm();
     const [errorMessage, setErrorMessage] = useState('')
+    const [disabledCheckBox, setDisabledCheckBox] = useState(false)
 
     useEffect( () => {
         if(isOpen){
@@ -87,6 +88,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                 .then(response => {
                     setAperitivo((response.data));
                 })
+            setDisabledCheckBox(!disabledCheckBox);
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
             )
@@ -144,9 +146,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
             }
         }
     }
-
-    console.log(trabajadores);
-    console.log(parleg)
 
     const handleProvinciaOrigenChange = (event) => {
         const selectedProvincia = event.target.value;
@@ -270,6 +269,10 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
         setValue('autoriza', first_solicitud.autoriza.id);
         setValue('labor', first_solicitud.labor);
         setValue('observaciones', first_solicitud.observaciones);
+        first_solicitud.aperitivo.forEach((valor) => {
+            setValue(`checkbox_${valor.id}`, valor.id);
+        }, []);
+
 
         if ( first_solicitud.parleg !== null){
             setValue('parleg', first_solicitud.parleg.id);
@@ -334,7 +337,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                                 />
                                 <FormLabel sx={{ mx: 2}} component="legend">Gasto en comida</FormLabel>
 
-                                <CheckBoxPersonalizate data={aperitivo} control={control} />
+                                <CheckBoxPersonalizate data={aperitivo} control={control} disabledCheckBox={disabledCheckBox}/>
 
                             </div>
 

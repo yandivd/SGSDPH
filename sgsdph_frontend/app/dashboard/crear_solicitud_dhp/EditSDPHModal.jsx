@@ -95,10 +95,10 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
         setValue('autoriza', solicitudes.autoriza.id);
         setValue('trabajador', solicitudes.trabajador.id);
         setValue('c_contable', solicitudes.c_contable.id);
+        solicitudes.aperitivo.forEach((valor) => {
+            setValue(`checkbox_${valor.id}`, valor.id);
+        }, []);
 
-        /*
-                setValue('aperitivo', 3);
-        */
         const index_provincia =  (municipios.findIndex((provincia) => provincia[0] === solicitudes.provincia))
         setValue('provincia',index_provincia);
         const index_prov_destino = (municipios.findIndex((provincia) => provincia[0] === solicitudes.prov_destino))
