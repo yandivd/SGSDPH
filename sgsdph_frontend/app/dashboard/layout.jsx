@@ -31,7 +31,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {activeUser, inactiveUser} from "../../redux/features/auth/authSlice";
 import Loading from "../../components/Loading";
 import {fetchConToken} from "../../helper/fetch";
-import {trabajadores_endpoint, veryfy_token} from "../../constants/apiRoutes";
+import {modelo_endpoint, trabajadores_endpoint, veryfy_token} from "../../constants/apiRoutes";
 import {LogoutService} from "../../helper/LogoutService";
 import Image from "next/image";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
@@ -39,6 +39,8 @@ import {useForm} from "react-hook-form";
 import FirmModal from "../../components/models/FirmModal";
 import AddTrabajadorModal from "../../components/models/AddTrabajadorModal";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import Badge from '@mui/material/Badge';
+import axios from "axios";
 
 const drawerWidth = 260;
 
@@ -110,13 +112,17 @@ export default function PersistentDrawerLeft({children}) {
     const router = useRouter();
     const pathname = usePathname()
     const dispatch = useDispatch();
-    const { register, control, handleSubmit, errors } = useForm();
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [openFirm, setOpenFirm] = React.useState(false);
     const [openAddTrabajador, setOpenAddTrabajador] = React.useState(false);
     const [username, setUsername] = React.useState('');
     const [rol, setRol] = React.useState(0);
+    const [pendientes, setPendientes] = React.useState('');
+    const [autorizadas, setAutorizadas] = React.useState('');
+    const [anticipo, setAnticipo] = React.useState('');
+
+
     /*1 = Crea
     2 = Solicitante
     3 = Autorizador
@@ -163,7 +169,33 @@ export default function PersistentDrawerLeft({children}) {
                 }
             })
         }
+        getModels();
+
     }, [dispatch,router])
+
+    const getModels = async () => {
+        const first_name = window.localStorage.getItem('first_name');
+        const last_name = window.localStorage.getItem('last_name');
+        const mirol = window.localStorage.getItem('rol');
+
+
+        await axios.get(
+            process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
+        )
+            .then(response => {
+                const data = response.data;
+                if(mirol === '5'){
+                    console.log('entraaaaaaaaaaaa')
+                    setPendientes(data.filter(objeto => objeto.estado === "PendienteSolicitar").length);
+                }else{
+                    setPendientes(data.filter(objeto => objeto.estado === "PendienteSolicitar" &&
+                        objeto.solicitante === (first_name + ' ' + last_name)).length);
+                }
+                setAutorizadas(data.filter(objeto => objeto.estado === "PendienteAutorizo").length);
+                setAnticipo(data.filter(objeto => objeto.estado === "PendienteAnticipo").length);
+
+            })
+    }
 
     if (isActive === null ) {
         return (
@@ -322,7 +354,9 @@ export default function PersistentDrawerLeft({children}) {
                                     >
                                         <ListItemButton>
                                             <ListItemIcon>
-                                                <LibraryBooksIcon />
+                                                <Badge badgeContent={pendientes} color="primary">
+                                                    <LibraryBooksIcon />
+                                                </Badge>
                                             </ListItemIcon>
                                             <ListItemText>Pendientes a Solicitar</ListItemText>
                                         </ListItemButton>
@@ -338,7 +372,9 @@ export default function PersistentDrawerLeft({children}) {
                                     >
                                         <ListItemButton>
                                             <ListItemIcon>
-                                                <HowToRegIcon />
+                                                <Badge badgeContent={autorizadas} color="primary">
+                                                    <HowToRegIcon />
+                                                </Badge>
                                             </ListItemIcon>
                                             <ListItemText>Pendientes a Autorizar</ListItemText>
                                         </ListItemButton>
@@ -354,7 +390,9 @@ export default function PersistentDrawerLeft({children}) {
                                     >
                                         <ListItemButton>
                                             <ListItemIcon >
-                                                <PaidIcon/>
+                                                <Badge badgeContent={anticipo} color="primary">
+                                                    <PaidIcon/>
+                                                </Badge>
                                             </ListItemIcon>
                                             <ListItemText>Pendientes a Anticipo</ListItemText>
                                         </ListItemButton>
@@ -419,7 +457,6 @@ export default function PersistentDrawerLeft({children}) {
                                     openAddTrabajador={openAddTrabajador}
                 />
             }
-
             </div>
 
     );

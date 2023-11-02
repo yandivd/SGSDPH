@@ -202,10 +202,14 @@ const AddTrabajadorModal = ({handleAddTrabajadorOpen,openAddTrabajador }) => {
                         <div className={'d-flex align-items-center justify-content-between'}>
                             <TextField
                                 label="Telefono"
-                                type='number'
+                                type='text'
                                 sx={{ m: 2, width: '188px' }}
                                 {...register('telf', {
-                                    required: 'Campo requerido'
+                                    required: 'Campo requerido',
+                                    pattern: {
+                                        value: /^\d+$/, // Expresión regular para aceptar solo números
+                                        message: 'Ingrese solo números',
+                                    },
                                 })}
                                 error={errors.telf}
                                 helperText={errors.telf && errors.telf.message}

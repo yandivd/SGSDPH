@@ -55,7 +55,7 @@ export default function BasicCard() {
 
     return (
         <div>
-            <CardDescription />
+            <CardDescription everySolicitudes={everySolicitudes} />
 
             <div className='d-flex justify-content-between my-2'>
                 <div>
