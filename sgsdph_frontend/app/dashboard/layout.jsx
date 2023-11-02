@@ -185,7 +185,6 @@ export default function PersistentDrawerLeft({children}) {
             .then(response => {
                 const data = response.data;
                 if(mirol === '5'){
-                    console.log('entraaaaaaaaaaaa')
                     setPendientes(data.filter(objeto => objeto.estado === "PendienteSolicitar").length);
                 }else{
                     setPendientes(data.filter(objeto => objeto.estado === "PendienteSolicitar" &&

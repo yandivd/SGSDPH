@@ -61,12 +61,17 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
 
         const index_provincia =  (municipios.findIndex((provincia) => provincia[0] === solicitudes.provincia))
         setValue('provincia',index_provincia);
+        setProvinciaOrigen(index_provincia);
+        setMunicipiosOrigen(municipios[index_provincia]);
+
         const index_prov_destino = (municipios.findIndex((provincia) => provincia[0] === solicitudes.prov_destino))
         setValue('prov_destino',index_prov_destino);
-      /*  setValue('origen', solicitudes.origen);
-        setValue('prov_origen', 'Regla');
-        setValue('regreso', 'Regla');*/
+        setProvinciaDestino(index_prov_destino);
+        setMunicipiosDestino(municipios[index_prov_destino]);
 
+        setValue('origen', solicitudes.origen);
+        setValue('destino', solicitudes.destino);
+        setValue('regreso', solicitudes.regreso);
         if ( solicitudes.parleg !== null){
             setValue('parleg', solicitudes.parleg.id);
         }
@@ -417,7 +422,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                             select
                                             required
                                             label="Regreso"
-                                            name='origen'
+                                            name='regreso'
                                             {...field}
                                             sx={{ m: 2, width: '300px' }}
                                         >
