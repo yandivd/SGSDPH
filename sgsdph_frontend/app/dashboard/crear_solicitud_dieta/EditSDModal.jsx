@@ -29,23 +29,52 @@ import Swal from "sweetalert2"
 
 
 const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
-    const [solicita, setSolicita] = React.useState('');
-    const [autoriza, setAutoriza] = React.useState('');
-    const [ccosto, setCcosto] = React.useState('');
-    const [cargoPresupuesto, setCargoPresupuesto] = React.useState('');
-    const [trabajadores, setTrabajadores] = React.useState('');
-    const [aperitivo, setAperitivo] = React.useState('');
+    const [solicita, setSolicita] = React.useState([]);
+    const [autoriza, setAutoriza] = React.useState([]);
+    const [ccosto, setCcosto] = React.useState([]);
+    const [cargoPresupuesto, setCargoPresupuesto] = React.useState([]);
+    const [trabajadores, setTrabajadores] = React.useState([]);
+    const [aperitivo, setAperitivo] = React.useState([]);
     const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, formState: { errors } } = useForm();
+    const { register, control, handleSubmit, formState: { errors } , setValue} = useForm();
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
-        getDataForm()
+        if(isOpen){
+            getDataForm();
+        }
 
-    }, [solicitudes, control])
+    }, [control, isOpen])
+
+    const loadingValues = () => {
+        setValue('solicitante', solicitudes.solicitante.id);
+        setValue('autoriza', solicitudes.autoriza.id);
+        setValue('trabajador', solicitudes.trabajador.id);
+        setValue('c_contable', solicitudes.c_contable.id);
+
+        solicitudes.aperitivo.forEach((valor) => {
+            setValue(`checkbox_${valor.id}`, valor.id);
+        }, []);
+
+        const index_provincia =  (municipios.findIndex((provincia) => provincia[0] === solicitudes.provincia))
+        setValue('provincia',index_provincia);
+        const index_prov_destino = (municipios.findIndex((provincia) => provincia[0] === solicitudes.prov_destino))
+        setValue('prov_destino',index_prov_destino);
+      /*  setValue('origen', solicitudes.origen);
+        setValue('prov_origen', 'Regla');
+        setValue('regreso', 'Regla');*/
+
+        if ( solicitudes.parleg !== null){
+            setValue('parleg', solicitudes.parleg.id);
+        }
+        setValue('cargo_presupuesto', solicitudes.cargo_presupuesto.id);
+        setValue('fecha_inicio_dieta', solicitudes.fecha_inicio_dieta);
+        setValue('fecha_final_dieta', solicitudes.fecha_final_dieta);
+
+    }
 
     const getDataForm = async () => {
         try {
@@ -91,6 +120,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
             console.log(error)
         }
 
+        loadingValues();
     }
 
     const handleProvinciaOrigenChange = (event) => {
@@ -278,7 +308,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                 <Controller
                                     name='provincia'
                                     control={control}
-                                    defaultValue=""
+                                    defaultValue=''
                                     render={({ field }) => (
                                         <TextField
                                             select
@@ -438,7 +468,6 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                     type={'date'}
                                     required
                                     sx={{ m: 2, width: '300px' }}
-                                    defaultValue= {solicitudes.fecha_inicio_dieta}
                                     {...register('fecha_inicio_dieta',
                                         {required: 'Campo requerido'})}
                                     helperText="Fecha Inicio Dieta"
@@ -448,7 +477,6 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                     type={'date'}
                                     required
                                     sx={{ mx: 2, width: '300px' }}
-                                    defaultValue= {solicitudes.fecha_final_dieta}
                                     {...register('fecha_final_dieta',
                                         {required: 'Campo requerido'})}
                                     helperText="Fecha Final Dieta"
@@ -466,7 +494,7 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                                 id="labor"
                                 label="Labor a Realizar"
                                 type='text'
-                                defaultValue= {solicitudes.labor}
+                                defaultValue={solicitudes.labor}
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
                             />
@@ -475,8 +503,8 @@ const EditSDModal = ({isOpen, handleClose, solicitudes, refreshFunction}) => {
                             <TextField
                                 id='observaciones'
                                 label='Observaciones'
+                                defaultValue={solicitudes.observaciones}
                                 type='text'
-                                defaultValue= {solicitudes.observaciones}
                                 sx={{ m: 2, width: '92%' }}
                                 {...register('observaciones' )}
                             />

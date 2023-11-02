@@ -70,6 +70,7 @@ export default function PendientesAprobar() {
     const [rol, setRol] = React.useState(0);
     const [show, setShow] = React.useState(false);
     const [value, setValue] = React.useState(0);
+    const [loading, setLoading] = useState(true);
 
     const getModels = async () => {
 
@@ -79,6 +80,7 @@ export default function PendientesAprobar() {
             .then(response => {
                 const data = response.data.filter(objeto => objeto.estado === "PendienteAutorizo" );
                 setModels(data);
+                setLoading(false);
             })
     }
 
@@ -192,6 +194,7 @@ export default function PendientesAprobar() {
                            rowsPerPageOptions={[5, 10, 25, 50]}
                            tableStyle={{ minWidth: '50rem' }}
                            globalFilter={globalFilter}
+                           loading={loading}
                 >
                     <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>

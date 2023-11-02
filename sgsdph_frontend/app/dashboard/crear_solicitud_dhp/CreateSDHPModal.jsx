@@ -27,18 +27,23 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
     const [ccosto, setCcosto] = React.useState([]);
     const [cargoPresupuesto, setCargoPresupuesto] = React.useState([]);
     const [trabajadores, setTrabajadores] = React.useState([]);
+    const [parleg, setParleg] = React.useState([]);
     const [aperitivo, setAperitivo] = React.useState([]);
     const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, errors } = useForm();
+    const { register, control, handleSubmit, setValue } = useForm();
     const [errorMessage, setErrorMessage] = useState('')
+    const [disabledCheckBox, setDisabledCheckBox] = useState(false)
 
     useEffect( () => {
-        getDataForm()
+        if(isOpen){
+            getDataForm();
+        }
 
-    }, [solicitudes, length])
+
+    }, [length, isOpen])
 
     const getDataForm = async () => {
         if(solicitudes.length > 0 && length !== null){
@@ -62,20 +67,30 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                 'last_name': first_solicitud.autoriza.last_name,
                 'id': first_solicitud.autoriza.id
             }])
+            if ( first_solicitud.parleg !== null){
+                setParleg([{
+                    'nombre': first_solicitud.parleg.nombre,
+                    'apellidos': first_solicitud.parleg.apellidos,
+                    'id': first_solicitud.parleg.id
+                }])
+            }
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
             )
                 .then(response => {
                     setAperitivo((response.data));
                 })
+            setDisabledCheckBox(!disabledCheckBox);
+
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
             )
                 .then(response => {
                     setTrabajadores((response.data));
                 })
-        }else{
 
+            loadingValues(first_solicitud);
+        }else{
             if(length !== null){
                 try {
                     await axios.get(
@@ -107,6 +122,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                     )
                         .then(response => {
                             setTrabajadores((response.data));
+                            setParleg((response.data));
                         })
 
                     await axios.get(
@@ -123,6 +139,23 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
         }
     }
 
+    const loadingValues= (first_solicitud) => {
+        setValue('solicitante', first_solicitud.solicitante.id);
+        setValue('c_contable', first_solicitud.c_contable.id);
+        setValue('cargo_presupuesto', first_solicitud.cargo_presupuesto.id);
+        setValue('autoriza', first_solicitud.autoriza.id);
+        setValue('labor', first_solicitud.labor);
+        setValue('observaciones', first_solicitud.observaciones);
+        first_solicitud.aperitivo.forEach((valor) => {
+            setValue(`checkbox_${valor.id}`, valor.id);
+        }, []);
+
+
+        if ( first_solicitud.parleg !== null){
+            setValue('parleg', first_solicitud.parleg.id);
+
+        }
+    }
     const handleProvinciaOrigenChange = (event) => {
         const selectedProvincia = event.target.value;
         setProvinciaOrigen(selectedProvincia);
@@ -304,13 +337,12 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
 
                                     />
                                     <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
-                                                 data={trabajadores}
+                                                 data={parleg}
                                                  name={'parleg'}
                                                  value_show1={'nombre'}
                                                  value_show2={'apellidos'}
                                                  control={control}
                                                  isRequired={false}
-
                                     />
                                     <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                                  data={cargoPresupuesto}
@@ -464,7 +496,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                         )}
                                     />
                                     <FormLabel sx={{ mx: 2}} component="legend">Gasto en comida</FormLabel>
-                                    <CheckBoxPersonalizate data={aperitivo} control={control} />
+                                    <CheckBoxPersonalizate data={aperitivo} control={control} disabledCheckBox={disabledCheckBox}/>
                                 </div>
 
                                 <div>
@@ -520,8 +552,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                             <div className={'mt-3'}>
                                 <TextField
                                     id="outlined-required"
-                                    label="Labor a Realizar"
                                     defaultValue=""
+                                    helperText="Labor"
                                     type='text'
                                     sx={{ m: 2, width: '92%' }}
                                     {...register("labor")}
@@ -531,8 +563,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                 <TextField
                                     id="outlined-required"
                                     type='text'
-                                    label="Observaciones"
-                                    sx={{ m: 2, width: '92%' }}
+                                    helperText="Observaciones"
+                                    sx={{ mx: 2, width: '92%' }}
                                     {...register("observaciones")}
                                 />
                             </div>

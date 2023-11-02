@@ -7,11 +7,11 @@ import axios from "axios";
 import {modelo_endpoint} from "../constants/apiRoutes";
 
 
-const CardDescription = () => {
-    const [pendientes, setPendientes] = React.useState('');
+const CardDescription = ({everySolicitudes}) => {
+    const tipo_1 = (everySolicitudes.filter((solicitud) => solicitud.tipo_sol === 1)).length;
+    const tipo_2 = (everySolicitudes.filter((solicitud) => solicitud.tipo_sol === 2)).length;
     const [archivadas, setArchiadas] = React.useState('');
     const [canceladas, setCanceladas] = React.useState([]);
-    const [autorizadas, setAutorizadas] = React.useState('');
 
     const getModels = async () => {
 
@@ -22,9 +22,7 @@ const CardDescription = () => {
                 const data = response.data;
 
                 setCanceladas( (data.filter(objeto => objeto.estado === "Cancelado") ));
-                setPendientes(data.filter(objeto => objeto.estado === "PendienteSolicitar"  ));
                 setArchiadas(data.filter(objeto => objeto.estado === "PendienteAnticipo" || objeto.estado === "Archivada"  ));
-                setAutorizadas(data.filter(objeto => objeto.estado === "PendienteAutorizo"  ));
             })
     }
 
@@ -38,20 +36,20 @@ const CardDescription = () => {
             <Card sx={{ minWidth: 220 }} className='my-3'>
                 <CardContent>
                     <Typography svariant="h5" className='text-primary ' gutterBottom>
-                        <b>Solicitudes pendientes</b>
+                        <b>Solicitudes de Dieta</b>
                     </Typography>
                     <Typography variant="h6" component="div">
-                        {pendientes.length}
+                        {tipo_1}
                     </Typography>
                 </CardContent>
             </Card>
             <Card sx={{ minWidth: 220 }} className='my-3'>
                 <CardContent>
                     <Typography svariant="h5" className='text-primary ' gutterBottom>
-                        <b>Solicitudes por autorizar</b>
+                        <b>Solicitudes por DPH</b>
                     </Typography>
                     <Typography variant="h6" component="div">
-                        {autorizadas.length}
+                        {tipo_2}
                     </Typography>
                 </CardContent>
             </Card>

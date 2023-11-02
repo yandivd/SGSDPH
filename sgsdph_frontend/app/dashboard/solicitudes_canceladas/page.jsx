@@ -55,6 +55,7 @@ export default function SolicitudesCanceladas() {
     const [globalFilter, setGlobalFilter] = useState('');
     const router = useRouter();
     const [value, setValue] = React.useState(0);
+    const [loading, setLoading] = useState(true);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -68,6 +69,7 @@ export default function SolicitudesCanceladas() {
             .then(response => {
                 const data = response.data.filter(objeto => objeto.estado === "Cancelado" );
                 setModels(data);
+                setLoading(false);
             })
     }
 
@@ -103,6 +105,7 @@ export default function SolicitudesCanceladas() {
                            rowsPerPageOptions={[5, 10, 25, 50]}
                            tableStyle={{ minWidth: '50rem' }}
                            globalFilter={globalFilter}
+                           loading={loading}
                 >
                     <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>

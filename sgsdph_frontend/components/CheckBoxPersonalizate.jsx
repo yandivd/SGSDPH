@@ -5,7 +5,7 @@ import React from "react";
 import {Controller} from "react-hook-form";
 
 
-const CheckBoxPersonalizate = ({data, control}) => {
+const CheckBoxPersonalizate = ({data, control, disabledCheckBox}) => {
     return (
         <FormGroup sx={{ m: 2, py: 1, px: 2, width: '300px', border: '1px solid #ccc' }}>
             { data.map( (data) => (
@@ -13,10 +13,11 @@ const CheckBoxPersonalizate = ({data, control}) => {
                     key={data.id}
                     name={`checkbox_${data.id}`} // Asigna un nombre único para cada campo Checkbox
                     control={control}
-                    defaultValue= '' // Valor inicial del campo Checkbox
+                    defaultValue={''} // Usar los valores predefinidos
                     render={({ field }) => (
                         <FormControlLabel
                             key={data.id}
+                            disabled={disabledCheckBox}
                             control={
                                 <Checkbox
                                     {...field}

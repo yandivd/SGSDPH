@@ -30,6 +30,8 @@ export default function CrearSolicitudDHP() {
     const [rol, setRol] = React.useState(0);
     const [show, setShow] = React.useState(false);
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
+
 
     const handleRefreshSolicitudes = () => {
         setRefreshSolicitudes(!refreshSolicitudes)
@@ -61,6 +63,16 @@ export default function CrearSolicitudDHP() {
                     gastos_comida += ','
                 }
             }
+        }
+        try {
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
+            )
+                .then(response => {
+                    setModelos(response.data);
+                })
+        } catch (error) {
+            console.log(error)
         }
 
         const dataModel = {
@@ -113,14 +125,8 @@ export default function CrearSolicitudDHP() {
             )
                 .then(response => {
                     setSolicitudes(response.data);
-                    setLength(solicitudes.length)
-                })
-
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
-            )
-                .then(response => {
-                    setModelos(response.data);
+                    setLength(solicitudes.length);
+                    setLoading(false);
                 })
         } catch (error) {
             console.log(error)
@@ -145,19 +151,24 @@ export default function CrearSolicitudDHP() {
     return (
         <div>
             <div className='d-flex justify-content-end my-2'>
-                <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>            </div>
+                <Button variant="contained" onClick={handleClickOpen}>+ Agregar Solicitud</Button>
+            </div>
 
-            <CreateSDHPModal isOpen={open}
-                           handleClose={handleClickOpen}
-                           solicitudes={solicitudes}
-                           refreshFunction={handleRefreshSolicitudes}
-                           length={length}
-            />
+            { open &&
+                <CreateSDHPModal isOpen={open}
+                                 handleClose={handleClickOpen}
+                                 solicitudes={solicitudes}
+                                 refreshFunction={handleRefreshSolicitudes}
+                                 length={length}
+                />
+            }
+
             <p className={'text-secondary my-3 ms-2'}>Listado de solicitudes de dietas, hospedaje y pasaje</p>
 
             <DataSDPHTable
                 solicitudes={solicitudes}
                 refreshFunction={handleRefreshSolicitudes}
+                loading={loading}
             />
 
             <Button variant="contained"  color='success' onClick={handleClickOpenGenerateModal} >Generar modelo</Button>

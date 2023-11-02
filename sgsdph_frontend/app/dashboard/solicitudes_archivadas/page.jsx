@@ -60,6 +60,8 @@ export default function Solicitudesrchivadas() {
     const [globalFilter, setGlobalFilter] = useState('');
     const router = useRouter();
     const [value, setValue] = React.useState(0);
+    const [loading, setLoading] = useState(true);
+
 
     const getModels = async () => {
 
@@ -68,8 +70,8 @@ export default function Solicitudesrchivadas() {
         )
             .then(response => {
                 const data = response.data.filter(objeto => objeto.estado === "PendienteAnticipo" || objeto.estado === "Archivada"  );
-
                 setModels(data);
+                setLoading(false);
             })
     }
 
@@ -108,20 +110,8 @@ export default function Solicitudesrchivadas() {
                            rowsPerPageOptions={[5, 10, 25, 50]}
                            tableStyle={{ minWidth: '50rem' }}
                            globalFilter={globalFilter}
+                           loading={loading}
                 >
-                    <Column
-                        field="tipo_model"
-                        header="Tipo de modelo"
-                        sortable
-                        style={{ width: '30%' }}
-                        body={(rowData) => {
-                            if (rowData.tipo_model === 1) {
-                                return 'Dieta';
-                            } else {
-                                return 'Dieta, Pasaje y Hospedaje';
-                            }
-                        }}
-                    ></Column>
                     <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
                     <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>

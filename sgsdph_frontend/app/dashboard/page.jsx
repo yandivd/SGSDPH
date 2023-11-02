@@ -24,6 +24,7 @@ export default function BasicCard() {
     const [everySolicitudes, setEverySolicitudes] = useState([]);
     const [globalFilter, setGlobalFilter] = useState('');
     const [rol, setRol] = React.useState(0);
+    const [loading, setLoading] = useState(true);
 
 
     const handleClickOpen = () => {
@@ -39,6 +40,7 @@ export default function BasicCard() {
             )
                 .then(response => {
                     setEverySolicitudes(response.data);
+                    setLoading(false);
                 })
 
         } catch (error) {
@@ -47,15 +49,13 @@ export default function BasicCard() {
     }
 
     useEffect( () => {
-
-        getData()
-
+        getData();
     }, [])
 
 
     return (
         <div>
-            <CardDescription />
+            <CardDescription everySolicitudes={everySolicitudes} />
 
             <div className='d-flex justify-content-between my-2'>
                 <div>
@@ -85,6 +85,7 @@ export default function BasicCard() {
                        rowsPerPageOptions={[5, 10, 25, 50]}
                        tableStyle={{ minWidth: '50rem' }}
                        globalFilter={globalFilter}
+                       loading={loading}
             >
                 <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(everySolicitudes) => (
                     <div>{everySolicitudes.trabajador.nombre} {everySolicitudes.trabajador.apellidos}</div>

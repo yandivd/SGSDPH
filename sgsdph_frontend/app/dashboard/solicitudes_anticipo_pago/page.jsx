@@ -64,6 +64,7 @@ export default function SolicitudesAnticipoPago() {
     const [rol, setRol] = React.useState(0);
     const [show, setShow] = React.useState(false);
     const [value, setValue] = React.useState(0);
+    const [loading, setLoading] = useState(true);
 
     const handleViewModel = (id) => {
         router.push(`/previsualizar-model/${id}`);
@@ -77,6 +78,7 @@ export default function SolicitudesAnticipoPago() {
             .then(response => {
                 const data = response.data.filter(objeto => objeto.estado === "PendienteAnticipo" );
                 setModels(data);
+                setLoading(false);
             })
     }
     const actionBodyTemplate = (rowData) => {
@@ -113,20 +115,8 @@ export default function SolicitudesAnticipoPago() {
                            rowsPerPageOptions={[5, 10, 25, 50]}
                            tableStyle={{ minWidth: '50rem' }}
                            globalFilter={globalFilter}
+                           loading={loading}
                 >
-                    <Column
-                        field="tipo_model"
-                        header="Tipo de modelo"
-                        sortable
-                        style={{ width: '30%' }}
-                        body={(rowData) => {
-                            if (rowData.tipo_model === 1) {
-                                return 'Dieta';
-                            } else {
-                                return 'Dieta, Pasaje y Hospedaje';
-                            }
-                        }}
-                    ></Column>
                     <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
                     <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>

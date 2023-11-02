@@ -32,94 +32,87 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, errors } = useForm();
+    const { register, control, handleSubmit, setValue } = useForm();
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
-        getDataForm()
+        if(isOpen){
+            getDataForm();
+        }
 
-    }, [solicitudes, length])
+    }, [control, isOpen])
 
     const getDataForm = async () => {
-        if(solicitudes.length > 0 && length !== null){
+        try {
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
+            )
+                .then(response => {
+                    setSolicita((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
+            )
+                .then(response => {
+                    setAutoriza((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
+            )
+                .then(response => {
+                    setCcosto((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
+            )
+                .then(response => {
+                    setCargoPresupuesto((response.data));
+                })
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
+            )
+                .then(response => {
+                    setTrabajadores((response.data));
+                })
 
-            const first_solicitud =  solicitudes[0]
-            setSolicita([{
-                'username': first_solicitud.solicitante.username,
-                'id': first_solicitud.solicitante.id
-            }])
-            setCcosto([{
-                'name': first_solicitud.c_contable.name,
-                'id': first_solicitud.c_contable.id
-            }])
-            setCargoPresupuesto([{
-                'account': first_solicitud.cargo_presupuesto.account,
-                'id': first_solicitud.cargo_presupuesto.id
-            }])
-            setAutoriza([{
-                'username': first_solicitud.autoriza.username,
-                'id': first_solicitud.autoriza.id
-            }])
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
             )
                 .then(response => {
                     setAperitivo((response.data));
                 })
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint
-            )
-                .then(response => {
-                    setTrabajadores((response.data));
-                })
-        }else{
 
-            if(length !== null){
-                try {
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + solicita_endpoint
-                    )
-                        .then(response => {
-                            setSolicita((response.data));
-                        })
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + autoriza_endpoint
-                    )
-                        .then(response => {
-                            setAutoriza((response.data));
-                        })
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + ccosto_endpoint
-                    )
-                        .then(response => {
-                            setCcosto((response.data));
-                        })
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + cargo_presupuesto_endpoint
-                    )
-                        .then(response => {
-                            setCargoPresupuesto((response.data));
-                        })
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + personas_endpoint
-                    )
-                        .then(response => {
-                            setTrabajadores((response.data));
-                        })
-
-                    await axios.get(
-                        process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
-                    )
-                        .then(response => {
-                            setAperitivo((response.data));
-                        })
-
-                } catch (error) {
-                    console.log(error)
-                }
-            }
+        } catch (error) {
+            console.log(error)
         }
+
+        loadingValues();
     }
+
+
+    const loadingValues = () => {
+        setValue('solicitante', solicitudes.solicitante.id);
+        setValue('autoriza', solicitudes.autoriza.id);
+        setValue('trabajador', solicitudes.trabajador.id);
+        setValue('c_contable', solicitudes.c_contable.id);
+        solicitudes.aperitivo.forEach((valor) => {
+            setValue(`checkbox_${valor.id}`, valor.id);
+        }, []);
+
+        const index_provincia =  (municipios.findIndex((provincia) => provincia[0] === solicitudes.provincia))
+        setValue('provincia',index_provincia);
+        const index_prov_destino = (municipios.findIndex((provincia) => provincia[0] === solicitudes.prov_destino))
+        setValue('prov_destino',index_prov_destino);
+        /*  setValue('origen', solicitudes.origen);
+          setValue('prov_origen', 'Regla');
+          setValue('regreso', 'Regla');*/
+
+        if ( solicitudes.parleg !== null){
+            setValue('parleg', solicitudes.parleg.id);
+        }
+        setValue('cargo_presupuesto', solicitudes.cargo_presupuesto.id);
+    }
+
 
     const handleProvinciaOrigenChange = (event) => {
         const selectedProvincia = event.target.value;
@@ -238,6 +231,7 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
             }
         }
     }
+
     return (
         <div>
             <Dialog
@@ -518,21 +512,22 @@ const EditSDPHModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
 
                         <div className={'mt-3'}>
                             <TextField
-                                id="outlined-required"
+                                id="labor"
                                 label="Labor a Realizar"
-                                defaultValue=""
                                 type='text'
+                                defaultValue={solicitudes.labor}
                                 sx={{ m: 2, width: '92%' }}
                                 {...register("labor")}
                             />
                         </div>
                         <div className={'mt-3'}>
                             <TextField
-                                id="outlined-required"
+                                id='observaciones'
+                                label='Observaciones'
+                                defaultValue={solicitudes.observaciones}
                                 type='text'
-                                label="Observaciones"
                                 sx={{ m: 2, width: '92%' }}
-                                {...register("observaciones")}
+                                {...register('observaciones' )}
                             />
                         </div>
                         {errorMessage && <div className='error-message text-danger ms-3'>{errorMessage}</div>}
