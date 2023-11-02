@@ -77,7 +77,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                 setParleg([{
                     'nombre': first_solicitud.parleg.nombre,
                     'apellidos': first_solicitud.parleg.apellidos,
-                    'id': first_solicitud.autoriza.id
+                    'id': first_solicitud.parleg.id
                 }])
             }
 
@@ -144,6 +144,9 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
             }
         }
     }
+
+    console.log(trabajadores);
+    console.log(parleg)
 
     const handleProvinciaOrigenChange = (event) => {
         const selectedProvincia = event.target.value;
@@ -265,6 +268,8 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
         setValue('c_contable', first_solicitud.c_contable.id);
         setValue('cargo_presupuesto', first_solicitud.cargo_presupuesto.id);
         setValue('autoriza', first_solicitud.autoriza.id);
+        setValue('labor', first_solicitud.labor);
+        setValue('observaciones', first_solicitud.observaciones);
 
         if ( first_solicitud.parleg !== null){
             setValue('parleg', first_solicitud.parleg.id);
@@ -519,7 +524,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                         <div className={'mt-3'}>
                             <TextField
                                 id="outlined-required"
-                                label="Labor a Realizar"
+                                helperText="Labor"
                                 type='text'
                                 defaultValue=""
                                 sx={{ m: 2, width: '92%' }}
@@ -529,9 +534,9 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                         <div className={'mt-3'}>
                             <TextField
                                 id="outlined-required"
-                                label="Observaciones"
+                                helperText="Observaciones"
                                 type='text'
-                                sx={{ m: 2, width: '92%' }}
+                                sx={{ mx: 2, width: '92%' }}
                                 {...register("observaciones")}
                             />
                         </div>

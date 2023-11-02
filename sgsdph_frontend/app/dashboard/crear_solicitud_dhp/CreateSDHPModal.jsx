@@ -33,7 +33,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, errors } = useForm();
+    const { register, control, handleSubmit, setValue } = useForm();
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
@@ -66,6 +66,13 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                 'last_name': first_solicitud.autoriza.last_name,
                 'id': first_solicitud.autoriza.id
             }])
+            if ( first_solicitud.parleg !== null){
+                setParleg([{
+                    'nombre': first_solicitud.parleg.nombre,
+                    'apellidos': first_solicitud.parleg.apellidos,
+                    'id': first_solicitud.parleg.id
+                }])
+            }
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
             )
@@ -78,13 +85,9 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                 .then(response => {
                     setTrabajadores((response.data));
                 })
-            setParleg([{
-                'nombre': first_solicitud.parleg.nombre,
-                'apellido': first_solicitud.parleg.apellido,
-                'id': first_solicitud.autoriza.id
-            }])
-        }else{
 
+            loadingValues(first_solicitud);
+        }else{
             if(length !== null){
                 try {
                     await axios.get(
@@ -133,6 +136,19 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
         }
     }
 
+    const loadingValues= (first_solicitud) => {
+        setValue('solicitante', first_solicitud.solicitante.id);
+        setValue('c_contable', first_solicitud.c_contable.id);
+        setValue('cargo_presupuesto', first_solicitud.cargo_presupuesto.id);
+        setValue('autoriza', first_solicitud.autoriza.id);
+        setValue('labor', first_solicitud.labor);
+        setValue('observaciones', first_solicitud.observaciones);
+
+        if ( first_solicitud.parleg !== null){
+            setValue('parleg', first_solicitud.parleg.id);
+
+        }
+    }
     const handleProvinciaOrigenChange = (event) => {
         const selectedProvincia = event.target.value;
         setProvinciaOrigen(selectedProvincia);
@@ -320,7 +336,6 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                                  value_show2={'apellidos'}
                                                  control={control}
                                                  isRequired={false}
-
                                     />
                                     <FieldSelect name_label={'Con Cargo al Presupuesto:'}
                                                  data={cargoPresupuesto}
@@ -530,8 +545,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                             <div className={'mt-3'}>
                                 <TextField
                                     id="outlined-required"
-                                    label="Labor a Realizar"
                                     defaultValue=""
+                                    helperText="Labor"
                                     type='text'
                                     sx={{ m: 2, width: '92%' }}
                                     {...register("labor")}
@@ -541,8 +556,8 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                                 <TextField
                                     id="outlined-required"
                                     type='text'
-                                    label="Observaciones"
-                                    sx={{ m: 2, width: '92%' }}
+                                    helperText="Observaciones"
+                                    sx={{ mx: 2, width: '92%' }}
                                     {...register("observaciones")}
                                 />
                             </div>
