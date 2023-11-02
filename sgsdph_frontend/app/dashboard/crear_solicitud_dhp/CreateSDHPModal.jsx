@@ -27,6 +27,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
     const [ccosto, setCcosto] = React.useState([]);
     const [cargoPresupuesto, setCargoPresupuesto] = React.useState([]);
     const [trabajadores, setTrabajadores] = React.useState([]);
+    const [parleg, setParleg] = React.useState([]);
     const [aperitivo, setAperitivo] = React.useState([]);
     const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
@@ -77,6 +78,11 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                 .then(response => {
                     setTrabajadores((response.data));
                 })
+            setParleg([{
+                'nombre': first_solicitud.parleg.nombre,
+                'apellido': first_solicitud.parleg.apellido,
+                'id': first_solicitud.autoriza.id
+            }])
         }else{
 
             if(length !== null){
@@ -110,6 +116,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
                     )
                         .then(response => {
                             setTrabajadores((response.data));
+                            setParleg((response.data));
                         })
 
                     await axios.get(
@@ -307,7 +314,7 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
 
                                     />
                                     <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
-                                                 data={trabajadores}
+                                                 data={parleg}
                                                  name={'parleg'}
                                                  value_show1={'nombre'}
                                                  value_show2={'apellidos'}

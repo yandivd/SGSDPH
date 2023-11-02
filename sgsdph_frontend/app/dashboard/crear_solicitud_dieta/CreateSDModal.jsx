@@ -18,11 +18,8 @@ import {
 import axios from "axios";
 import {municipios} from "../../../constants/municipios";
 import {Controller, useForm} from "react-hook-form";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import CheckBoxPersonalizate from "../../../components/CheckBoxPersonalizate";
 import {fetchSinToken} from "../../../helper/fetch";
-import {activeUser} from "../../../redux/features/auth/authSlice";
 import Swal from "sweetalert2"
 
 
@@ -34,12 +31,13 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
     const [ccosto, setCcosto] = React.useState([]);
     const [cargoPresupuesto, setCargoPresupuesto] = React.useState([]);
     const [trabajadores, setTrabajadores] = React.useState([]);
+    const [parleg, setParleg] = React.useState([]);
     const [aperitivo, setAperitivo] = React.useState([]);
     const [provinciaOrigen, setProvinciaOrigen] = React.useState(0);
     const [provinciaDestino, setProvinciaDestino] = React.useState(0);
     const [municipiosOrigen, setMunicipiosOrigen] = React.useState([]);
     const [municipiosDestino, setMunicipiosDestino] = React.useState([]);
-    const { register, control, handleSubmit, formState: { errors }  } = useForm();
+    const { register, control, handleSubmit, formState: { errors } , setValue } = useForm();
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect( () => {
@@ -51,26 +49,38 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
 
     const getDataForm = async () => {
         if(solicitudes.length > 0 && length !== null){
+            const first_solicitud =  solicitudes[0];
 
-            const first_solicitud =  solicitudes[0]
             setSolicita([{
                 'first_name': first_solicitud.solicitante.first_name,
                 'last_name': first_solicitud.solicitante.last_name,
                 'id': first_solicitud.solicitante.id
             }])
+
             setCcosto([{
                 'name': first_solicitud.c_contable.name,
                 'id': first_solicitud.c_contable.id
             }])
+
             setCargoPresupuesto([{
                 'account': first_solicitud.cargo_presupuesto.account,
                 'id': first_solicitud.cargo_presupuesto.id
             }])
+
             setAutoriza([{
                 'first_name': first_solicitud.autoriza.first_name,
                 'last_name': first_solicitud.autoriza.last_name,
                 'id': first_solicitud.autoriza.id
             }])
+
+            if ( first_solicitud.parleg !== null){
+                setParleg([{
+                    'nombre': first_solicitud.parleg.nombre,
+                    'apellidos': first_solicitud.parleg.apellidos,
+                    'id': first_solicitud.autoriza.id
+                }])
+            }
+
             await axios.get(
                 process.env.NEXT_PUBLIC_API_HOST + aperitivos_endpoint
             )
@@ -83,6 +93,8 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                 .then(response => {
                     setTrabajadores((response.data));
                 })
+
+            loadingValues(first_solicitud);
         }else{
 
             if(length !== null){
@@ -116,6 +128,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                     )
                         .then(response => {
                             setTrabajadores((response.data));
+                            setParleg((response.data));
                         })
 
                     await axios.get(
@@ -230,8 +243,6 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
             }else{
                 try {
                     const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
-                    const body = await resp.json();
-
 
                     if (resp.status === 201) {
                         Swal.fire('Exito', "Se ha creado correctamente", 'success');
@@ -246,6 +257,17 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
                 }
                 handleClose();
             }
+        }
+    }
+
+    const loadingValues= (first_solicitud) => {
+        setValue('solicitante', first_solicitud.solicitante.id);
+        setValue('c_contable', first_solicitud.c_contable.id);
+        setValue('cargo_presupuesto', first_solicitud.cargo_presupuesto.id);
+        setValue('autoriza', first_solicitud.autoriza.id);
+
+        if ( first_solicitud.parleg !== null){
+            setValue('parleg', first_solicitud.parleg.id);
         }
     }
 
@@ -446,7 +468,7 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
 
                             <div>
                                 <FieldSelect name_label={'Persona autorizada a Recibir y Loquidar el efectivo del grupo:'}
-                                             data={trabajadores}
+                                             data={parleg}
                                              name={'parleg'}
                                              value_show1={'nombre'}
                                              value_show2={'apellidos'}
