@@ -49,7 +49,7 @@ class Solicitud(models.Model):
     aperitivo = models.ManyToManyField(Aperitivo)
     labor=models.CharField(max_length=500, blank=True, null=True)
     # para el anticipo #
-    dias_estimadods = models.IntegerField(null=True, blank=True)
+    dias_estimados = models.IntegerField(null=True, blank=True)
     importe_dieta = models.DecimalField(decimal_places=2,max_digits=9, null=True, blank=True)
 
     def __str__(self):

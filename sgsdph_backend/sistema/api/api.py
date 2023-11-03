@@ -20,6 +20,18 @@ def solicitud_api_view(request):
 
             ### calcular el importe_dieta ###
             from sistema.views import calcular_importe
+            from datetime import datetime
+            fecha1 = datetime.strptime(str(solicitud.fecha_inicio_dieta), '%Y-%m-%d')
+            fecha2 = datetime.strptime(str(solicitud.fecha_final_dieta), '%Y-%m-%d')
+
+            # Calcula la diferencia en días
+            diferencia = fecha2 - fecha1
+
+            # Extrae el número de días de la diferencia
+            dias = diferencia.days+1
+            print(dias)
+            solicitud.dias_estimados = dias
+            solicitud.save()
             calcular_importe(solicitud)
 
             ### fin ###
