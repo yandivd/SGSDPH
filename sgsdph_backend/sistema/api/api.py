@@ -193,7 +193,26 @@ def modelo_api_view(request):
                 solicitud.estado = 'Ok'
                 solicitud.save()
 
-            modelo_serializer.save()
+            modelo = modelo_serializer.save()
+            try:
+                nombre_completo = modelo.nombre
+                # Divide la cadena en palabras
+                palabras = nombre_completo.split()
+
+                # Los dos últimos elementos son los apellidos
+                apellidos = ' '.join(palabras[-2:])
+
+                # El resto de las palabras es el nombre
+                nombre = ' '.join(palabras[:-2])
+                # Busca al trabajador por nombre y apellido
+                print('Nombre: '+ nombre)
+                print('Apellidos: '+ apellidos)
+                creador = Trabajador.objects.filter(first_name=nombre, last_name=apellidos).first()
+                modelo.firma_crea = creador.firma
+                modelo.save()
+                print('Firmado por el creador')
+            except Exception as e:
+                print(e)
             return Response(modelo_serializer.data, status=status.HTTP_201_CREATED)
         return Response(modelo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

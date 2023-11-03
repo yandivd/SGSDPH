@@ -46,3 +46,4 @@ mysql
 sgsdph_backend/static
 sgsdph_backend/sistema/api/__pycache__
 package-lock.json
+sgsdph_backend/media
