@@ -107,7 +107,5 @@ class Anticipo(models.Model):
     fecha = models.DateField(auto_now_add=True)
     dias_estimados = models.IntegerField()
     alimentacion_costo = models.DecimalField(decimal_places=2, max_digits=9)
-    hospedaje_costo = models.DecimalField(decimal_places=2, max_digits=9, null=True, blank=True)
-    transporte_costo = models.DecimalField(decimal_places=2, max_digits=9, null=True, blank=True)
     desayuno_costo = models.DecimalField(decimal_places=2,  max_digits=9, null=True, blank=True)
     total = models.DecimalField(decimal_places=2, max_digits=9)
