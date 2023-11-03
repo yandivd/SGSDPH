@@ -14,12 +14,16 @@ def solicitud_api_view(request):
         serializer = SolicitudSerializerGET(solicitudes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        print(request.data)
         sol_serializer = SolicitudSerializer(data=request.data)
-        print(sol_serializer)
         if sol_serializer.is_valid():
-            print('valid')
-            sol_serializer.save()
+            solicitud=sol_serializer.save()
+
+            ### calcular el importe_dieta ###
+            from sistema.views import calcular_importe
+            calcular_importe(solicitud)
+
+            ### fin ###
+
             return Response(sol_serializer.data, status=status.HTTP_201_CREATED)
         return Response(SolicitudSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
