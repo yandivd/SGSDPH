@@ -239,6 +239,13 @@ const CreateSdModal = ({isOpen, handleClose, solicitudes, refreshFunction, lengt
             data.numero = solicitudes.length + 1;      // Agregar el campo "numero de solicitud"
             data.unidad_organizativa = unidad_organizativa;      // Agregar el campo "numero de solicitud"
 
+            var fecha1 = new Date(data.fecha_final_dieta);
+            var fecha2 = new Date(data.fecha_inicio_dieta);
+            const diferenciaEnMilisegundos =fecha1 - fecha2 ;
+
+            data.dias_estimados = Math.floor(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
+            data.importe_dieta = 0;
+
             if( aperitivo.length === 0){
                 setErrorMessage('Tiene que marcar al menos un tipo de gasto en comida ')
 

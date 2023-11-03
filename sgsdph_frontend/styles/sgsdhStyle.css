@@ -58,10 +58,10 @@
     color: dodgerblue;
 }
 
-.tableAnticipo th td{
+.tableAnticipo th, td {
     border: 0.5px solid #000;
     margin-top: 2rem;
-    font-size: 14px;
+    font-size: 11pt;
     padding: 1px;
-    background-color: red;
+    font-weight: normal;
 }

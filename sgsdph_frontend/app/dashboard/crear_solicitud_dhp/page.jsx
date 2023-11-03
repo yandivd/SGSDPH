@@ -99,7 +99,6 @@ export default function CrearSolicitudDHP() {
 
         try {
             const resp = await fetchSinToken(modelo_endpoint, dataModel, "POST");
-            const body = await resp.json();
 
             if (resp.status === 201) {
                 Swal.fire('Exito', "Se ha creado correctamente", 'success');
