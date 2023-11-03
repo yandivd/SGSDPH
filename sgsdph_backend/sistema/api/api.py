@@ -256,3 +256,27 @@ def solicitudes_todas_api_view(request):
         solicitudes = Solicitud.objects.all()
         solicitudes_serializer = SolicitudSerializerGET(solicitudes, many=True)
         return Response(solicitudes_serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET', 'POST'])
+def anticipo_api_view(request):
+    if request.method == 'GET':
+        anticipos = Anticipo.objects.all()
+        anticipos_serializer = AnticipoSerializerGET(anticipos, many=True)
+        return Response(anticipos_serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        anticipo_serializer = AnticipoSerializer(data=request.data)
+        if anticipo_serializer.is_valid():
+            anticipo_serializer.save()
+            return Response(anticipo_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(anticipo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+@api_view(['GET'])
+def anticipo_detail_api_view(request, id):
+    try:
+        anticipo = Anticipo.objects.get(id=id)
+    except:
+        return Response({'error':'Anticipo no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        anticipo_serializer = AnticipoSerializerGET(anticipo)
+        return Response(anticipo_serializer.data, status=status.HTTP_200_OK)
