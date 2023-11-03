@@ -45,3 +45,4 @@ sgsdph_backend/autentic/api/__pycache__/serializers.cpython-311.pyc
 mysql
 sgsdph_backend/static
 sgsdph_backend/sistema/api/__pycache__
+package-lock.json
