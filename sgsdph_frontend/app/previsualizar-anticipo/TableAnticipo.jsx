@@ -199,7 +199,6 @@ const TableAnticipo = () => {
                     </tr>
                 </thead>
             </table>
-
             <br/>
         </div>
     );
