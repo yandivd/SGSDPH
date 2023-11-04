@@ -4,7 +4,7 @@ import styles from '/app/previsualizar-anticipo/TableTrabajadores.module.css'
 
 const TableTrabajadores = ({anticipo}) => {
     return (
-        <div>
+        <div className={'mt-4'}>
             <p>Desglose de dietas en efectivo CUP por trabajador</p>
 
             <table className={ styles.tableAnticipoTrabajador}>

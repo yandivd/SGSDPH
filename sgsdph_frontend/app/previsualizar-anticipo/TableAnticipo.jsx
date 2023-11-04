@@ -217,7 +217,6 @@ const TableAnticipo = ({anticipo}) => {
                     </tr>
                 </thead>
             </table>
-            <br/>
         </div>
     );
 };

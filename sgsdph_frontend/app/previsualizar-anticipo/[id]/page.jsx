@@ -66,8 +66,6 @@ const Page = ({params}) => {
 
     }, [show])
 
-    console.log(show)
-    console.log(anticipo)
 
     if (isActive === null ) {
         return (
@@ -75,11 +73,13 @@ const Page = ({params}) => {
         )
     }
     return (
-        <div className={'p-5'} style={{ width: 'max-content' }}>
+        <div className={'p-3'} style={{ width: 'max-content', margin: 'auto' }}>
 
             { anticipo.length !== 0 &&
                 <div>
+
                     <TableAnticipo anticipo={anticipo} />
+
 
                     <TableTrabajadores anticipo={anticipo} />
                 </div>
