@@ -54,7 +54,7 @@ class Solicitud(models.Model):
     importe_desayuno = models.DecimalField(decimal_places=2,max_digits=9, null=True, blank=True)
 
     def __str__(self):
-        return str(self.numero)
+        return str(self.solicitante)
 
     class Meta:
         verbose_name="Solicitud"
@@ -105,6 +105,7 @@ class PARLEG(models.Model):
 
 class Anticipo(models.Model):
     modelo = models.ForeignKey(Modelo, on_delete=models.CASCADE)
+    consec=models.CharField(max_length=8, null=True, blank=True)
     fecha = models.DateField(auto_now_add=True)
     dias_estimados = models.IntegerField(null=True, blank=True)
     alimentacion_costo = models.DecimalField(decimal_places=2, max_digits=9, null=True, blank=True)
