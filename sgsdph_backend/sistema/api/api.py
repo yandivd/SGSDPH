@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from autentic.models import *
 from autentic.api.serializers import *
+import datetime
 
 #### Solicitudes de Dietas ####
 @api_view(['GET', 'POST'])
@@ -286,7 +287,11 @@ def anticipo_api_view(request):
                 (anticipo.alimentacion_costo or 0) +
                 (anticipo.desayuno_costo or 0)
             )
-
+            # calc consec #
+            anticipos_existentes = Anticipo.objects.all().count()
+            consec = str(str(anticipos_existentes)+'-'+str(datetime.datetime.today().year))
+            anticipo.consec = consec
+            # end #
             anticipo.save()
             return Response(anticipo_serializer.data, status=status.HTTP_201_CREATED)
         else:
