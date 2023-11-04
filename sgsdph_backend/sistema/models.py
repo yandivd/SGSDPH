@@ -51,6 +51,7 @@ class Solicitud(models.Model):
     # para el anticipo #
     dias_estimados = models.IntegerField(null=True, blank=True)
     importe_dieta = models.DecimalField(decimal_places=2,max_digits=9, null=True, blank=True)
+    importe_desayuno = models.DecimalField(decimal_places=2,max_digits=9, null=True, blank=True)
 
     def __str__(self):
         return str(self.numero)
@@ -105,9 +106,7 @@ class PARLEG(models.Model):
 class Anticipo(models.Model):
     modelo = models.ForeignKey(Modelo, on_delete=models.CASCADE)
     fecha = models.DateField(auto_now_add=True)
-    dias_estimados = models.IntegerField()
-    alimentacion_costo = models.DecimalField(decimal_places=2, max_digits=9)
-    hospedaje_costo = models.DecimalField(decimal_places=2, max_digits=9, null=True, blank=True)
-    transporte_costo = models.DecimalField(decimal_places=2, max_digits=9, null=True, blank=True)
+    dias_estimados = models.IntegerField(null=True, blank=True)
+    alimentacion_costo = models.DecimalField(decimal_places=2, max_digits=9, null=True, blank=True)
     desayuno_costo = models.DecimalField(decimal_places=2,  max_digits=9, null=True, blank=True)
-    total = models.DecimalField(decimal_places=2, max_digits=9)
+    total = models.DecimalField(decimal_places=2, max_digits=9, null=True, blank=True)
