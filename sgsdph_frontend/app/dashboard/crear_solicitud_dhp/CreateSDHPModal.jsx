@@ -257,8 +257,6 @@ const CreateSdhpModal = ({isOpen, handleClose, solicitudes, refreshFunction, len
             }else{
                 try {
                     const resp = await fetchSinToken(solicitudes_endpoint, data, "POST");
-                    const body = await resp.json();
-
 
                     if (resp.status === 201) {
                         Swal.fire('Exito', "Se ha creado correctamente", 'success');

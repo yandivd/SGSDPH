@@ -1,0 +1,45 @@
+
+.tableAnticipo{
+    border-collapse: collapse; /* Esto elimina los espacios entre las celdas */
+    width: 100%; /* Ancho de la tabla */
+}
+
+.tableAnticipo th, .tableAnticipo td{
+    border: 0.5px solid #000;
+    margin-top: 2rem;
+    text-align: left;
+    font-size: 14px;
+    padding: 1px;
+    font-weight: normal;
+    border-bottom: none!important; /* Esto quita el borde superior */
+}
+
+
+.tableAnticipoSinBorder{
+    border-collapse: collapse; /* Esto elimina los espacios entre las celdas */
+    width: 100%; /* Ancho de la tabla */
+}
+.tableAnticipoSinBorder th, .tableAnticipoSinBorder td{
+    border: 0.5px solid #000;
+    margin-top: 2rem;
+    font-size: 14px;
+    padding: 1px;
+    font-weight: normal;
+}
+
+.ultimoTable{
+    border-collapse: collapse; /* Esto elimina los espacios entre las celdas */
+    width: 100%; /* Ancho de la tabla */
+}
+.ultimoTable th, .ultimoTable td{
+    border: 0.5px solid #000;
+    margin-bottom: 2rem;
+    font-size: 14px;
+    padding: 1px;
+    font-weight: normal;
+}
+
+@page {
+    size: landscape;
+    margin: 0.5cm;
+}

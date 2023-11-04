@@ -1,4 +1,5 @@
 import React from 'react';
+import './stylesTablesModel.css'
 
 const TableDataAll = ({model}) => {
     const solicitudes = model.solicitudes;

@@ -24,7 +24,6 @@ export default function CrearSolicitudDHP() {
     const [open, setOpen] = useState(false);
     const [openGenerateModelo, setOpenGenerateModelo] = useState(false);
     const [solicitudes, setSolicitudes] = React.useState([]);
-    const [modelos, setModelos] = React.useState([]);
     const [refreshSolicitudes, setRefreshSolicitudes] = React.useState(false)
     const [length, setLength] = React.useState(null)
     const [rol, setRol] = React.useState(0);
@@ -50,10 +49,21 @@ export default function CrearSolicitudDHP() {
         const last_name = window.localStorage.getItem('last_name');
 
         var fechaActual = new Date();
-
         var year = fechaActual.getFullYear();
-
         var gastos_comida = '';
+        var length_model = 0;
+
+
+        try {
+            await axios.get(
+                process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
+            )
+                .then(response => {
+                    length_model = (response.data).length
+                })
+        } catch (error) {
+            console.log(error)
+        }
 
         if(firstSolicitud.aperitivo.length > 0){
             gastos_comida = ' Gastos en';
@@ -64,16 +74,6 @@ export default function CrearSolicitudDHP() {
                 }
             }
         }
-        try {
-            await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
-            )
-                .then(response => {
-                    setModelos(response.data);
-                })
-        } catch (error) {
-            console.log(error)
-        }
 
         const dataModel = {
             "tipo_model":2,
@@ -81,12 +81,12 @@ export default function CrearSolicitudDHP() {
             "solicitante": firstSolicitud.solicitante.first_name + ' ' +  firstSolicitud.solicitante.last_name,
             "unidad_organizativa": firstSolicitud.unidad_organizativa.name,
             "c_contable": firstSolicitud.c_contable.name,
-            "consec": ( modelos.length + 1 )+ '/' + year,
+            "consec": ( length_model + 1 )+ '/' + year,
             "solicitudes": solicitudes_id,
             "parleg": (firstSolicitud.parleg === null ? ''  :  firstSolicitud.parleg.nombre + ' ' + firstSolicitud.parleg.apellidos),
             "autoriza": firstSolicitud.autoriza.first_name + ' ' + firstSolicitud.autoriza.last_name ,
             "cargo_presupuesto": firstSolicitud.cargo_presupuesto.account,
-            "observaciones": firstSolicitud.observaciones + gastos_comida,
+            "observaciones": firstSolicitud.observaciones + '.' + gastos_comida,
             "estado":"PendienteSolicitar",
             "telf_solicitante": firstSolicitud.solicitante.telf,
             "cargo_autoriza":firstSolicitud.autoriza.cargo,
@@ -99,7 +99,6 @@ export default function CrearSolicitudDHP() {
 
         try {
             const resp = await fetchSinToken(modelo_endpoint, dataModel, "POST");
-            const body = await resp.json();
 
             if (resp.status === 201) {
                 Swal.fire('Exito', "Se ha creado correctamente", 'success');
