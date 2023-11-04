@@ -280,15 +280,12 @@ def anticipo_api_view(request):
                     alimentacion_costo = primera_solicitud.importe_dieta
                     desayuno_costo = primera_solicitud.importe_desayuno
             anticipo.dias_estimados = dias_estimados
-            anticipo.alimentacion_costo = alimentacion_costo
-            anticipo.desayuno_costo = desayuno_costo
+            anticipo.alimentacion_costo = (alimentacion_costo or 0) * anticipo.modelo.solicitudes.count()
+            anticipo.desayuno_costo = (desayuno_costo or 0) * anticipo.modelo.solicitudes.count()
             anticipo.total = (
-                (anticipo.dias_estimados or 0) *
                 (anticipo.alimentacion_costo or 0) +
-                (anticipo.dias_estimados or 0) *
-                (desayuno_costo or 0)
-            ) * anticipo.modelo.solicitudes.count()
-
+                (anticipo.desayuno_costo or 0)
+            )
 
             anticipo.save()
             return Response(anticipo_serializer.data, status=status.HTTP_201_CREATED)
