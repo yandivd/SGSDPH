@@ -66,17 +66,25 @@ const Page = ({params}) => {
 
     }, [show])
 
+    console.log(show)
+    console.log(anticipo)
+
     if (isActive === null ) {
         return (
             <Loading infoText='Verificando permisos' />
         )
     }
-    console.log(anticipo)
     return (
         <div className={'p-5'} style={{ width: 'max-content' }}>
-           <TableAnticipo anticipo={anticipo}/>
 
-            <TableTrabajadores />
+            { anticipo.length !== 0 &&
+                <div>
+                    <TableAnticipo anticipo={anticipo} />
+
+                    <TableTrabajadores anticipo={anticipo} />
+                </div>
+            }
+
         </div>
     );
 };

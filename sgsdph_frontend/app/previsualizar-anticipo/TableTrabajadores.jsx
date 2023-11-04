@@ -1,41 +1,8 @@
 import React from 'react';
 import styles from '/app/previsualizar-anticipo/TableTrabajadores.module.css'
 
-const test = [
-    {
-        "id": 1,
-        "nombre": "Juan Pérez",
-        "edad": 30,
-        "saldo": 5000.00
-    },
-    {
-        "id": 2,
-        "nombre": "María Rodríguez",
-        "edad": 25,
-        "saldo": 7000.50
-    },
-    {
-        "id": 3,
-        "nombre": "Luis González",
-        "edad": 35,
-        "saldo": 6000.75
-    },
-    {
-        "id": 4,
-        "nombre": "Ana Martínez",
-        "edad": 28,
-        "saldo": 5500.25
-    },
-    {
-        "id": 5,
-        "nombre": "Carlos Sánchez",
-        "edad": 32,
-        "saldo": 8000.00
-    }
-]
 
-
-const TableTrabajadores = () => {
+const TableTrabajadores = ({anticipo}) => {
     return (
         <div>
             <p>Desglose de dietas en efectivo CUP por trabajador</p>
@@ -57,12 +24,12 @@ const TableTrabajadores = () => {
 
 
                 <tbody>
-                {typeof test !== 'undefined' ? test.map((val, index) => (
-                    <tr key={index}>
+                {typeof anticipo.modelo.solicitudes !== 'undefined' ? anticipo.modelo.solicitudes.map((val, id) => (
+                    <tr key={id}>
                         <td style={{ height: '0.21in' }}>{val.id}</td>
-                        <td>{val.nombre}</td>
-                        <td>{val.edad}</td>
-                        <td>{val.saldo}</td>
+                        <td>{val.trabajador.nombre} {val.trabajador.apellidos}</td>
+                        <td>{val.dias_estimados}</td>
+                        <td>{val.importe_dieta}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -74,7 +41,7 @@ const TableTrabajadores = () => {
                     <td>Total</td>
                     <td></td>
                     <td></td>
-                    <td>1234567</td>
+                    <td>{anticipo.total}</td>
                     <td></td>
                     <td></td>
                     <td></td>

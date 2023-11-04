@@ -113,7 +113,7 @@ export default function AnticiposArchivados() {
                            globalFilter={globalFilter}
                            loading={loading}
                 >
-                    <Column field="id" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
+                    <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="fecha" header="Fecha" sortable style={{ width: '15%' }}></Column>
                     <Column field="modelo.unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>
                     <Column field="modelo.c_contable" header="Centro Contable" sortable style={{ width: '25%' }}></Column>
