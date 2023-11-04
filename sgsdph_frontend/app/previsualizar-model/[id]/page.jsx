@@ -74,8 +74,6 @@ const Page = ({params}) => {
         )
     }
 
-    console.log(model)
-
     return (
 
         <div className={'p-4'} style={{ width: 'max-content' }}>

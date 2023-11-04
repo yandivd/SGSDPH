@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './TableAnticipo.module.css'
 import Image from "next/image";
 
-const TableAnticipo = () => {
+const TableAnticipo = ({anticipo}) => {
     return (
         <div>
             <table className={styles.tableAnticipo}>
@@ -10,9 +10,9 @@ const TableAnticipo = () => {
                 <tr>
                     <th style={{ width: '4.18in', height: '1.05in' }} rowSpan={3} >
                         <div className={'d-flex flex-column align-items-start justify-content-start'}>
-                            <span>Centro contable: PONER </span>
-                            <sapn>Areas de Trabajo: PONER </sapn>
-                            <span> Solicitud No.: PONER </span>
+                            <span>Centro contable: {anticipo.modelo.c_contable} </span>
+                            <sapn>Areas de Trabajo: {anticipo.modelo.unidad_organizativa}  </sapn>
+                            <span> Solicitud No.: {anticipo.modelo.c_contable}  </span>
                         </div>
                     </th>
                     <th style={{ width: '5.61in', height: '1.05in' }} rowSpan={3} className={'text-center'}>

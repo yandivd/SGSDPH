@@ -196,6 +196,7 @@ export default function PersistentDrawerLeft({children}) {
             })
     }
 
+
     if (isActive === null ) {
         return (
             <Loading infoText='Verificando permisos' />
@@ -409,7 +410,19 @@ export default function PersistentDrawerLeft({children}) {
                                     <ListItemIcon>
                                         <ArchiveIcon />
                                     </ListItemIcon>
-                                    <ListItemText>Archivadas</ListItemText>
+                                    <ListItemText>Modelos Archivados</ListItemText>
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <Link href={'/dashboard/anticipos_archivados'}
+                                  className={`link-sidebar ${pathname === '/dashboard/anticipos_archivados' ? 'active' : ''}`}
+                            >
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <ArchiveIcon />
+                                    </ListItemIcon>
+                                    <ListItemText>Anticipos Archivados</ListItemText>
                                 </ListItemButton>
                             </Link>
                         </ListItem>
@@ -421,7 +434,7 @@ export default function PersistentDrawerLeft({children}) {
                                     <ListItemIcon>
                                         <CancelIcon />
                                     </ListItemIcon>
-                                    <ListItemText>Canceladas</ListItemText>
+                                    <ListItemText>Modelos Cancelados</ListItemText>
                                 </ListItemButton>
                             </Link>
                         </ListItem>

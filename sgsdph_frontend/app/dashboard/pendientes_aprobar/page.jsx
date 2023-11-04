@@ -129,7 +129,7 @@ export default function PendientesAprobar() {
         setModels(new_models);
 
         const data = {
-            estado: "state"
+            estado: state
         }
 
         try {
