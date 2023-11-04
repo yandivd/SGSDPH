@@ -19,7 +19,7 @@ def solicitud_api_view(request):
             solicitud=sol_serializer.save()
 
             ### calcular el importe_dieta ###
-            from sistema.views import calcular_importe
+            from sistema.views import calcular_importe_desayuno, calcular_importe_dieta
             from datetime import datetime
             fecha1 = datetime.strptime(str(solicitud.fecha_inicio_dieta), '%Y-%m-%d')
             fecha2 = datetime.strptime(str(solicitud.fecha_final_dieta), '%Y-%m-%d')
@@ -32,7 +32,8 @@ def solicitud_api_view(request):
             print(dias)
             solicitud.dias_estimados = dias
             solicitud.save()
-            calcular_importe(solicitud)
+            calcular_importe_dieta(solicitud)
+            calcular_importe_desayuno(solicitud)
 
             ### fin ###
 
@@ -266,7 +267,30 @@ def anticipo_api_view(request):
     elif request.method == 'POST':
         anticipo_serializer = AnticipoSerializer(data=request.data)
         if anticipo_serializer.is_valid():
-            anticipo_serializer.save()
+            anticipo = anticipo_serializer.save()
+            # Accede a la primera solicitud relacionada a través del modelo
+            modelo_relacionado = anticipo.modelo
+
+            if modelo_relacionado:
+                primera_solicitud = modelo_relacionado.solicitudes.first()
+                if primera_solicitud:
+                    #dias  estimados
+                    dias_estimados = primera_solicitud.dias_estimados
+                    #total alimentacion
+                    alimentacion_costo = primera_solicitud.importe_dieta
+                    desayuno_costo = primera_solicitud.importe_desayuno
+            anticipo.dias_estimados = dias_estimados
+            anticipo.alimentacion_costo = alimentacion_costo
+            anticipo.desayuno_costo = desayuno_costo
+            anticipo.total = (
+                (anticipo.dias_estimados or 0) *
+                (anticipo.alimentacion_costo or 0) +
+                (anticipo.dias_estimados or 0) *
+                (desayuno_costo or 0)
+            ) * anticipo.modelo.solicitudes.count()
+
+
+            anticipo.save()
             return Response(anticipo_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(anticipo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
