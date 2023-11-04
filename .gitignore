@@ -23,15 +23,8 @@ sgsdph_frontend/npm-debug.log*
 sgsdph_frontend/yarn-debug.log*
 sgsdph_frontend/yarn-error.log*
 
-# local env files
-sgsdph_frontend/.env*.local
-
 # vercel
 sgsdph_frontend/.vercel
-
-# typescript
-sgsdph_frontend/.tsbuildinfo
-sgsdph_frontend/next-env.d.ts
 
 sgsdph_backend/sgsdph_backend/__pycache__
 sgsdph_backend/sistema/migrations
@@ -45,5 +38,4 @@ sgsdph_backend/autentic/api/__pycache__/serializers.cpython-311.pyc
 mysql
 sgsdph_backend/static
 sgsdph_backend/sistema/api/__pycache__
-package-lock.json
 sgsdph_backend/media
