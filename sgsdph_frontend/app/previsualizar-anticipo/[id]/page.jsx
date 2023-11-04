@@ -1,13 +1,13 @@
 import React from 'react';
-import Table1 from "../Table1";
-import Table2 from "../Table2";
+import TableAnticipo from "../TableAnticipo";
+import TableTrabajadores from "../TableTrabajadores";
 
 const Page = () => {
     return (
-        <div className={'p-5'}>
-           <Table1 />
+        <div className={'p-5'} style={{ width: 'max-content' }}>
+           <TableAnticipo />
 
-            <Table2 />
+            <TableTrabajadores />
         </div>
     );
 };

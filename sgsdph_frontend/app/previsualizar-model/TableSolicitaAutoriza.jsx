@@ -1,4 +1,6 @@
 import React from 'react';
+import './stylesTablesModel.css'
+
 
 const TableSolicitaAutoriza = ({ tittle, name, cargo, dependencia }) => {
     return (

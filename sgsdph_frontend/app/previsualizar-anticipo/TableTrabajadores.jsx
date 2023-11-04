@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '/app/previsualizar-anticipo/TableTrabajadores.module.css'
 
 const test = [
     {
@@ -34,14 +35,13 @@ const test = [
 ]
 
 
-const Table2 = () => {
+const TableTrabajadores = () => {
     return (
         <div>
             <p>Desglose de dietas en efectivo CUP por trabajador</p>
 
-            <table className={'tableAnticipo'}>
-
-                <thead className={'p-3 text-center'}>
+            <table className={ styles.tableAnticipoTrabajador}>
+                <thead className={'p-3'}>
                     <tr>
                         <th style={{ width: '0.76in', height: '0.42in' }}>No. Anticipo</th>
                         <th style={{ width: '2.49in', height: '0.42in' }}>Nombre del Trabajador</th>
@@ -88,4 +88,4 @@ const Table2 = () => {
     );
 };
 
-export default Table2;
+export default TableTrabajadores;
