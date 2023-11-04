@@ -55,3 +55,14 @@ class ModeloSerializerGET(serializers.ModelSerializer):
     class  Meta:
         model = Modelo
         fields = '__all__'
+
+class AnticipoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Anticipo
+        fields = '__all__'
+
+class AnticipoSerializerGET(serializers.ModelSerializer):
+    modelo = ModeloSerializerGET()
+    class Meta:
+        model = Anticipo
+        fields = '__all__'

@@ -14,12 +14,29 @@ def solicitud_api_view(request):
         serializer = SolicitudSerializerGET(solicitudes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        print(request.data)
         sol_serializer = SolicitudSerializer(data=request.data)
-        print(sol_serializer)
         if sol_serializer.is_valid():
-            print('valid')
-            sol_serializer.save()
+            solicitud=sol_serializer.save()
+
+            ### calcular el importe_dieta ###
+            from sistema.views import calcular_importe_desayuno, calcular_importe_dieta
+            from datetime import datetime
+            fecha1 = datetime.strptime(str(solicitud.fecha_inicio_dieta), '%Y-%m-%d')
+            fecha2 = datetime.strptime(str(solicitud.fecha_final_dieta), '%Y-%m-%d')
+
+            # Calcula la diferencia en días
+            diferencia = fecha2 - fecha1
+
+            # Extrae el número de días de la diferencia
+            dias = diferencia.days+1
+            print(dias)
+            solicitud.dias_estimados = dias
+            solicitud.save()
+            calcular_importe_dieta(solicitud)
+            calcular_importe_desayuno(solicitud)
+
+            ### fin ###
+
             return Response(sol_serializer.data, status=status.HTTP_201_CREATED)
         return Response(SolicitudSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -189,7 +206,26 @@ def modelo_api_view(request):
                 solicitud.estado = 'Ok'
                 solicitud.save()
 
-            modelo_serializer.save()
+            modelo = modelo_serializer.save()
+            try:
+                nombre_completo = modelo.nombre
+                # Divide la cadena en palabras
+                palabras = nombre_completo.split()
+
+                # Los dos últimos elementos son los apellidos
+                apellidos = ' '.join(palabras[-2:])
+
+                # El resto de las palabras es el nombre
+                nombre = ' '.join(palabras[:-2])
+                # Busca al trabajador por nombre y apellido
+                print('Nombre: '+ nombre)
+                print('Apellidos: '+ apellidos)
+                creador = Trabajador.objects.filter(first_name=nombre, last_name=apellidos).first()
+                modelo.firma_crea = creador.firma
+                modelo.save()
+                print('Firmado por el creador')
+            except Exception as e:
+                print(e)
             return Response(modelo_serializer.data, status=status.HTTP_201_CREATED)
         return Response(modelo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -221,3 +257,47 @@ def solicitudes_todas_api_view(request):
         solicitudes = Solicitud.objects.all()
         solicitudes_serializer = SolicitudSerializerGET(solicitudes, many=True)
         return Response(solicitudes_serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET', 'POST'])
+def anticipo_api_view(request):
+    if request.method == 'GET':
+        anticipos = Anticipo.objects.all()
+        anticipos_serializer = AnticipoSerializerGET(anticipos, many=True)
+        return Response(anticipos_serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        anticipo_serializer = AnticipoSerializer(data=request.data)
+        if anticipo_serializer.is_valid():
+            anticipo = anticipo_serializer.save()
+            # Accede a la primera solicitud relacionada a través del modelo
+            modelo_relacionado = anticipo.modelo
+
+            if modelo_relacionado:
+                primera_solicitud = modelo_relacionado.solicitudes.first()
+                if primera_solicitud:
+                    #dias  estimados
+                    dias_estimados = primera_solicitud.dias_estimados
+                    #total alimentacion
+                    alimentacion_costo = primera_solicitud.importe_dieta
+                    desayuno_costo = primera_solicitud.importe_desayuno
+            anticipo.dias_estimados = dias_estimados
+            anticipo.alimentacion_costo = (alimentacion_costo or 0) * anticipo.modelo.solicitudes.count()
+            anticipo.desayuno_costo = (desayuno_costo or 0) * anticipo.modelo.solicitudes.count()
+            anticipo.total = (
+                (anticipo.alimentacion_costo or 0) +
+                (anticipo.desayuno_costo or 0)
+            )
+
+            anticipo.save()
+            return Response(anticipo_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(anticipo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+@api_view(['GET'])
+def anticipo_detail_api_view(request, id):
+    try:
+        anticipo = Anticipo.objects.get(id=id)
+    except:
+        return Response({'error':'Anticipo no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        anticipo_serializer = AnticipoSerializerGET(anticipo)
+        return Response(anticipo_serializer.data, status=status.HTTP_200_OK)

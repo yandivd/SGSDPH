@@ -35,4 +35,8 @@ urlpatterns = [
     path('modelo/dph/', modelo_dph_api_view),
     path('modelo/<int:id>/',modelo_detail_api_view),
 
+    ### anticipos ###
+    path('anticipo/', anticipo_api_view),
+    path('anticipo/<int:id>/', anticipo_detail_api_view),
+
 ]

@@ -48,6 +48,10 @@ class Solicitud(models.Model):
     observaciones=models.CharField(max_length=500, blank=True, null=True)
     aperitivo = models.ManyToManyField(Aperitivo)
     labor=models.CharField(max_length=500, blank=True, null=True)
+    # para el anticipo #
+    dias_estimados = models.IntegerField(null=True, blank=True)
+    importe_dieta = models.DecimalField(decimal_places=2,max_digits=9, null=True, blank=True)
+    importe_desayuno = models.DecimalField(decimal_places=2,max_digits=9, null=True, blank=True)
 
     def __str__(self):
         return str(self.numero)
@@ -98,3 +102,11 @@ class PARLEG(models.Model):
     class Meta:
         verbose_name="Persona autorizada a recoger y liquidar el Efectivo"
         verbose_name="Personas autorizadas a recoger y liquidar el Efectivo"
+
+class Anticipo(models.Model):
+    modelo = models.ForeignKey(Modelo, on_delete=models.CASCADE)
+    fecha = models.DateField(auto_now_add=True)
+    dias_estimados = models.IntegerField(null=True, blank=True)
+    alimentacion_costo = models.DecimalField(decimal_places=2, max_digits=9, null=True, blank=True)
+    desayuno_costo = models.DecimalField(decimal_places=2,  max_digits=9, null=True, blank=True)
+    total = models.DecimalField(decimal_places=2, max_digits=9, null=True, blank=True)
