@@ -80,7 +80,6 @@ const Page = ({params}) => {
 
                     <TableAnticipo anticipo={anticipo} />
 
-
                     <TableTrabajadores anticipo={anticipo} />
                 </div>
             }
