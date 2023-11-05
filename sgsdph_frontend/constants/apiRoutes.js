@@ -18,6 +18,7 @@ export const every_solicituds_endpoint = '/api/sistema/solicitudes/index/'
 export const solicitudesDPH_endpoint = '/api/sistema/solicitudes/dph/'
 
 export const modelo_detail_endpoint = '/api/sistema/modelo/'
+export const anticipo_endpoint = '/api/sistema/anticipo/'
 
 export const rol_endpoint = '/api/rol/'
 

@@ -2,7 +2,25 @@ import React from 'react';
 import styles from './TableAnticipo.module.css'
 import Image from "next/image";
 
-const TableAnticipo = () => {
+const TableAnticipo = ({anticipo}) => {
+    const fecha_1 = new Date(anticipo.fecha);
+    const dia_1 = fecha_1.getDate();
+    const mes_1 = fecha_1.getMonth() + 1;
+    const ano_1 = fecha_1.getFullYear();
+
+    const fecha_2 = new Date(anticipo.modelo.solicitudes[0].fecha_inicio_dieta);
+    const dia_2 = fecha_2.getDate();
+    const mes_2 = fecha_2.getMonth() + 1;
+    const ano_2 = fecha_2.getFullYear();
+
+    const fecha_3 = new Date(anticipo.modelo.solicitudes[0].fecha_final_dieta);
+    const dia_3 = fecha_3.getDate();
+    const mes_3 = fecha_3.getMonth() + 1;
+    const ano_3 = fecha_3.getFullYear();
+
+
+    console.log(anticipo)
+
     return (
         <div>
             <table className={styles.tableAnticipo}>
@@ -10,9 +28,9 @@ const TableAnticipo = () => {
                 <tr>
                     <th style={{ width: '4.18in', height: '1.05in' }} rowSpan={3} >
                         <div className={'d-flex flex-column align-items-start justify-content-start'}>
-                            <span>Centro contable: PONER </span>
-                            <sapn>Areas de Trabajo: PONER </sapn>
-                            <span> Solicitud No.: PONER </span>
+                            <div>Centro contable: {anticipo.modelo.c_contable} </div>
+                            <div>Areas de Trabajo: {anticipo.modelo.unidad_organizativa}  </div>
+                            <div> Solicitud No.: {anticipo.modelo.consec}  </div>
                         </div>
                     </th>
                     <th style={{ width: '5.61in', height: '1.05in' }} rowSpan={3} className={'text-center'}>
@@ -38,16 +56,16 @@ const TableAnticipo = () => {
                     <th className={'text-center'} style={{ width: '1.09in', height: '0.21in' }}>A</th>
                 </tr>
                 <tr>
-                    <th className={'text-center'} style={{ width: '1.23in', height: '0.21in' }}>PONER</th>
-                    <th className={'text-center'} style={{ width: '1.10in', height: '0.21in' }}>PONER</th>
-                    <th className={'text-center'} style={{ width: '1.09in', height: '0.21in' }}>PONER</th>
+                    <th className={'text-center'} style={{ width: '1.23in', height: '0.21in' }}>{dia_1}</th>
+                    <th className={'text-center'} style={{ width: '1.10in', height: '0.21in' }}>{mes_1}</th>
+                    <th className={'text-center'} style={{ width: '1.09in', height: '0.21in' }}>{ano_1}</th>
                 </tr>
                 </thead>
             </table>
             <table className={styles.tableAnticipo}>
                 <thead>
                   <tr>
-                        <td style={{ width: '7.5in', height: '0.42in' }} rowSpan={2} >Nombre Completo y Apellido: Parleg PONER</td>
+                        <td style={{ width: '7.5in', height: '0.42in' }} rowSpan={2} >Nombre Completo y Apellido: {anticipo.modelo.parleg} </td>
                         <td className={'text-center'} style={{ width: '5.71in', height: '0.21in' }}  rowSpan={1} colSpan={2}>CLASIFICACiÓN</td>
                     </tr>
                     <tr>
@@ -59,7 +77,7 @@ const TableAnticipo = () => {
             <table className={styles.tableAnticipo}>
                 <thead>
                     <tr>
-                        <td style={{ width: '7.5in', height: '1.47in' }} rowSpan={7}>Laabor a realizar o detalle del pago: Larbbor PONEr</td>
+                        <td style={{ width: '7.5in', height: '1.47in' }} rowSpan={7}>Labor a realizar o detalle del pago: {anticipo.modelo.labor} </td>
                         <td colSpan={4} style={{ width: '4.62in', height: '0.21in' }}>En la localidad (Dentro del país)</td>
                         <td style={{ width: '1.09in', height: '0.21in' }} className={'text-center'}>X</td>
                     </tr>
@@ -71,16 +89,16 @@ const TableAnticipo = () => {
                         <td style={{ width: '1.09in', height: '0.21in' }} className={'text-center'}>H</td>
                     </tr>
                     <tr>
-                        <td style={{ width: '2.29in', height: '0.21in' }} colSpan={2}>Regreso Estimado</td>
-                        <td className={'text-center'}>PONER</td>
-                        <td className={'text-center'}>PONER</td>
-                        <td className={'text-center'}>PONER</td>
+                        <td style={{ width: '2.29in', height: '0.21in' }} colSpan={2}>Salida Estimada</td>
+                        <td className={'text-center'}>{dia_2}</td>
+                        <td className={'text-center'}>{mes_2}</td>
+                        <td className={'text-center'}>{ano_2}</td>
                     </tr>
                     <tr>
                         <td style={{ width: '2.29in', height: '0.21in' }} colSpan={2}>Regreso Estimado</td>
-                        <td className={'text-center'}>PONER</td>
-                        <td className={'text-center'}>PONER</td>
-                        <td className={'text-center'}>PONER</td>
+                        <td className={'text-center'}>{dia_3}</td>
+                        <td className={'text-center'}>{mes_3}</td>
+                        <td className={'text-center'}>{ano_3}</td>
                     </tr>
                     <tr>
                         <td style={{ width: '2.29in', height: '0.21in' }} colSpan={2}>Salida Real</td>
@@ -106,7 +124,7 @@ const TableAnticipo = () => {
                     <td style={{ width: '0.78in', height: '0.21in' }}>DIA</td>
                     <td style={{ width: '0.76in', height: '0.21in' }}>MES</td>
                     <td style={{ width: '4.62in', height: '0.21in' }}>Días Estimados</td>
-                    <td style={{ width: '1.09in', height: '0.21in' }} className={'text-center'}>1</td>
+                    <td style={{ width: '1.09in', height: '0.21in' }} className={'text-center'}>{anticipo.dias_estimados}</td>
                 </tr>
                 </thead>
             </table>
@@ -146,10 +164,10 @@ const TableAnticipo = () => {
                         <td> </td>
                         <td> </td>
                         <td colSpan={2} className={'text-center'}>Entregado</td>
-                        <td className={'text-center'}>2500.00</td>
-                        <td className={'text-center'}>2500.00</td>
+                        <td className={'text-center'}>{anticipo.total}</td>
+                        <td className={'text-center'}>{anticipo.alimentacion_costo}</td>
                         <td> </td>
-                        <td> </td>
+                        <td className={'text-center'}>{anticipo.desayuno_costo} </td>
                         <td> </td>
                         <td> </td>
                     </tr>
@@ -189,17 +207,16 @@ const TableAnticipo = () => {
                         <td></td>
                     </tr>
                     <tr>
-                        <td colSpan={7}>Anotado por: Katia González Figueroa</td>
-                        <td rowSpan={2}>No PONER</td>
+                        <td colSpan={7}>Anotado por: {anticipo.modelo.nombre}</td>
+                        <td rowSpan={2}>No {anticipo.consec}</td>
                     </tr>
                     <tr>
                         <td> </td>
                         <td> </td>
-                        <td colSpan={7}>Registrado por: Yomara Barrios Barrios</td>
+                        <td colSpan={7}>Registrado por: </td>
                     </tr>
                 </thead>
             </table>
-            <br/>
         </div>
     );
 };
