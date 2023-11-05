@@ -131,9 +131,9 @@ const TableAnticipo = ({anticipo}) => {
             <table className={styles.tableAnticipo}>
                 <thead>
                     <tr>
-                        <td style={{ width: '3.25in', height: '0.21in' }} rowSpan={2}>Entrega</td>
-                        <td style={{ width: '2.71in', height: '0.21in' }} rowSpan={2}>Liquidación</td>
-                        <td style={{ width: '0.78in', height: '0.21in' }} rowSpan={2}></td>
+                        <td style={{ width: '3.25in', height: '0.21in' }} rowSpan={2} className={'text-left'}>Entrega</td>
+                        <td style={{ width: '2.71in', height: '0.21in' }} rowSpan={2} className={'text-left'}>Liquidación</td>
+                        <td style={{ width: '0.78in', height: '0.21in' }} rowSpan={2} className={'text-left'}></td>
                         <td style={{ width: '0.76in', height: '0.21in' }} rowSpan={2}></td>
                         <td style={{ width: '4.62in', height: '0.21in' }}>Días Reales</td>
                         <td style={{ width: '1.09in', height: '0.21in' }} className={'text-center'}></td>
@@ -207,13 +207,13 @@ const TableAnticipo = ({anticipo}) => {
                         <td></td>
                     </tr>
                     <tr>
-                        <td colSpan={7}>Anotado por: {anticipo.modelo.nombre}</td>
-                        <td rowSpan={2}>No {anticipo.consec}</td>
+                        <td colSpan={7} className={'text-left'}>Anotado por: {anticipo.modelo.nombre}</td>
+                        <td rowSpan={2} className={'text-left'}>No {anticipo.consec}</td>
                     </tr>
                     <tr>
                         <td> </td>
                         <td> </td>
-                        <td colSpan={7}>Registrado por: </td>
+                        <td colSpan={7} className={'text-left'}>Registrado por: </td>
                     </tr>
                 </thead>
             </table>
