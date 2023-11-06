@@ -194,7 +194,7 @@ export default function SolicitudesAnticipoPago() {
                 setModels(new_models);
 
                 const data = {
-                    estado: 'AnticiposArchivado'
+                    estado: 'Archivada'
                 }
                 const resp = await fetchSinToken(endpoint, data, "PATCH");
                 if (resp.status === 200) {
