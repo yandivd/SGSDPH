@@ -98,6 +98,7 @@ const Page = ({params}) => {
                                        name={model.autoriza}
                                        cargo={model.cargo_autoriza}
                                        dependencia={model.dependencia_autoriza}
+                                       firma = {model.firma_autoriza}
                 />
 
 
@@ -106,6 +107,8 @@ const Page = ({params}) => {
                                        name={model.solicitante}
                                        cargo={model.cargo_solicita}
                                        dependencia={model.dependencia_solicita}
+                                       firma = {model.firma_solicita}
+
                 />
 
             </div>
