@@ -144,25 +144,7 @@ export default function PendienteSolicitud() {
         if( firma === null){
             Swal.fire('Error', 'Usted no tiene firma asociada, Agrege su firma', 'error');
         }else{
-            const endpoint_modelo_detail = modelo_detail_endpoint + id +'/'
-            const url = `${process.env.NEXT_PUBLIC_API_HOST}${endpoint_modelo_detail}`;
 
-            try {
-                 const resp = await fetch(url, {
-                     method: 'PATCH',
-                     body: firma,
-                 });
-                 console.log(firma)
-
-                 if (resp.status === 200) {
-                     Swal.fire('Éxito', 'Operación finalizada con éxito', 'success');
-                 }else{
-                     Swal.fire('Error', 'Error del servidor', 'error');
-                 }
-             } catch (error) {
-                 console.error(error);
-                 Swal.fire('Error', 'Error del servidor', 'error');
-             }
         }
         handleOpenSolicitar(!openSolicitar);
     }
@@ -240,7 +222,7 @@ export default function PendienteSolicitud() {
                     globalFilter={globalFilter}
                     loading={loading}
                 >
-                    <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
+                    <Column field="firma_solicita" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
                     <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>
                     <Column field="c_contable" header="Centro Contable" sortable style={{ width: '25%' }}></Column>
