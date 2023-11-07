@@ -1,60 +1,58 @@
-import React from 'react';
-import Dialog from "@mui/material/Dialog";
+import { useState } from 'react';
+import { TextField, Button, Dialog, DialogContent } from '@mui/material';
+import Swal from 'sweetalert2';
+import {trabajadores_endpoint} from "../../constants/apiRoutes";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import DialogContent from "@mui/material/DialogContent";
-import TextField from "@mui/material/TextField";
 import {DialogActions} from "@mui/material";
-import Button from "@mui/material/Button";
-import {trabajadores_endpoint} from "../../constants/apiRoutes";
-import Swal from "sweetalert2";
 import {useForm} from "react-hook-form";
 
-const FirmModal = ({handleFirmOpen,openFirm}) => {
-    const { register, handleSubmit } = useForm();
+function MyComponent({openFirm, handleFirmOpen}) {
+    const { register, control, handleSubmit, formState: { errors } } = useForm();
+    const [selectedFile, setSelectedFile] = useState(null);
 
-    const handleSubmitFirm = async(data) => {
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedFile(file);
+    };
 
-        console.log('data', data)
-        const id = window.localStorage.getItem('id');
-        const method = "PATCH";
-        const url = process.env.NEXT_PUBLIC_API_HOST + trabajadores_endpoint + id + '/';
+    const handleSubmitFirm = async () => {
+        if (selectedFile) {
+            const id = window.localStorage.getItem('id');
+            const url = `${process.env.NEXT_PUBLIC_API_HOST}${trabajadores_endpoint}${id}/`;
 
-        /*        const formData= {
-                    "firma": data.firma[0]
-                }*/
+            const dataToSend = new FormData();
+            dataToSend.append('firma', selectedFile);
 
-        const dataToSend = new FormData()
-        dataToSend.append( 'firma', data.firma[0])
+            try {
+                const resp = await fetch(url, {
+                    method: 'PATCH',
+                    body: dataToSend,
+                });
 
-        try {
-            const resp = await fetch( url, {
-                method,
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                body: dataToSend
-            });
-
-            if (resp.status === 200) {
-                Swal.fire('Exito', "Operación finaliza con éxito", 'success');
-            }else{
-                Swal.fire('Error', "Error del servidor", 'error');
+                if (resp.status === 200) {
+                    Swal.fire('Éxito', 'Operación finalizada con éxito', 'success');
+                } else {
+                    Swal.fire('Error', 'Error del servidor', 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Error', 'Error del servidor', 'error');
             }
 
-        } catch (error) {
-            console.log(error)
+            handleFirmOpen(!openFirm);
         }
-
-    }
+    };
 
     return (
         <div>
+
             <Dialog
                 onClose={handleFirmOpen}
                 aria-labelledby="customized-dialog-title"
                 open={openFirm}
                 className={'p-5'}
+                onChange={handleFileChange}
             >
 
                 <IconButton
@@ -85,16 +83,15 @@ const FirmModal = ({handleFirmOpen,openFirm}) => {
                             <Button autoFocus onClick={handleFirmOpen} variant="contained" color='error'>
                                 Cancelar
                             </Button> <br/>
-                            <Button variant="contained" type="submit">
+                            <Button variant="contained" type="submit" onClick={handleSubmitFirm}>
                                 Aceptar
                             </Button>
                         </DialogActions>
                     </DialogContent>
                 </form>
             </Dialog>
-
         </div>
     );
-};
+}
 
-export default FirmModal;
+export default MyComponent;

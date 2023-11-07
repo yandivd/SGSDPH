@@ -4,3 +4,9 @@ const nextConfig = {}
 module.exports = nextConfig
 
 
+// next.config.js
+module.exports = {
+    images: {
+        domains: ['localhost'], // Agrega tu dominio o host aquí
+    },
+}

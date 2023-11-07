@@ -1,7 +1,11 @@
 'use client'
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {modelo_detail_endpoint, modelo_endpoint, solicitudes_endpoint} from "../../../constants/apiRoutes";
+import {
+    modelo_detail_endpoint,
+    modelo_endpoint,
+    trabajadores_endpoint
+} from "../../../constants/apiRoutes";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import 'primereact/resources/themes/lara-light-indigo/theme.css'
@@ -123,6 +127,28 @@ export default function PendienteSolicitud() {
         router.push(`/previsualizar-model/${id}`);
     }
 
+    const handleFirm = async () => {
+        const id_trabajador = window.localStorage.getItem('id');
+        const endpoint_trabajador_detail = trabajadores_endpoint + id_trabajador +'/'
+
+        var firma = null
+
+
+        await axios.get(
+            process.env.NEXT_PUBLIC_API_HOST + endpoint_trabajador_detail
+        )
+            .then(response => {
+                firma = response.data.firma
+            })
+
+        if( firma === null){
+            Swal.fire('Error', 'Usted no tiene firma asociada, Agrege su firma', 'error');
+        }else{
+
+        }
+        handleOpenSolicitar(!openSolicitar);
+    }
+
     const actionBodyTemplate = (rowData) => {
         return (
             <>
@@ -196,7 +222,7 @@ export default function PendienteSolicitud() {
                     globalFilter={globalFilter}
                     loading={loading}
                 >
-                    <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
+                    <Column field="firma_solicita" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
                     <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>
                     <Column field="c_contable" header="Centro Contable" sortable style={{ width: '25%' }}></Column>
@@ -270,7 +296,7 @@ export default function PendienteSolicitud() {
                     </DialogContent>
 
                     <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
-                        <Button variant="contained" >
+                        <Button variant="contained" onClick={handleFirm} >
                             Firmar
                         </Button> <br/>
                         <Button variant="contained"
