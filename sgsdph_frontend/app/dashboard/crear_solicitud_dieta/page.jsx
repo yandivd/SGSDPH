@@ -4,11 +4,8 @@ import Button from "@mui/material/Button";
 import CreateSDModal from "./CreateSDModal";
 import axios from "axios";
 import {
-    aperitivos_endpoint,
-    autoriza_endpoint,
-    cargo_presupuesto_endpoint,
-    ccosto_endpoint, modelo_detail_endpoint, modelo_endpoint,
-    solicita_endpoint, solicitudes_endpoint, trabajadores_endpoint
+     modelo_endpoint,
+    solicitudes_endpoint
 } from "../../../constants/apiRoutes";
 import DataSolicitudesTable from "./DataSolicitudesTable";
 import Dialog from "@mui/material/Dialog";
@@ -20,7 +17,6 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {DialogActions} from "@mui/material";
 import {fetchSinToken} from "../../../helper/fetch";
 import Swal from "sweetalert2";
-import {InputText} from "primereact/inputtext";
 import {useRouter} from "next/navigation";
 
 export default function CrearSolicitudDieta() {

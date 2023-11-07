@@ -35,7 +35,6 @@ import {modelo_endpoint, trabajadores_endpoint, veryfy_token} from "../../consta
 import {LogoutService} from "../../helper/LogoutService";
 import Image from "next/image";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
-import {useForm} from "react-hook-form";
 import FirmModal from "../../components/models/FirmModal";
 import AddTrabajadorModal from "../../components/models/AddTrabajadorModal";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';

@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
-import {DialogActions, FormGroup, FormLabel, MenuItem} from "@mui/material";
+import {DialogActions, FormLabel, MenuItem} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import FieldSelect from "../../../components/FieldSelect";
 import {
@@ -18,11 +18,8 @@ import {
 import axios from "axios";
 import {municipios} from "../../../constants/municipios";
 import {Controller, useForm} from "react-hook-form";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import CheckBoxPersonalizate from "../../../components/CheckBoxPersonalizate";
 import {fetchSinToken} from "../../../helper/fetch";
-import {activeUser} from "../../../redux/features/auth/authSlice";
 import Swal from "sweetalert2"
 
 

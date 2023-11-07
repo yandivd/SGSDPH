@@ -14,13 +14,6 @@ import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import CloseIcon from "@mui/icons-material/Close";
-import DialogContent from "@mui/material/DialogContent";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import {DialogActions} from "@mui/material";
-import Button from "@mui/material/Button";
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
