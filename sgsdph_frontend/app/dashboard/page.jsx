@@ -6,22 +6,17 @@ import CreateSolicitudModal from "../../components/models/CreateSolicitudModal";
 import {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import {every_solicituds_endpoint} from "../../constants/apiRoutes";
+import {modelo_endpoint} from "../../constants/apiRoutes";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import 'primereact/resources/themes/lara-light-indigo/theme.css'
 import 'primereact/resources/primereact.min.css'
 import {InputText} from "primereact/inputtext";
-import ListItem from "@mui/material/ListItem";
-import Link from "next/link";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import ListItemText from "@mui/material/ListItemText";
+
 
 export default function BasicCard() {
     const [open, setOpen] = useState(false);
-    const [everySolicitudes, setEverySolicitudes] = useState([]);
+    const [models, setModels] = useState([]);
     const [globalFilter, setGlobalFilter] = useState('');
     const [rol, setRol] = React.useState(0);
     const [loading, setLoading] = useState(true);
@@ -36,10 +31,10 @@ export default function BasicCard() {
 
         try {
             await axios.get(
-                process.env.NEXT_PUBLIC_API_HOST + every_solicituds_endpoint
+                process.env.NEXT_PUBLIC_API_HOST + modelo_endpoint
             )
                 .then(response => {
-                    setEverySolicitudes(response.data);
+                    setModels(response.data);
                     setLoading(false);
                 })
 
@@ -55,7 +50,7 @@ export default function BasicCard() {
 
     return (
         <div>
-            <CardDescription everySolicitudes={everySolicitudes} />
+            <CardDescription models={models} />
 
             <div className='d-flex justify-content-between my-2'>
                 <div>
@@ -80,15 +75,15 @@ export default function BasicCard() {
 
             <Typography className={'text-secondary my-3 ms-2'}>Listado de Soliciudes de Dietas</Typography>
 
-            <DataTable value={everySolicitudes}
+            <DataTable  value={models.flatMap(modelo => modelo.solicitudes)}
                        paginator rows={5}
                        rowsPerPageOptions={[5, 10, 25, 50]}
                        tableStyle={{ minWidth: '50rem' }}
                        globalFilter={globalFilter}
                        loading={loading}
             >
-                <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(everySolicitudes) => (
-                    <div>{everySolicitudes.trabajador.nombre} {everySolicitudes.trabajador.apellidos}</div>
+                <Column field="trabajador.nombre" header="Nombre" sortable style={{ width: '20%' }} body={(solicitudes) => (
+                    <div>{solicitudes.trabajador.nombre} {solicitudes.trabajador.apellidos}</div>
                 )}></Column>
                 <Column field="trabajador.ci" header="CI" sortable style={{ width: '25%' }}></Column>
                 <Column field="unidad_organizativa.name" header="Unidad Organizativa" sortable style={{ width: '15%' }}></Column>

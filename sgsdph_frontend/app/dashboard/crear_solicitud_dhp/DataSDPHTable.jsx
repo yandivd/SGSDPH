@@ -14,7 +14,6 @@ import DialogContent from "@mui/material/DialogContent";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {DialogActions} from "@mui/material";
 import Button from "@mui/material/Button";
-import EditSDModal from "../crear_solicitud_dieta/EditSDModal";
 import 'primereact/resources/themes/lara-light-indigo/theme.css'
 import 'primereact/resources/primereact.min.css'
 import EditSDPHModal from "./EditSDPHModal";

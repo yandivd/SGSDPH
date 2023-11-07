@@ -26,7 +26,7 @@ const TableTrabajadores = ({anticipo}) => {
                 <tbody>
                 {typeof anticipo.modelo.solicitudes !== 'undefined' ? anticipo.modelo.solicitudes.map((val, id) => (
                     <tr key={id}>
-                        <td style={{ height: '0.21in' }}>{val.id}</td>
+                        <td style={{ height: '0.21in' }}>{anticipo.consec}</td>
                         <td>{val.trabajador.nombre} {val.trabajador.apellidos}</td>
                         <td>{val.dias_estimados}</td>
                         <td>{val.importe_dieta}</td>

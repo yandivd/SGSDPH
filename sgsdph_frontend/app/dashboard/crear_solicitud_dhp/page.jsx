@@ -3,12 +3,10 @@ import React from 'react';
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import CreateSDHPModal from "./CreateSDHPModal";
-import CreateSDModal from "../crear_solicitud_dieta/CreateSDModal";
 import {fetchSinToken} from "../../../helper/fetch";
 import {modelo_endpoint, solicitudes_endpoint, solicitudesDPH_endpoint} from "../../../constants/apiRoutes";
 import Swal from "sweetalert2";
 import axios from "axios";
-import DataSolicitudesTable from "../crear_solicitud_dieta/DataSolicitudesTable";
 import DataSDPHTable from "./DataSDPHTable";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -17,7 +15,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import {DialogActions} from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import {InputText} from "primereact/inputtext";
 import {useRouter} from "next/navigation";
 
 export default function CrearSolicitudDHP() {

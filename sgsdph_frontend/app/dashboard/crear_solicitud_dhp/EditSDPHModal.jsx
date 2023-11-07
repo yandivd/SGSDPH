@@ -16,7 +16,6 @@ import {
     aperitivos_endpoint,
     autoriza_endpoint, cargo_presupuesto_endpoint, ccosto_endpoint, personas_endpoint,
     solicita_endpoint, solicitudes_endpoint,
-    trabajadores_endpoint
 } from "../../../constants/apiRoutes";
 import {fetchSinToken} from "../../../helper/fetch";
 import Swal from "sweetalert2";

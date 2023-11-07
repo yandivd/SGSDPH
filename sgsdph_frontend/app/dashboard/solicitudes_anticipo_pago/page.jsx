@@ -20,7 +20,6 @@ import GradingIcon from '@mui/icons-material/Grading';
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {DialogActions} from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
