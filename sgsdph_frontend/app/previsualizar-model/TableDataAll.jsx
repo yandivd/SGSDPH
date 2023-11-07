@@ -1,5 +1,6 @@
 import React from 'react';
 import './stylesTablesModel.css'
+import Image from "next/image";
 
 const TableDataAll = ({model}) => {
     const solicitudes = model.solicitudes;
@@ -154,7 +155,17 @@ const TableDataAll = ({model}) => {
                         <td colSpan="7" style={{ textAlign: 'left'}}>NOMBRE Y APELLIDOS:</td>
                     </tr>
                     <tr>
-                        <td colSpan="7" style={{ textAlign: 'left', height: '1.2cm' }}>FIRMA:</td>
+                        <td colSpan="7" style={{ textAlign: 'left', height: '1.2cm' }}>FIRMA:
+                            { (model.firma_crea !== null && model.firma_crea !== undefined) ?
+                                <Image
+                                    src={ `${process.env.NEXT_PUBLIC_API_HOST}${model.firma_crea}`}
+                                    alt={ 'firma' }
+                                    width={ 70 }
+                                    height={ 30 }
+                                    className={'bg-sucess mx-auto d-block text-center'}
+                                /> : ''
+                        }
+                        </td>
                         <td colSpan="7" style={{ textAlign: 'left', height: '1.2cm' }}>FIRMA:</td>
                     </tr>
                     <tr>

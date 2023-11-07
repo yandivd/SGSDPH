@@ -22,6 +22,9 @@ export const anticipo_endpoint = '/api/sistema/anticipo/'
 
 export const rol_endpoint = '/api/rol/'
 
+export const firma_solicita_endpoint = '/api/sistema/firma_solicita/'
+
+export const firma_autoriza_endpoint = '/api/sistema/firma_autoriza/'
 
 
 

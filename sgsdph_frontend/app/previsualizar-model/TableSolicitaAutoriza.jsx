@@ -5,7 +5,7 @@ import {trabajadores_endpoint} from "../../constants/apiRoutes";
 
 
 const TableSolicitaAutoriza = ({ tittle, name, cargo, dependencia , data, firma}) => {
-    console.log(firma)
+    console.log(data)
 
     var imageUrl = ''
 

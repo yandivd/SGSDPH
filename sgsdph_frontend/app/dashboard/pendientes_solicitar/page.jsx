@@ -2,8 +2,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {
+    firma_solicita_endpoint,
     modelo_detail_endpoint,
-    modelo_endpoint,
+    modelo_endpoint, solicitudes_endpoint,
     trabajadores_endpoint
 } from "../../../constants/apiRoutes";
 import {DataTable} from "primereact/datatable";
@@ -144,6 +145,23 @@ export default function PendienteSolicitud() {
         if( firma === null){
             Swal.fire('Error', 'Usted no tiene firma asociada, Agrege su firma', 'error');
         }else{
+            const endpoint_firma = firma_solicita_endpoint + id_trabajador + '/' + id + '/'
+
+            try {
+                const resp = await fetchSinToken(endpoint_firma, '',"POST");
+
+                if (resp.status === 200) {
+                    Swal.fire('Exito', "Se ha firmado correctamente", 'success');
+                    refreshFunction();
+                }else{
+                    Swal.fire('Error', "Error del servidor", 'error');
+
+                }
+
+            } catch (error) {
+                console.log(error)
+            }
+
 
         }
         handleOpenSolicitar(!openSolicitar);
@@ -222,7 +240,7 @@ export default function PendienteSolicitud() {
                     globalFilter={globalFilter}
                     loading={loading}
                 >
-                    <Column field="firma_solicita" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
+                    <Column field="consec" header="Consecutivo" sortable style={{ width: '25%' }}></Column>
                     <Column field="nombre" header="Creador" sortable style={{ width: '15%' }}></Column>
                     <Column field="unidad_organizativa" header="Unidad Organizativa" sortable style={{ width: '25%' }}></Column>
                     <Column field="c_contable" header="Centro Contable" sortable style={{ width: '25%' }}></Column>
