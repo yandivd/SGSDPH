@@ -1,7 +1,11 @@
 'use client'
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {modelo_detail_endpoint, modelo_endpoint, solicitudes_endpoint} from "../../../constants/apiRoutes";
+import {
+    modelo_detail_endpoint,
+    modelo_endpoint,
+    trabajadores_endpoint
+} from "../../../constants/apiRoutes";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import 'primereact/resources/themes/lara-light-indigo/theme.css'
@@ -121,6 +125,46 @@ export default function PendienteSolicitud() {
 
     const handleViewModel = (id) => {
         router.push(`/previsualizar-model/${id}`);
+    }
+
+    const handleFirm = async () => {
+        const id_trabajador = window.localStorage.getItem('id');
+        const endpoint_trabajador_detail = trabajadores_endpoint + id_trabajador +'/'
+
+        var firma = null
+
+
+        await axios.get(
+            process.env.NEXT_PUBLIC_API_HOST + endpoint_trabajador_detail
+        )
+            .then(response => {
+                firma = response.data.firma
+            })
+
+        if( firma === null){
+            Swal.fire('Error', 'Usted no tiene firma asociada, Agrege su firma', 'error');
+        }else{
+            const endpoint_modelo_detail = modelo_detail_endpoint + id +'/'
+            const url = `${process.env.NEXT_PUBLIC_API_HOST}${endpoint_modelo_detail}`;
+
+            try {
+                 const resp = await fetch(url, {
+                     method: 'PATCH',
+                     body: firma,
+                 });
+                 console.log(firma)
+
+                 if (resp.status === 200) {
+                     Swal.fire('Éxito', 'Operación finalizada con éxito', 'success');
+                 }else{
+                     Swal.fire('Error', 'Error del servidor', 'error');
+                 }
+             } catch (error) {
+                 console.error(error);
+                 Swal.fire('Error', 'Error del servidor', 'error');
+             }
+        }
+        handleOpenSolicitar(!openSolicitar);
     }
 
     const actionBodyTemplate = (rowData) => {
@@ -270,7 +314,7 @@ export default function PendienteSolicitud() {
                     </DialogContent>
 
                     <DialogActions sx={{ pb: 3, justifyContent: 'center'}} >
-                        <Button variant="contained" >
+                        <Button variant="contained" onClick={handleFirm} >
                             Firmar
                         </Button> <br/>
                         <Button variant="contained"

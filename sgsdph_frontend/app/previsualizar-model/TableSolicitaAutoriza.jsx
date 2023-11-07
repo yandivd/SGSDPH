@@ -1,8 +1,10 @@
 import React from 'react';
 import './stylesTablesModel.css'
+import Image from "next/image";
 
 
-const TableSolicitaAutoriza = ({ tittle, name, cargo, dependencia }) => {
+const TableSolicitaAutoriza = ({ tittle, name, cargo, dependencia , data, firma}) => {
+    console.log(data)
     return (
         <table style={{ borderCollapse: 'collapse', width: '450px', padding: "20px"}} >
             <tbody>
@@ -11,7 +13,17 @@ const TableSolicitaAutoriza = ({ tittle, name, cargo, dependencia }) => {
                 </tr>
                 <tr>
                     <td className={'tablePrevizualizar'}>Firma</td>
-                    <td className={'tablePrevizualizar'}></td>
+                    <td className={'tablePrevizualizar'}>
+                        { firma !== null ?
+                        <Image
+                            src={ firma}
+                            alt={ 'Logotipo' }
+                            width={ 180 }
+                            height={ 65 }
+                            className={'bg-sucess'}
+                        /> : ''
+                        }
+                    </td>
                 </tr>
                 <tr>
                     <td className={'tablePrevizualizar'}>Nombre y Apellidos</td>
