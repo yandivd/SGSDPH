@@ -1,7 +1,12 @@
 'use client'
 import React, {useState} from 'react';
 import axios from "axios";
-import {modelo_detail_endpoint, modelo_endpoint, trabajadores_endpoint} from "../../../constants/apiRoutes";
+import {
+    firma_autoriza_endpoint, firma_solicita_endpoint,
+    modelo_detail_endpoint,
+    modelo_endpoint,
+    trabajadores_endpoint
+} from "../../../constants/apiRoutes";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CheckIcon from "@mui/icons-material/Check";
@@ -106,8 +111,25 @@ export default function PendientesAprobar() {
         if( firma === null){
             Swal.fire('Error', 'Usted no tiene firma asociada, Agrege su firma', 'error');
         }else{
+            const endpoint_firma = firma_autoriza_endpoint + id_trabajador + '/' + id + '/'
+
+            try {
+                const resp = await fetchSinToken(endpoint_firma, '',"POST");
+
+                if (resp.status === 200) {
+                    Swal.fire('Exito', "Se ha firmado correctamente", 'success');
+                    refreshFunction();
+                }else{
+                    Swal.fire('Error', "Error del servidor", 'error');
+                }
+
+            } catch (error) {
+                console.log(error)
+            }
+
 
         }
+
         handleopenAutoriza(!openAutoriza);
     }
 
