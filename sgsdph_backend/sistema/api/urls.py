@@ -1,5 +1,6 @@
 from django.urls import path
 from .api import *
+from sistema.views import firmarAutoriza, firmarSolicitante
 
 urlpatterns = [
     #solicitudes de dietas
@@ -38,5 +39,8 @@ urlpatterns = [
     ### anticipos ###
     path('anticipo/', anticipo_api_view),
     path('anticipo/<int:id>/', anticipo_detail_api_view),
+
+    path('firma_solicita/<int:id>/<int:id_modelo>/', firmarSolicitante),
+    path('firma_autoriza/<int:id>/<int:id_modelo>/', firmarAutoriza),
 
 ]
