@@ -1,6 +1,7 @@
 import React from 'react';
 import './stylesTablesModel.css'
 import Image from "next/image";
+import { formatDate } from '../../utils/formatDate';
 
 const TableDataAll = ({model}) => {
     const solicitudes = model.solicitudes;
@@ -94,7 +95,14 @@ const TableDataAll = ({model}) => {
                 </thead>
 
                 <tbody>
-                    {typeof solicitudes !== 'undefined' ? model.solicitudes.map((val, index) => (
+                    {typeof solicitudes !== 'undefined' ? model.solicitudes.map((val, index) => {
+                        val.fecha_inicio_dieta = formatDate(val.fecha_inicio_dieta)
+                        val.fecha_final_dieta = formatDate(val.fecha_final_dieta)
+                        val.fecha_inicio_hosp = formatDate(val.fecha_inicio_hosp)
+                        val.fecha_final_hosp = formatDate(val.fecha_final_hosp)
+                        val.fecha_inicio_pasaj = formatDate(val.fecha_inicio_pasaj)
+                        val.fecha_final_pasaj = formatDate(val.fecha_final_pasaj)
+                        return(
                         <tr style={{ textAlign: 'center' }} key={index}>
                             <td style={{ textAlign: 'center' }}>{index + 1}</td>
                             <td style={{ width: '150px' }}>{val.trabajador.nombre} {val.trabajador.apellidos}</td>
@@ -113,7 +121,7 @@ const TableDataAll = ({model}) => {
                             <td></td>
                             <td></td>
                         </tr>
-                    )) : ''}
+                    )}) : ''}
 
                     <tr>
                         <td colSpan={16} style={{ height: '0.7cm', textAlign: 'left' }}>
